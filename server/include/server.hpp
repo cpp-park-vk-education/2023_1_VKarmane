@@ -1,23 +1,25 @@
-// Copyright 2023 Kosmatoff
 #pragma once
 
-#include <boost>
-#include <memory>
+#include <boost/asio.hpp>
+#include <string>
+#include <unordered_map>
 
-class IServer {
- public:
-    virtual void run() = 0;
-    virtual void stop() = 0;
- private:
-    virtual handle_accept(std::shared_ptr<boost::asio::ip::tcp::socket> socket,
-                          const boost::system::error_code& error) = 0;
-};
+#include "config.hpp"
+#include "VpnWorker.hpp"
 
-class Server: public IServer {
+using boost::asio::ip::tcp;
+
+class Server {
  public:
-    void run() override;
-    void stop() override;
+    Server(boost::asio::io_service& io_service, Config& config, unsigned int port)
+        : acceptor_(io_service, tcp::endpoint(tcp::v4(), port)),
+          config_(config) {}
+
+    void run();
+
  private:
-    void handle_accept(std::shared_ptr<boost::asio::ip::tcp::socket> socket,
-                          const boost::system::error_code& error) override
+    void accept();
+
+    tcp::acceptor acceptor_;
+    Config& config_;
 };
