@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include "config.hpp"
+// Copyright 2023 Kosmatoff
 #include "server.hpp"
 #include "VpnWorker.hpp"
 

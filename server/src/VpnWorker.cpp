@@ -1,3 +1,4 @@
+// Copyright 2023 Kosmatoff
 #include <iostream>
 #include "VpnWorker.hpp"
 
