@@ -1,25 +1,23 @@
+// Copyright 2023 Kosmatoff
 #pragma once
 
 #include <boost/asio.hpp>
 #include <string>
 #include <unordered_map>
 
-#include "config.hpp"
 #include "VpnWorker.hpp"
+#include "config.hpp"
 
 using boost::asio::ip::tcp;
 
 class Server {
  public:
-    Server(boost::asio::io_service& io_service, Config& config, unsigned int port)
-        : acceptor_(io_service, tcp::endpoint(tcp::v4(), port)),
-          config_(config) {}
-
-    void run();
+    Server(boost::asio::io_context& io_context, unsigned short port, Config& config, std::string& address);
 
  private:
-    void accept();
+    void doAccept();
 
-    tcp::acceptor acceptor_;
-    Config& config_;
+    boost::asio::io_context& _io_context;
+    boost::asio::ip::tcp::acceptor _acceptor;
+    Config& _config;
 };

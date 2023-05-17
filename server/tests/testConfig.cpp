@@ -5,8 +5,7 @@
 
 // проверка на создания конфига c пирами и корректность работы его методов
 TEST(WireGuardConfigTest, BasicConfigCreateTest) {
-    std::string dir = "/etc/wireguard/";
-    Config config(dir + "wg0.conf");
+    Config config("wg0.conf");
     config.createKey();
     config.setListenPort(51820);
 
@@ -22,7 +21,7 @@ TEST(WireGuardConfigTest, BasicConfigCreateTest) {
     std::string actualContent((std::istreambuf_iterator<char>(file)),
                                std::istreambuf_iterator<char>());
     ASSERT_EQ(testContent, actualContent);
-    config.deleteConfig(dir + "wg0.conf");
+    config.deleteConfig("wg0.conf");
     config.deleteConfig("config.conf");
 }
 

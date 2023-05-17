@@ -6,7 +6,9 @@
 #include <sstream>
 #include <cstdlib>
 
-#include "../include/config.hpp"
+#include <regex>
+
+#include "config.hpp"
 
 static const std::string defaultIpServer = "10.20.0.1/24";
 static const std::string defaultPort = "51285";
@@ -19,15 +21,36 @@ static void parseIpForSearch(std::string& ip) {
     ip = ip.substr(pos + 1); // output "101"
 }
 
-// используется для проверки уже созданного конфига на валидность
-static bool isConfigValid(const std::string& configPath) {
-    std::string command = "sudo wg-quick up " + configPath;
-    int result = system(command.c_str());
-    // закрываем конфиг
-    std::string commandClose = "sudo wg-quick down" + configPath;
-    system(commandClose.c_str());
-    return result == 0;
+static bool isValidWireguardKey(std::string keyStr) {
+    // Удалить пробельные символы из строки
+    keyStr.erase(std::remove(keyStr.begin(), keyStr.end(), ' '), keyStr.end());
+    keyStr.erase(std::remove(keyStr.begin(), keyStr.end(), '\n'), keyStr.end());
+
+    // Проверяем, что ключевая строка имеет правильную длину
+    if (keyStr.length() != 44) {
+        return false;
+    }
+
+    // Проверяем, что ключевая строка содержит только допустимые символы Base64
+    std::regex base64regex("[A-Za-z0-9+/]+={0,2}");
+    if (!std::regex_match(keyStr, base64regex)) {
+        return false;
+    }
+
+    // ключ валидный
+    return true;
 }
+
+// используется для проверки уже созданного конфига на валидность
+// static bool isConfigValid(const std::string& configPath) {
+//     std::string command = "sudo wg-quick up " + configPath;
+//     std::cout << "error" << std::endl;
+//     int result = system(command.c_str());
+//     // закрываем конфиг
+//     std::string commandClose = "sudo wg-quick down" + configPath;
+//     system(commandClose.c_str());
+//     return result == 0;
+// }
 
 Config::Config(const std::string& name_) : name(name_) {
     createKey();
@@ -41,28 +64,31 @@ void Config::run() {
     }
 }
 
-Config::~Config() {
-    stop();
-}
 
 void Config::stop() {
     std::string command = "sudo wg-quick down " + name;
-}
-
-std::string& Config::addPeer(std::string key) {
-    std::string allowedIp = getAllowedIP();
-    std::string command = "sudo wg set wg0 peer " + key +
-                          " allowed-ips " + allowedIp;
     system(command.c_str());
-    std::string serverKey = getPublicKey();
-    return serverKey;
 }
 
-std::string& Config::getAllowedIP() {
+std::string Config::addPeer(std::string key) {
+    if (isValidWireguardKey(key)) {
+        std::string allowedIp = getAllowedIP();
+        std::cout << "New peer! Ip " << allowedIp << std::endl;
+        std::string command = "sudo wg set wg0 peer " + key +
+                            " allowed-ips " + allowedIp;
+        size_t a = system(command.c_str());
+        std::string serverKey = getPublicKey() + " " + allowedIp + '\n';
+        return serverKey;
+    }
+    std::string errorMessage = "KeyError";
+    return errorMessage;
+}
+
+std::string Config::getAllowedIP() {
     auto it = ipPull.begin();
     std::string firstValue;
     if (it != ipPull.end()) {
-        std::string firstValue = it->second;
+        firstValue = it->second;
         ipPull.erase(it);
     } else {
         // TO DO
@@ -112,7 +138,7 @@ void Config::makeConfig(const std::string& path) {
     }
 
     // поверка на существования уже созданного конфига
-    if (std::filesystem::exists(path) && isConfigValid(path)) {
+    if (std::filesystem::exists(path)) {
         std::cout << "Config file already exists" << std::endl;
         loadFromFile(path);
 
@@ -141,7 +167,6 @@ void Config::deleteConfig(const std::string& path) {
     } else {
         std::cout << "File delete" << std::endl;
     }
-
 }
 
 void Config::loadFromFile(const std::string& path) {
@@ -194,6 +219,6 @@ void Config::loadFromFile(const std::string& path) {
     }
 }
 
-const std::string& Config::getPublicKey() {
+std::string Config::getPublicKey() {
     return publicKey;
 }

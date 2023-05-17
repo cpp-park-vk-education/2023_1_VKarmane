@@ -1,22 +1,22 @@
 // Copyright 2023 Kosmatoff
 #pragma once
 
-#include <vector>
-#include <unordered_map>
+#include <map>
 #include <string>
 
 class ICongif {
  public:
-    virtual void makeConfig(const std::string& name) = 0;
     virtual void deleteConfig(const std::string& name) = 0;
+ private:
+    virtual void makeConfig(const std::string& path) = 0;
 };
 
 class Config : public ICongif {
  public:
-    // В конструктор передается имя файла с путем до него dir + name
-    // Рекомендуется делать dir: "/etc/wireguard/"
-    explicit Config(const std::string& name_) { makeConfig(name_); }
-    ~Config();
+    // В конструктор передается имя файла
+    // Путь до файла рекомендуется указывать "etc/wireguard/name"
+    explicit Config(const std::string& name_);
+    ~Config() = default;
 
     // запускает wg-quick up
     void run();  // try ...
@@ -24,24 +24,33 @@ class Config : public ICongif {
     // отключает wg-quick down
     void stop();
 
-    void makeConfig(const std::string& name) override;
     void deleteConfig(const std::string& name) override;
-    void changeConfig();
 
-    // проверяет запущен ли конфиг
-    bool checkConfig();
+    std::string addPeer(std::string key);
 
-    std::string& addPeer(std::string key);
-
-    void setListenPort(int port_);
-    void createKey();
-
-    std::string& getPublicKey();
+    std::string getPublicKey();
 
  private:
+    // создает рабочий конфиг wireguard и считывает данные
+    // если конфиг уже существует, просто считывает данные
+    void makeConfig(const std::string& name) override;
+
+    // вызывается, когда конфиг уже существует
+    // считывает из него данные
+    void loadFromFile(const std::string& path);
+
+    // создает файлы в etc/wireguard publickey и privatekey
+    void createKey();
+
+    // возвращает первый свободный ip по порядку и удаляет его из ipPull
+    std::string getAllowedIP();
+
     std::string name;
-    int peer;
+    size_t peer = 101;
     int port;
     std::string publicKey;
-    std::vector<std::string> ipull;
+    std::string privateKey;
+
+    // хранит свободные ip от 101 - 255, которые выдаются клиенту
+    std::map<std::size_t, std::string> ipPull;
 };

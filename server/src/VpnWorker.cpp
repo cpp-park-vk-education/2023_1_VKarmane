@@ -1,27 +1,34 @@
 // Copyright 2023 Kosmatoff
-#include <iostream>
-#include "VpnWorker.hpp"
 
-void VpnWorker::run()  {
-    std::lock_guard<std::mutex> lock(config_mutex_);
+#include <VpnWorker.hpp>
 
-    std::string client_ip_address = socket_.remote_endpoint().address().to_string();
-    boost::asio::streambuf buffer;
-    boost::asio::async_read_until(socket_, buffer, '\n', [this, &client_ip_address, &buffer](const boost::system::error_code &error, size_t bytes_transferred) {        
-        if (!error) {
-            std::string public_key(boost::asio::buffers_begin(buffer.data()), boost::asio::buffers_end(buffer.data()) - 1);
-            // запишет новый коннект в конфиг и вернет ipClient на сервере
-            std::string ipClientOnServer = config_.addPeer(public_key);
 
-            std::string message = "IP: " + ipClientOnServer + "\nPublic key: " + config_.getPublicKey() + "\n";
-            boost::asio::async_write(socket_, boost::asio::buffer(message), [this](const boost::system::error_code& error, size_t bytes_transferred) {
-                socket_.shutdown(tcp::socket::shutdown_both);
-                socket_.close();
-            });
-        } else {
-            std::cerr << "Error in async_read_until: " << error.message() << "\n";
-            socket_.shutdown(tcp::socket::shutdown_both);
-            socket_.close();
-        }
-    });
+boost::asio::ip::tcp::socket& VpnWorker::socket() {
+    return _socket;
+}
+
+void VpnWorker::start() {
+    doRead();
+}
+
+void VpnWorker::doRead() {
+    auto self(shared_from_this());
+    _socket.async_read_some(boost::asio::buffer(_data, max_length),
+                            [this, self](boost::system::error_code ec, std::size_t length) {
+                                if (!ec) {
+                                    ipAddPeer = _config.addPeer(_data);
+                                    doWrite();
+                                }
+                            });
+}
+
+void ::VpnWorker::doWrite() {
+    auto self(shared_from_this());
+    std::string message = ipAddPeer + "\n";
+    boost::asio::async_write(_socket, boost::asio::buffer(message),
+        [this, self](boost::system::error_code ec, std::size_t length) {
+            if (!ec) {
+                _socket.close();
+            }
+        });
 }

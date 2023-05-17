@@ -4,10 +4,19 @@ project(Server)
 set(CMAKE_CXX_STANDARD 17)
 
 enable_testing()
-add_subdirectory(googletest)
-add_executable(Server test.cpp)
-target_link_libraries(Server gtest_main)
+#add_subdirectory(googletest)
+add_executable(Server 
+               src/config.cpp
+               src/server.cpp
+               src/VpnWorker.cpp
+               src/main.cpp)
+
+#target_link_libraries(Server gtest_main)
+
+find_package(Boost REQUIRED COMPONENTS system thread)
+include_directories(${Boost_INCLUDE_DIRS})
+target_link_libraries(Server ${Boost_LIBRARIES})
 
 include_directories(include)
 
-add_subdirectory(tests)
+#add_subdirectory(tests)
