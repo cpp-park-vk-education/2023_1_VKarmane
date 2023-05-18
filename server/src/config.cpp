@@ -272,6 +272,7 @@ std::string Config::getAllowedIP() {
             std::string command = "wg set wg0 peer " + peer + " remove";
             system(command.c_str());
             ipPull.insert(std::make_pair(std::stoull(extractIPValue(ips)), ips));
+            firstValue = ips;
         } else {
             firstValue = "ServerFull\n";
         }
