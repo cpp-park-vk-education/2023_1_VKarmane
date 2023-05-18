@@ -4,6 +4,11 @@
 #include <map>
 #include <string>
 
+struct WireguardPeer {
+    std::string publicKey;
+    std::string allowedIPs;
+};
+
 class ICongif {
  public:
     virtual void deleteConfig(const std::string& name) = 0;
@@ -34,6 +39,8 @@ class Config : public ICongif {
     // создает рабочий конфиг wireguard и считывает данные
     // если конфиг уже существует, просто считывает данные
     void makeConfig(const std::string& name) override;
+
+    void AddPeerToConfig(const WireguardPeer& peer);
 
     // вызывается, когда конфиг уже существует
     // считывает из него данные
