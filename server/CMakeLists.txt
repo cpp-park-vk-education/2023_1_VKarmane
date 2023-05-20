@@ -20,3 +20,17 @@ target_link_libraries(Server ${Boost_LIBRARIES})
 include_directories(include)
 
 #add_subdirectory(tests)
+
+# Test
+
+add_subdirectory(googletest)
+add_executable(ServerTest 
+               tests/testConfig.cpp
+               tests/testServer.cpp 
+               src/config.cpp 
+               src/server.cpp
+               src/VpnWorker.cpp)
+
+target_link_libraries(ServerTest gtest_main ${Boost_LIBRARIES})
+include(GoogleTest)
+gtest_discover_tests(ServerTest)

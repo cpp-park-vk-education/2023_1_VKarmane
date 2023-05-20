@@ -11,6 +11,8 @@ static void signalHandler(int signum) {
     if (config_ptr) {
         config_ptr->stop();
     }
+    config_ptr->~Config();
+    delete config_ptr;
     exit(signum);
 }
 

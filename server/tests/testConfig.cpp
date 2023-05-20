@@ -5,24 +5,14 @@
 
 // проверка на создания конфига c пирами и корректность работы его методов
 TEST(WireGuardConfigTest, BasicConfigCreateTest) {
-    Config config("wg0.conf");
-    config.createKey();
-    config.setListenPort(51820);
+    Config config("/etc/wireguard/wg0.conf");
+    config.run();
 
-    config.addPeer("yKm7rYF7n0GtML9KvXYoyytzaqqh4vfRPXT7RjrcZCY=");
-
-    ASSERT_TRUE(std::filesystem::exists(dir + "wg0.conf"));
-    
-    std::ifstream fileTest("config.conf");
-    std::ifstream file(dir + "wg0.conf");
-    std::string testContent((std::istreambuf_iterator<char>(fileTest)),
-                               std::istreambuf_iterator<char>());
-
-    std::string actualContent((std::istreambuf_iterator<char>(file)),
-                               std::istreambuf_iterator<char>());
-    ASSERT_EQ(testContent, actualContent);
-    config.deleteConfig("wg0.conf");
-    config.deleteConfig("config.conf");
+    // Проверяем, что конфигурация WireGuard успешно поднята
+    std::string command = "wg show wg0";
+    int result = system(command.c_str());
+    ASSERT_EQ(result, 0);
+    config.stop();
 }
 
 // проверка на удаление конфига
@@ -37,7 +27,7 @@ TEST(WireGuardConfigTest, BasicConfigDeleteTest) {
 
 // ===========================================================================
 
-// проверка на создания файлов с ключами
+// // проверка на создания файлов с ключами
 TEST(WireGuardGenerateKeyTest, GenerateKeyTest) {
     std::string dir = "/etc/wireguard/";
     std::string publicKeyFile = dir + "publickey";
@@ -47,8 +37,7 @@ TEST(WireGuardGenerateKeyTest, GenerateKeyTest) {
     std::filesystem::remove(publicKeyFile);
     std::filesystem::remove(privateKeyFile);
 
-    Config config("wg0.conf");
-    config.createKey();
+    Config config(dir + "wg0.conf");
 
     // проверяем, что файлы уже созданы
     ASSERT_TRUE(std::filesystem::exists(publicKeyFile));
@@ -66,6 +55,15 @@ TEST(WireGuardGenerateKeyTest, GenerateKeyTest) {
 
     std::filesystem::remove(publicKeyFile);
     std::filesystem::remove(privateKeyFile);
-    config.deleteConfig("config.conf");
 }
 
+TEST(WireGuardConfigTest, AddPeer) {
+    std::string dir = "/etc/wireguard/";
+    Config config(dir + "wg0.conf");
+    config.run();
+    std::string ipPublic = config.addPeer("ALHo1Ji3W7quFYQKXgqVRA+QzgNRz3PrOk7/UeLdtm8=");
+    config.getPublicKey();
+    std::string testString = config.getPublicKey() + " 10.20.0.101/32\n";
+    ASSERT_EQ(ipPublic, testString);
+    config.stop();
+}

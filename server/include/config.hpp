@@ -11,6 +11,7 @@ struct WireguardPeer {
 
 class ICongif {
  public:
+    ~ICongif() = default;
     virtual void deleteConfig(const std::string& name) = 0;
  private:
     virtual void makeConfig(const std::string& path) = 0;
