@@ -69,10 +69,24 @@ include CMakeFiles/client.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/client.dir/flags.make
 
+CMakeFiles/client.dir/main.cpp.o: CMakeFiles/client.dir/flags.make
+CMakeFiles/client.dir/main.cpp.o: /home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/main.cpp
+CMakeFiles/client.dir/main.cpp.o: CMakeFiles/client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/client.dir/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/client.dir/main.cpp.o -MF CMakeFiles/client.dir/main.cpp.o.d -o CMakeFiles/client.dir/main.cpp.o -c /home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/main.cpp
+
+CMakeFiles/client.dir/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/client.dir/main.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/main.cpp > CMakeFiles/client.dir/main.cpp.i
+
+CMakeFiles/client.dir/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/client.dir/main.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/main.cpp -o CMakeFiles/client.dir/main.cpp.s
+
 CMakeFiles/client.dir/src/ConfigClient.cpp.o: CMakeFiles/client.dir/flags.make
 CMakeFiles/client.dir/src/ConfigClient.cpp.o: /home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/src/ConfigClient.cpp
 CMakeFiles/client.dir/src/ConfigClient.cpp.o: CMakeFiles/client.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/client.dir/src/ConfigClient.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/client.dir/src/ConfigClient.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/client.dir/src/ConfigClient.cpp.o -MF CMakeFiles/client.dir/src/ConfigClient.cpp.o.d -o CMakeFiles/client.dir/src/ConfigClient.cpp.o -c /home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/src/ConfigClient.cpp
 
 CMakeFiles/client.dir/src/ConfigClient.cpp.i: cmake_force
@@ -86,7 +100,7 @@ CMakeFiles/client.dir/src/ConfigClient.cpp.s: cmake_force
 CMakeFiles/client.dir/src/VPNClient.cpp.o: CMakeFiles/client.dir/flags.make
 CMakeFiles/client.dir/src/VPNClient.cpp.o: /home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/src/VPNClient.cpp
 CMakeFiles/client.dir/src/VPNClient.cpp.o: CMakeFiles/client.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/client.dir/src/VPNClient.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/client.dir/src/VPNClient.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/client.dir/src/VPNClient.cpp.o -MF CMakeFiles/client.dir/src/VPNClient.cpp.o.d -o CMakeFiles/client.dir/src/VPNClient.cpp.o -c /home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/src/VPNClient.cpp
 
 CMakeFiles/client.dir/src/VPNClient.cpp.i: cmake_force
@@ -99,17 +113,19 @@ CMakeFiles/client.dir/src/VPNClient.cpp.s: cmake_force
 
 # Object files for target client
 client_OBJECTS = \
+"CMakeFiles/client.dir/main.cpp.o" \
 "CMakeFiles/client.dir/src/ConfigClient.cpp.o" \
 "CMakeFiles/client.dir/src/VPNClient.cpp.o"
 
 # External object files for target client
 client_EXTERNAL_OBJECTS =
 
+client: CMakeFiles/client.dir/main.cpp.o
 client: CMakeFiles/client.dir/src/ConfigClient.cpp.o
 client: CMakeFiles/client.dir/src/VPNClient.cpp.o
 client: CMakeFiles/client.dir/build.make
 client: CMakeFiles/client.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable client"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable client"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/client.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

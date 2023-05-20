@@ -1,29 +1,30 @@
 #include "ConfigClient.hpp"
 
-ConfigClient::ConfigClient(): 
-          _address(nullptr), _privateKey(nullptr),
-          _publicKey(nullptr), _endpoint(nullptr),
-          _keepAlive(25) {
-               int status = mkdir("~/.wireguard-cli", 0777);
-               if (status == -1) {
-                    //ToDo handele error
-               }
+ConfigClient::ConfigClient():
+     _address(nullptr), _privateKey(nullptr),
+     _publicKey(nullptr), _endpoint(nullptr),
+     _keepAlive(25) {
+          int status = mkdir("~/.wireguard-cli", 0777);
+          if (status == -1) {
+               //ToDo handele error
           }
+}
 
 
 ConfigClient::ConfigClient(const std::string name, std::string configname): _name(name) {
      std::string path = frontendDataPath + configname;
-     std::ifstream cfgstream(path);
-     //parseInputFile(cfgstream); ////////////////////////////
      ParseFile p;
 
      if (p.isValid(path)) {
-          *this = p.parseConfig(path);
+          std::vector<std::vector<std::string>> parsed_vector = p.parseConfig(path);
+          *this = parsed_vector;
      } else {
-          this->setAllowedIPs(p.parseUrls(path));
+          *this = p.parseNotStructured(path);
+          this->genPair();
      }
 
-     cfgstream.close();
+     this->ipPublicKeyrequest();
+
 
      int status = mkdir("~/.wireguard-cli", 0777);
      if (status == -1) {
@@ -35,6 +36,47 @@ ConfigClient::ConfigClient(const std::string name, std::string configname): _nam
      if (status == -1) {
           //ToDo error handle
      }
+}
+
+ConfigClient& ConfigClient::operator=(const std::vector<std::vector<std::string>> parsed_vector) {
+     for (int i = 0; i < parsed_vector.size(); ++i) {
+          if (parsed_vector[i][0] == "PrivateKey") {
+               this->setPrivateKey(parsed_vector[i][1]);
+          }
+
+          if (parsed_vector[i][0] == "Address") {
+               this->setAddress(parsed_vector[i][1]);
+          }
+
+          if (parsed_vector[i][0] == "DNS") {
+               this->setDns(parsed_vector[i]);
+          }
+
+          if (parsed_vector[i][0] == "PublicKey") {
+               this->setPublicKey(parsed_vector[i][1]);
+          }
+
+          if (parsed_vector[i][0] == "AllowedIPs") {
+               this->setAllowedIPs(parsed_vector[i]);
+          }
+
+          if (parsed_vector[i][0] == "Endpoint") {
+               this->setEndpoint(parsed_vector[i][1]);
+          }
+
+          if (parsed_vector[i][0] == "PersistentKeepalive") {
+               this->setKeepAlive(std::stoul(parsed_vector[i][1]));
+          }
+
+          if (parsed_vector[i][0] == "URLlist") {
+               this->setAllowedIPs(parsed_vector[i]);
+          }
+
+          if (parsed_vector[i][0] == "Endpoint") {
+               this->setEndpoint(parsed_vector[i][1]);
+          }
+     }
+     return *this;
 }
 
 ConfigClient& ConfigClient::operator=(const ConfigClient& config) {
@@ -58,22 +100,21 @@ void ConfigClient::genPublicKey(const std::string& private_key) {
 }
 
 void ConfigClient::genPair() {
-     if (_publicKey.empty() || _privateKey.empty()) {
+     if (!_publicKey.empty() || !_privateKey.empty()) {
           //ToDo mistake handle
      }
+
      std::string pathPublicKey = "~/.wireguard-cli/" + _name + "/publickey";
      std::string pathPrivateKey = "~/.wireguard-cli/" + _name + "/privatekey";
      
      std::string command = "wg genkey | tee " + pathPrivateKey +
-                              " | wg pubkey > " + pathPublicKey;
+                         " | wg pubkey > " + pathPublicKey;
      std::system(command.c_str());
      std::ifstream publicKeyFile(pathPublicKey);
      std::ifstream privateKeyFile(pathPrivateKey);
 
-     if (publicKeyFile.is_open() && privateKeyFile.is_open()) {
-          std::getline(publicKeyFile, this->_publicKey);
+     if (privateKeyFile.is_open()) {
           std::getline(privateKeyFile, this->_privateKey);
-          publicKeyFile.close();
           privateKeyFile.close();
      }
      
@@ -85,9 +126,17 @@ int ConfigClient::ipPublicKeyrequest() {
           cli.connect();
           cli.send(this->_publicKey);
           std::string response = cli.receive();
-          if (!response_checker(response)) {
+          if (!cli.response_checker(response)) {
                // TODO: retry request throw exception
                return 505;
+          }
+
+          std::stringstream response_parse(response);
+          std::string pb, address;
+
+          while (response_parse >> pb >> address) {
+               this->_publicKey = pb;
+               this->_address = address;
           }
 
      } catch (std::exception& error) {
@@ -111,6 +160,8 @@ void ConfigClient::setUnspecified() {
           dnslist.push_back("8.8.4.4");
           this->setDns(dnslist);
      }
+
+     _endpoint = _endpoint + defaultPort;
 }
 
 void ConfigClient::buildConfig() {

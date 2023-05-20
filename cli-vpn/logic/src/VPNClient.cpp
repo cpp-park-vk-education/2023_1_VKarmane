@@ -3,12 +3,9 @@
 #include "vpnTunnel.hpp"
 
 void VPNClient::setVpnTunContext(const std::string& name, std::string contextFilePath) {
-     ConfigClient config(const std::string& name, contextFilePath);
-     config.genPair();
-     config.ipPublicKeyrequest();
+     ConfigClient config(name, contextFilePath);
      config.setUnspecified();
      config.buildConfig();
-     contextstream.close();
 
      vpnTun tun(name);
 
@@ -18,7 +15,7 @@ void VPNClient::setVpnTunContext(const std::string& name, std::string contextFil
 
 void VPNClient::runTun(size_t id) {
      try {
-          tunnels[i].up();
+          tunnels[id].up();
      } catch (std::exception& error) {
           std::cerr << "Error: " << error.what() << std::endl;
      }
@@ -27,7 +24,7 @@ void VPNClient::runTun(size_t id) {
 
 void VPNClient::stopTun(size_t id) {
      try {
-          tunnels[i].down();
+          tunnels[id].down();
      } catch (std::exception& error) {
           std::cerr << "Error: " << error.what() << std::endl;
      }

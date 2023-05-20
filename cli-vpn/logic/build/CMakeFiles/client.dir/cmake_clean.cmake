@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/client.dir/main.cpp.o"
+  "CMakeFiles/client.dir/main.cpp.o.d"
   "CMakeFiles/client.dir/src/ConfigClient.cpp.o"
   "CMakeFiles/client.dir/src/ConfigClient.cpp.o.d"
   "CMakeFiles/client.dir/src/VPNClient.cpp.o"

@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/client.dir/src/ConfigClient.cpp.o CMakeFiles/client.dir/src/VPNClient.cpp.o -o client 
+/usr/bin/c++ CMakeFiles/client.dir/main.cpp.o CMakeFiles/client.dir/src/ConfigClient.cpp.o CMakeFiles/client.dir/src/VPNClient.cpp.o -o client 

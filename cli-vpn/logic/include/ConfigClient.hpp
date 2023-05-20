@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <sys/stat.h>
+
 #include "Parser.hpp"
 #include "../../handshake/headers/ClinetHandshake.hpp"
 
@@ -15,12 +16,16 @@ public:
      
      ConfigClient(const std::string name, std::string configname);
 
+     ConfigClient(const std::string name, std::vector<std::vector<std::string>> parse_input);
+
      ConfigClient(const ConfigClient& config):
           _address(config._address), _privateKey(config._privateKey),
           _publicKey(config._publicKey), _allowedIPs(config._allowedIPs),
           _endpoint(config._endpoint), _keepAlive(config._keepAlive) {}
      
      ConfigClient& operator=(const ConfigClient& config);
+
+     ConfigClient& operator=(const std::vector<std::vector<std::string>> parsed_vector);
 
      void setAddress(std::string address) { _address = address; }
      void setPrivateKey(std::string privateKey) { _privateKey = privateKey; }
@@ -60,10 +65,5 @@ private:
      std::string tunDataPath = "~/.wireguard-cli/";
      std::string frontendDataPath = "../../../metadata/";
      std::string defaultPath = "/etc/wireguard/";
+     std::string defaultPort = ":51820";
 };
-
-
-
-bool response_checker(std::string response) {
-     return true; // ToDo checker
-}

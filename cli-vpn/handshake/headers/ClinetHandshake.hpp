@@ -29,6 +29,13 @@ public:
 
           return msg;
      }
+
+     bool response_checker(std::string response) {
+          if (response.size() > 0) {
+               return true; // ToDo checker
+          }
+          return false;
+     }
 private:
      boost::asio::io_context _io_context;
      boost::asio::ip::tcp::socket _socket;

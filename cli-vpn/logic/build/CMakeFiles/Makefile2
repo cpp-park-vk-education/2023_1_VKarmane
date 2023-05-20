@@ -81,12 +81,12 @@ clean: CMakeFiles/client.dir/clean
 CMakeFiles/client.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/build/CMakeFiles --progress-num=1,2,3 "Built target client"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/build/CMakeFiles --progress-num=1,2,3,4 "Built target client"
 .PHONY : CMakeFiles/client.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/client.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/build/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/build/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/client.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/build/CMakeFiles 0
 .PHONY : CMakeFiles/client.dir/rule

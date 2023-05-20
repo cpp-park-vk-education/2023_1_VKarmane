@@ -1,39 +1,52 @@
 #pragma once
 
 #include <vector>
+#include <fstream>
 #include <string>
+#include <sstream>
 #include <algorithm>
-#include "ConfigClient.hpp"
+
+
 
 class ParseFile {
 public:
      ParseFile() = default;
 
-     ConfigClient parseConfig(std::string filePath) {
+     std::vector<std::vector<std::string>> parseConfig(std::string filePath) {
           if (!isValid(filePath)) {
                //ToDo Handle Error
           }
 
-          ConfigClient cfg;
-          std::ifstream filestream;
+
+          size_t i = 0;
+          std::vector<std::vector<std::string>> output;
+
+          std::ifstream filestream(filePath);
           std::string line;
+          std::string key;
 
           while (std::getline(filestream, line)) {
                if (line.find("PrivateKey") != std::string::npos) {
                     line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    std::string key(line.substr(line.find("=") + 1));
-                    cfg.setPrivateKey(key);
+                    key = line.substr(line.find("=") + 1);
+
+                    output[i].push_back("PrivateKey");
+
+                    output[i].push_back(key);
                }
 
                if (line.find("Address") != std::string::npos) {
                     line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    std::string key(line.substr(line.find("=") + 1));
-                    cfg.setAddress(key);
+                    key = line.substr(line.find("=") + 1);
+                    
+                    output[i].push_back("Address");
+
+                    output[i].push_back(key);
                }
 
                if (line.find("DNS") != std::string::npos) {
                     line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    std::string key(line.substr(line.find("=") + 1));
+                    key = line.substr(line.find("=") + 1);
                     
                     std::vector<std::string> dnslist;
 
@@ -44,18 +57,25 @@ public:
                          dnslist.push_back(token);
                     }
 
-                    cfg.setDns(dnslist);
+                    output[i].push_back("DNS");
+
+                    for (int j = 0; j < dnslist.size(); ++j) {
+                         output[i].push_back(dnslist[j]);
+                    }
                }
 
                if (line.find("PublicKey") != std::string::npos) {
                     line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    std::string key(line.substr(line.find("=") + 1));
-                    cfg.setPublicKey(key);
+                    key = line.substr(line.find("=") + 1);
+                    
+                    output[i].push_back("PublicKey");
+
+                    output[i].push_back(key);
                }
 
                if (line.find("AllowedIPs") != std::string::npos) {
                     line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    std::string key(line.substr(line.find("=") + 1));
+                    key = line.substr(line.find("=") + 1);
 
                     std::vector<std::string> allowedips;
 
@@ -66,29 +86,43 @@ public:
                          allowedips.push_back(token);
                     }
 
-                    cfg.setAllowedIPs(allowedips);
+                    output[i].push_back("AllowedIPs");
+
+                    for (int j = 0; j < allowedips.size(); ++j) {
+                         output[i].push_back(allowedips[j]);
+                    }
                }
 
                if (line.find("Endpoint") != std::string::npos) {
                     line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    std::string key(line.substr(line.find("=") + 1));
-                    cfg.setEndpoint(key);
+                    key = line.substr(line.find("=") + 1);
+
+                    output[i].push_back("Endpoint");
+                    
+                    output[i].push_back(key);
                }
 
                if (line.find("PersistentKeepalive") != std::string::npos) {
                     line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    std::string key(line.substr(line.find("=") + 1));
-                    cfg.setKeepAlive(std::stoul(key));
+                    key = line.substr(line.find("=") + 1);
+                    
+                    output[i].push_back("PersistentKeepalive");
+
+                    output[i].push_back(key);
                }
           }
 
-          return cfg;
+          return output;
      }
 
-     std::vector<std::string> parseUrls(std::string filename) {
-          std::vector<std::string> v;
+     std::vector<std::vector<std::string>> parseNotStructured(std::string filename) {
+          std::vector<std::vector<std::string>> output;
+
           std::ifstream filestream(filename);
           std::string line;
+
+          size_t i = 0;
+
           while (std::getline(filestream, line)) {
                if (line.find("URLlist") != std::string::npos) {
                     line.erase(remove(line.begin(), line.end(), ' '), line.end());
@@ -103,10 +137,22 @@ public:
                          allowedips.push_back(token);
                     }
 
-                    return allowedips;
+                    output[i].push_back("URLlist");
+                    for (int j = 0; j < allowedips.size(); ++j) {
+                         output[i].push_back(allowedips[j]);
+                    }
+               }
+
+               if (line.find("Endpoint") != std::string::npos) {
+                    line.erase(remove(line.begin(), line.end(), ' '), line.end());
+                    std::string key(line.substr(line.find("=") + 1));
+
+                    output[i].push_back("Endpoint");
+
+                    output[i].push_back(key);
                }
           }
-          return v;
+          return output;
      }
 
      bool isValid(std::string path) {

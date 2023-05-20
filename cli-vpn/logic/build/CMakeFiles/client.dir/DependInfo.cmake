@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/main.cpp" "CMakeFiles/client.dir/main.cpp.o" "gcc" "CMakeFiles/client.dir/main.cpp.o.d"
   "/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/src/ConfigClient.cpp" "CMakeFiles/client.dir/src/ConfigClient.cpp.o" "gcc" "CMakeFiles/client.dir/src/ConfigClient.cpp.o.d"
   "/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/logic/src/VPNClient.cpp" "CMakeFiles/client.dir/src/VPNClient.cpp.o" "gcc" "CMakeFiles/client.dir/src/VPNClient.cpp.o.d"
   )

@@ -4,10 +4,12 @@ project(client)
 
 include_directories(src)
 include_directories(include)
+
 include_directories(../handshake/headers)
 include_directories(../handshake/src)
 
 set (SOURCES
+     main.cpp
      src/ConfigClient.cpp
      src/VPNClient.cpp
 )
