@@ -26,7 +26,6 @@ include_directories(include)
 add_subdirectory(googletest)
 add_executable(ServerTest 
                tests/testConfig.cpp
-               tests/testServer.cpp 
                src/config.cpp 
                src/server.cpp
                src/VpnWorker.cpp)

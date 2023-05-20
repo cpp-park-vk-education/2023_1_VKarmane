@@ -154,11 +154,13 @@ std::vector<WireguardPeer> parseWireGuardShowOutput(const std::string& output) {
             std::istringstream public_key(line);
             public_key.ignore(6);
             public_key >> peer.publicKey;
-
             // Extract allowed IPs
             std::getline(stream, line);
+            if (line.find("endpoint:") != std::string::npos) {
+                std::getline(stream, line);
+            }
             std::istringstream ipsStream(line);
-            ipsStream.ignore(15); // Skip "  allowed ips: "
+            ipsStream.ignore(15);  // Skip "  allowed ips: "
             std::getline(ipsStream, peer.allowedIPs, ',');
 
             peers.push_back(peer);
