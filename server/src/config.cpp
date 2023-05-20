@@ -276,7 +276,6 @@ std::string Config::getAllowedIP() {
         } else {
             firstValue = "ServerFull\n";
         }
-        // To Do
         // нужно найти конфиг самым больших last handshake соединением
         // удалить его с помощью wg set выдать его ip адрес новому peer
     }
