@@ -3,9 +3,9 @@
 #include "vpnTunnel.hpp"
 
 void VPNClient::setVpnTunContext(const std::string& name, std::string contextFilePath) {
-     ConfigClient config(name, contextFilePath);
-     config.setUnspecified();
-     config.buildConfig();
+     //ConfigClient config(name, contextFilePath);
+     //config.setUnspecified();
+     //config.buildConfig();
 
      vpnTun tun(name);
 

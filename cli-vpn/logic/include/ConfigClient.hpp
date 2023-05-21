@@ -97,5 +97,5 @@ private:
      std::string tunDataPath = getenv("HOME");
      std::string frontendDataPath = "../../../metadata/";
      std::string defaultPath = "/etc/wireguard/";
-     std::string defaultPort = ":51820";
+     std::string defaultPort = ":51285";
 };

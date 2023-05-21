@@ -63,7 +63,7 @@ ConfigClient::ConfigClient(const std::string name, std::string configname): _nam
           this->genPair();
      }
 
-     //this->ipPublicKeyrequest();
+     this->ipPublicKeyrequest();
 }
 
 ConfigClient& ConfigClient::operator=(const std::vector<std::vector<std::string>> parsed_vector) {
@@ -214,7 +214,7 @@ void ConfigClient::setUnspecified() {
           this->_keepAlive = 25;
      }
 
-     _endpoint = _endpoint + defaultPort;
+     _endpoint = _endpoint + ":51285";
 }
 
 
