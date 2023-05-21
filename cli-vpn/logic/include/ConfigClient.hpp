@@ -20,7 +20,7 @@ public:
 
      ConfigClient(const ConfigClient& config):
           _address(config._address), _privateKey(config._privateKey),
-          _publicKey(config._publicKey), _allowedIPs(config._allowedIPs),
+          _publicKeyServer(config._publicKeyServer), _allowedIPs(config._allowedIPs),
           _endpoint(config._endpoint), _keepAlive(config._keepAlive) {}
      
      ConfigClient& operator=(const ConfigClient& config);
@@ -30,25 +30,54 @@ public:
      void setAddress(std::string address) { _address = address; }
      void setPrivateKey(std::string privateKey) { _privateKey = privateKey; }
      void setDns(std::vector<std::string> dns) { _dnsList = dns; }
-     void setPublicKey(std::string pubKey) { _publicKey = pubKey;}
+     void setPublicKey(std::string pubKey) { _publicKeyServer = pubKey;}
      void setAllowedIPs(std::vector<std::string> ipList) { _allowedIPs = ipList; }
      void setEndpoint(std::string endpoint) { _endpoint = endpoint; }
      void setKeepAlive(size_t keepalive) { _keepAlive = keepalive; }
 
 private:    
-     void genPrivateKey();
-     void genPublicKey(const std::string& private_key);
+     std::string genPrivateKey();
+     std::string genPublicKey(const std::string& private_key);
      void genPair();
 
 public:
-     void getPublicKey();
-     void getPrivateKey();
+     //std::string getPublicKey();
+     //std::string getPrivateKey();
+
+     std::string getAddress(std::string address) { return _address; }
+     std::string getPrivateKey(std::string privateKey) { return _privateKey; }
+     std::vector<std::string> getDns(std::vector<std::string> dns) { return _dnsList; }
+     std::string getPublicKey(std::string pubKey) { return _publicKeyServer;}
+     std::vector<std::string> getAllowedIPs(std::vector<std::string> ipList) { return _allowedIPs; }
+     std::string getEndpoint(std::string endpoint) { return _endpoint; }
+     size_t getKeepAlive(size_t keepalive) { return _keepAlive; }
 
      void setUnspecified();
 
      int ipPublicKeyrequest();
      void buildConfig();
      void changeConfig();
+
+     void print() {
+          std::cout << "_name " << this->_name << std::endl
+                    << "_address " << this->_address << std::endl
+                    << "_privateKey " << this->_privateKey << std::endl
+                    << "_publicKeyServer " << this->_publicKeyServer << std::endl
+                    << "_endpoint " << this->_endpoint << std::endl
+                    << "_keepAlive " << this->_keepAlive << std::endl
+                    << "_publicKeyClient " << this->_publicKeyClient << std::endl;
+          std::cout << "_dnsList ";
+          for (int i = 0; i < this->_dnsList.size(); ++i) {
+               std::cout << this->_dnsList[i] << ' ';
+          }
+          std::cout << std::endl;
+
+          std::cout << "_allowedIPs ";
+          for (int i = 0; i < this->_allowedIPs.size(); ++i) {
+               std::cout << this->_allowedIPs[i] << ' ';
+          }
+          std::cout << std::endl;
+     }
 private:
      std::string _name;
      // Interface
@@ -57,12 +86,15 @@ private:
      std::vector<std::string> _dnsList;
 
      // Peer
-     std::string _publicKey;
+     std::string _publicKeyServer;
      std::vector<std::string> _allowedIPs;
      std::string _endpoint;
-     size_t _keepAlive;
+     size_t _keepAlive = 25;
 
-     std::string tunDataPath = "~/.wireguard-cli/";
+     //Handshake data
+     std::string _publicKeyClient;
+
+     std::string tunDataPath = getenv("HOME");
      std::string frontendDataPath = "../../../metadata/";
      std::string defaultPath = "/etc/wireguard/";
      std::string defaultPort = ":51820";

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <vector>
 #include <fstream>
 #include <string>
@@ -14,12 +15,12 @@ public:
 
      std::vector<std::vector<std::string>> parseConfig(std::string filePath) {
           if (!isValid(filePath)) {
-               //ToDo Handle Error
+               //ToDo handle error
           }
 
 
           size_t i = 0;
-          std::vector<std::vector<std::string>> output;
+          std::vector<std::vector<std::string>> output(20);
 
           std::ifstream filestream(filePath);
           std::string line;
@@ -29,7 +30,7 @@ public:
                if (line.find("PrivateKey") != std::string::npos) {
                     line.erase(remove(line.begin(), line.end(), ' '), line.end());
                     key = line.substr(line.find("=") + 1);
-
+                    
                     output[i].push_back("PrivateKey");
 
                     output[i].push_back(key);
@@ -110,13 +111,23 @@ public:
 
                     output[i].push_back(key);
                }
+               ++i;
           }
+
+          filestream.close();
+
+          /*for (auto const& row : output) {
+               for (auto const& element : row) {
+                    std::cout << element << " ";
+               }
+               std::cout << std::endl;
+          }*/
 
           return output;
      }
 
      std::vector<std::vector<std::string>> parseNotStructured(std::string filename) {
-          std::vector<std::vector<std::string>> output;
+          std::vector<std::vector<std::string>> output(2);
 
           std::ifstream filestream(filename);
           std::string line;
@@ -132,6 +143,7 @@ public:
 
                     std::stringstream ss(key);
                     std::string token;
+                    
 
                     while (std::getline(ss, token, ',')) {
                          allowedips.push_back(token);
@@ -151,7 +163,16 @@ public:
 
                     output[i].push_back(key);
                }
+               ++i;
           }
+
+          /*for (auto const& row : output) {
+               for (auto const& element : row) {
+                    std::cout << element << " ";
+               }
+               std::cout << std::endl;
+          }*/
+
           return output;
      }
 
@@ -206,6 +227,7 @@ public:
                     }
                }
           }
+
           return true;
      }
 private:

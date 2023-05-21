@@ -1,10 +1,13 @@
 #include "ConfigClient.hpp"
+//#include "../include/ConfigClient.hpp"
 
 ConfigClient::ConfigClient():
      _address(nullptr), _privateKey(nullptr),
-     _publicKey(nullptr), _endpoint(nullptr),
+     _publicKeyServer(nullptr), _endpoint(nullptr),
      _keepAlive(25) {
-          int status = mkdir("~/.wireguard-cli", 0777);
+          std::string path = getenv("HOME");
+          path = path + "/.wireguard-cli";
+          int status = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
           if (status == -1) {
                //ToDo handele error
           }
@@ -12,33 +15,59 @@ ConfigClient::ConfigClient():
 
 
 ConfigClient::ConfigClient(const std::string name, std::string configname): _name(name) {
-     std::string path = frontendDataPath + configname;
-     ParseFile p;
+     std::cout << "---------constr----------" << std::endl;
 
-     if (p.isValid(path)) {
-          std::vector<std::vector<std::string>> parsed_vector = p.parseConfig(path);
-          *this = parsed_vector;
-     } else {
-          *this = p.parseNotStructured(path);
-          this->genPair();
-     }
-
-     this->ipPublicKeyrequest();
-
-
-     int status = mkdir("~/.wireguard-cli", 0777);
+     std::string path;
+     path = defaultPath + "/wireguard-cli";
+     int status = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
      if (status == -1) {
           //ToDo handele error
      }
 
-     std::string folderPath = "~/.wireguard-cli/" + _name;
-     status = mkdir(folderPath.c_str(), 0777);
+     path = path + '/' + _name;
+     status = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
      if (status == -1) {
-          //ToDo error handle
+          std::cout << path << " " << status << std::endl;
      }
+
+     std::string cfgPath = configname;
+
+     ParseFile p;
+
+     if (p.isValid(cfgPath)) {
+          std::vector<std::vector<std::string>> parsed_vector = p.parseConfig(cfgPath);
+
+          for (auto const& row : parsed_vector) {
+               for (auto const& element : row) {
+                    std::cout << element << " ";
+               }
+               std::cout << std::endl;
+          }
+
+          *this = parsed_vector;
+     } else {
+          std::cout << "printing676776" << std::endl;
+          std::vector<std::vector<std::string>> parsed_vector = p.parseNotStructured(cfgPath);
+          
+          for (auto const& row : parsed_vector) {
+               for (auto const& element : row) {
+                    std::cout << element << " ";
+               }
+               std::cout << std::endl;
+          }
+
+          std::cout << "printing 1" << std::endl;
+          *this = parsed_vector;
+          std::cout << "printing" << std::endl;
+          this->print();
+          this->genPair();
+     }
+
+     //this->ipPublicKeyrequest();
 }
 
 ConfigClient& ConfigClient::operator=(const std::vector<std::vector<std::string>> parsed_vector) {
+     std::cout << "coping" << std::endl;
      for (int i = 0; i < parsed_vector.size(); ++i) {
           if (parsed_vector[i][0] == "PrivateKey") {
                this->setPrivateKey(parsed_vector[i][1]);
@@ -69,10 +98,21 @@ ConfigClient& ConfigClient::operator=(const std::vector<std::vector<std::string>
           }
 
           if (parsed_vector[i][0] == "URLlist") {
-               this->setAllowedIPs(parsed_vector[i]);
+               std::cout << "lol" << std::endl;
+               for (const auto& el : parsed_vector[i]) {
+                    std::cout << el << ' ';
+               }
+               
+               this->_allowedIPs = parsed_vector[i];
+               _allowedIPs.erase(_allowedIPs.begin());
+          
+               for (const auto& el : _allowedIPs) {
+                    std::cout << el << ' ';
+               }
           }
 
           if (parsed_vector[i][0] == "Endpoint") {
+               std::cout << "kek" << std::endl;
                this->setEndpoint(parsed_vector[i][1]);
           }
      }
@@ -82,30 +122,30 @@ ConfigClient& ConfigClient::operator=(const std::vector<std::vector<std::string>
 ConfigClient& ConfigClient::operator=(const ConfigClient& config) {
      _address = config._address;
      _privateKey = config._privateKey;
-     _publicKey = config._publicKey;
+     _publicKeyServer = config._publicKeyServer;
      _endpoint = config._endpoint;
      _keepAlive = config._keepAlive;
 
      return *this;
 }
      
-void ConfigClient::genPrivateKey() {
+std::string ConfigClient::genPrivateKey() {
      // TODO: Key gen
-     return;
+     return "a";
 }
 
-void ConfigClient::genPublicKey(const std::string& private_key) {
+std::string ConfigClient::genPublicKey(const std::string& private_key) {
      // TODO: Key gen
-     return;
+     return "b";
 }
 
 void ConfigClient::genPair() {
-     if (!_publicKey.empty() || !_privateKey.empty()) {
-          //ToDo mistake handle
+     if (!_publicKeyServer.empty() || !_privateKey.empty()) {
+          return;
      }
 
-     std::string pathPublicKey = "~/.wireguard-cli/" + _name + "/publickey";
-     std::string pathPrivateKey = "~/.wireguard-cli/" + _name + "/privatekey";
+     std::string pathPublicKey = defaultPath + "/wireguard-cli/" + _name + "/publickey";
+     std::string pathPrivateKey = defaultPath + "/wireguard-cli/" + _name + "/privatekey";
      
      std::string command = "wg genkey | tee " + pathPrivateKey +
                          " | wg pubkey > " + pathPublicKey;
@@ -113,8 +153,13 @@ void ConfigClient::genPair() {
      std::ifstream publicKeyFile(pathPublicKey);
      std::ifstream privateKeyFile(pathPrivateKey);
 
-     if (privateKeyFile.is_open()) {
+     std::cout << privateKeyFile.is_open() << ' ' << publicKeyFile.is_open() << std::endl;
+
+     if (privateKeyFile.is_open() && publicKeyFile.is_open()) {
           std::getline(privateKeyFile, this->_privateKey);
+          std::getline(publicKeyFile, this->_publicKeyClient);
+          std::cout << "key pair -> " << _privateKey << std::endl
+                    << _publicKeyClient << std::endl;
           privateKeyFile.close();
      }
      
@@ -123,11 +168,15 @@ void ConfigClient::genPair() {
 int ConfigClient::ipPublicKeyrequest() {
      try {
           Client cli("45.82.15.27", "2003");
+          std::cout << "foo" << std::endl;
           cli.connect();
-          cli.send(this->_publicKey);
+          std::cout << "foo" << std::endl;
+          cli.send(this->_publicKeyClient);
+          std::cout << "foo" << std::endl;
           std::string response = cli.receive();
           if (!cli.response_checker(response)) {
                // TODO: retry request throw exception
+               std::cout << "foo" << std::endl;
                return 505;
           }
 
@@ -135,7 +184,7 @@ int ConfigClient::ipPublicKeyrequest() {
           std::string pb, address;
 
           while (response_parse >> pb >> address) {
-               this->_publicKey = pb;
+               this->_publicKeyServer = pb;
                this->_address = address;
           }
 
@@ -154,19 +203,27 @@ void ConfigClient::setUnspecified() {
           this->setAllowedIPs(allowedips);
      }
 
-     if (_allowedIPs.size() == 0) {
+     if (_dnsList.size() == 0) {
           std::vector<std::string> dnslist;
           dnslist.push_back("8.8.8.8");
           dnslist.push_back("8.8.4.4");
           this->setDns(dnslist);
      }
 
+     if (this->_keepAlive == 0) {
+          this->_keepAlive = 25;
+     }
+
      _endpoint = _endpoint + defaultPort;
 }
 
+
+
 void ConfigClient::buildConfig() {
-     std::string path = defaultPath + _name;
-     std::fstream wg_config(path);
+     this->setUnspecified();
+
+     std::string path = defaultPath + _name + ".conf";
+     std::ofstream wg_config(path);
 
      wg_config << "[Interface]\n"
                << "Address = " << this->_address << "\n"
@@ -179,7 +236,7 @@ void ConfigClient::buildConfig() {
 
      wg_config << _dnsList[_dnsList.size() - 1] << "\n"
                << "[Peer]\n"
-               << "PublicKey = " << this->_publicKey << "\n"
+               << "PublicKey = " << this->_publicKeyServer << "\n"
                << "AllowedIPs = ";
 
      for (size_t i = 0; i < _allowedIPs.size() - 1; ++i) {
@@ -188,7 +245,7 @@ void ConfigClient::buildConfig() {
      
      wg_config << _allowedIPs[_allowedIPs.size() - 1] << "\n"
                << "Endpoint = " << this->_endpoint << "\n"
-               << "PersistentKeepalive = " << this->_keepAlive;
+               << "PersistentKeepalive = " << this->_keepAlive << '\n';
      
      wg_config.close();
 }
