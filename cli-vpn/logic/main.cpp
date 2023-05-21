@@ -3,9 +3,7 @@
 int main() {
      VPNClient cli;
 
-     ConfigClient cfg("NL_tun","testCfg.txt");
-
-     cfg.buildConfig();
+     cli.setVpnTunContext("NL_tun", "Context.txt");
 
      cli.runTun(0);
 
