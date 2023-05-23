@@ -158,7 +158,7 @@ void MainWindow::lightMode() {
 void MainWindow::connectionPoland() {
     defaultConfiguration.clear();
 
-    defaultConfiguration = "\nEndpoint = 45.82.15.27";
+    defaultConfiguration = "Endpoint = 45.82.15.27";
     nameTun = "PL_tun";
     ui->lbCountryMessage->setVisible(false);
     buttonCountryClicked = true;

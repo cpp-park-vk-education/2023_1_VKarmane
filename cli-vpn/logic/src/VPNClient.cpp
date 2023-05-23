@@ -57,9 +57,6 @@ void VPNClient::runTun(const std::string& name) {
           }
      }
 
-     if (id == -1) {
-          setUpContext(name, )
-     }
 
      try {
           tunnels[id].second.up();
