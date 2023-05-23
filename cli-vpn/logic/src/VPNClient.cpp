@@ -8,10 +8,8 @@ VPNClient::VPNClient() {
      DIR* directory;
      struct dirent* file;
      int count = 0;
-     if ((directory = opendir(path.c_str())) != nullptr)
-     {
-          while ((file = readdir(directory)) != nullptr)
-          {
+     if ((directory = opendir(path.c_str())) != nullptr) {
+          while ((file = readdir(directory)) != nullptr) {
                if (file->d_type == DT_REG && file->d_name[strlen(file->d_name) - 5] == '.' 
                     && file->d_name[strlen(file->d_name) - 4] == 'c' 
                     && file->d_name[strlen(file->d_name) - 3] == 'o' 
@@ -57,6 +55,10 @@ void VPNClient::runTun(const std::string& name) {
                id = i;
                break;
           }
+     }
+
+     if (id == -1) {
+          setUpContext(name, )
      }
 
      try {

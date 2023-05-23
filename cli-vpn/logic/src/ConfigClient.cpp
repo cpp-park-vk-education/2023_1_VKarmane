@@ -120,7 +120,6 @@ ConfigClient& ConfigClient::operator=(const std::vector<std::vector<std::string>
           }
 
           if (parsed_vector[i][0] == "Endpoint") {
-               std::cout << "kek" << std::endl;
                this->setEndpoint(parsed_vector[i][1]);
           }
      }

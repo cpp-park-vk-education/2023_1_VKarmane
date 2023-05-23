@@ -1,11 +1,10 @@
-#include "VPNClient.hpp"
+#include "Utilities.hpp"
 
 int main() {
-     VPNClient cli;
 
-     std::cout << "--------init---------" << std::endl;
+     std::string name = "8.8.8.8";
 
-     cli.printTunnels();
+     std::cout << ipToCountryCode(name);
 
      return 0;
 }
