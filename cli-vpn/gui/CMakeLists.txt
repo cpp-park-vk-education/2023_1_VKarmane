@@ -12,52 +12,32 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
-include_directories(gui/include)
-include_directories(gui/src)
-
-include_directories(handshake/headers)
-include_directories(handshake/src)
-
-include_directories(logic/include)
-include_directories(logic/src)
+include_directories(include)
+include_directories(src)
 
 set(PROJECT_SOURCES
-     #GUI
-     gui/src/main.cpp
-     gui/src/mainwindow.cpp
-     gui/include/mainwindow.h
-     gui/src/mainwindow.ui
+        src/main.cpp
+        src/mainwindow.cpp
+        include/mainwindow.h
+        src/mainwindow.ui
 
-     gui/src/configurationwindow.cpp
-     gui/include/configurationwindow.h
-     gui/src/configurationwindow.ui
+        src/configurationwindow.cpp
+        include/configurationwindow.h
+        src/configurationwindow.ui
 
-     gui/src/authenticationwindow.cpp
-     gui/include/authenticationwindow.h
-     gui/src/authenticationwindow.ui
+        src/authenticationwindow.cpp
+        include/authenticationwindow.h
+        src/authenticationwindow.ui
 
-     gui/src/staticswindow.cpp
-     gui/include/staticswindow.h
-     gui/src/staticswindow.ui
+        src/staticswindow.cpp
+        include/staticswindow.h
+        src/staticswindow.ui
 
-     gui/include/countries.h
-     gui/src/countries.cpp
-     gui/src/countries.ui
+        include/countries.h
+        src/countries.cpp
+        src/countries.ui
 
-     gui/resource.qrc
-
-     #Client Back Headers
-     logic/include/ConfigClient.hpp
-     logic/include/Parser.hpp
-     logic/include/VPNClient.hpp
-     logic/include/vpnTunnel.hpp
-     handshake/headers/ClinetHandshake.hpp
-
-     #Client Back Source
-     logic/src/ConfigClient.cpp
-     logic/src/VPNClient.cpp
-     logic/src/Parser.cpp
-     handshake/src/ClientHandshake.cpp
+        resource.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -71,13 +51,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(GUI SHARED
+        add_library(RK2 SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(GUI
+        add_executable(RK2
             ${PROJECT_SOURCES}
         )
     endif()
