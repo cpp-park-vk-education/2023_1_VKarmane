@@ -1,19 +1,19 @@
 #pragma once
 
 #include <utility>
+#include <dirent.h>
+#include <string.h>
 
 #include "ConfigClient.hpp"
 #include "vpnTunnel.hpp"
 
 class VPNClient {
 private:
-     // VPNUser useer;
+     // VPNUser useer; //
      std::vector<std::pair <std::string, vpnTun> > tunnels;
 
 public:
-     VPNClient() {
-          // load old cfg
-     }
+     VPNClient();
 
      ~VPNClient() = default;
 
@@ -22,6 +22,8 @@ public:
      void runTun(const std::string& name); // input name instead id
      void stopTun(const std::string& name);
      void rebootTun(const std::string& name);
+
+     void printTunnels();
 };
 
 

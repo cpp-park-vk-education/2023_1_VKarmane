@@ -83,6 +83,11 @@ public:
           std::cout << std::endl;
      }
 
+     bool isFileEmpty(std::string filename) {
+          std::ifstream file(filename);
+          return file.peek() == std::ifstream::traits_type::eof();
+     }
+
 private:
      // Config & tun name
      std::string _name;

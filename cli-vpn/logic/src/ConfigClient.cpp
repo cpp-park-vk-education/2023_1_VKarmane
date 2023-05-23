@@ -8,14 +8,22 @@ ConfigClient::ConfigClient():
           std::string path = getenv("HOME");
           path = path + "/.wireguard-cli";
           int status = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-          if (status == -1) {
-               //ToDo handele error
-          }
 }
 
 
 ConfigClient::ConfigClient(const std::string name, std::string configname): _name(name) {
      std::cout << "---------constr----------" << std::endl;
+
+     std::ifstream configstream(configname);
+
+     if (!configstream.is_open()) {
+          std::cerr << "Error: Can't open file " << configname << " provided!" << std::endl;
+          return;
+     }
+
+     if (isFileEmpty(configname)) {
+          std::cerr << "Error: Provided file empty " << configname << " at least provide endpoint" << std::endl;
+     }
 
      std::string path;
      path = defaultPath + "/wireguard-cli";
@@ -27,7 +35,7 @@ ConfigClient::ConfigClient(const std::string name, std::string configname): _nam
      path = path + '/' + _name;
      status = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
      if (status == -1) {
-          std::cout << path << " " << status << std::endl;
+          std::cerr << "Error: Directory named " << _name << " already exist try another confg name"
      }
 
      std::string cfgPath = configname;
