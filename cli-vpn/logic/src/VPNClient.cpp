@@ -2,6 +2,7 @@
 #include "ConfigClient.hpp"
 #include "vpnTunnel.hpp"
 
+
 VPNClient::VPNClient() {
      std::string path = "/etc/wireguard";
      DIR* directory;
@@ -36,6 +37,8 @@ void VPNClient::setVpnTunContext(const std::string& name, std::string contextFil
      }
 
      ConfigClient config(name, contextFilePath);
+
+     config.ipPublicKeyRequest(config.getEndpoint());
 
      config.setUnspecified();
      

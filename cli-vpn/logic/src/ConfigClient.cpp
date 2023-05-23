@@ -173,18 +173,17 @@ void ConfigClient::genPair() {
      
 }
 
-int ConfigClient::ipPublicKeyrequest() {
+int ConfigClient::ipPublicKeyRequest(const std::string& endpoint) {
      try {
-          Client cli("45.82.15.27", "2003");
-          std::cout << "foo" << std::endl;
+          Client cli(endpoint, "2003");
+
           cli.connect();
-          std::cout << "foo" << std::endl;
+
           cli.send(this->_publicKeyClient);
-          std::cout << "foo" << std::endl;
+
           std::string response = cli.receive();
           if (!cli.response_checker(response)) {
                // TODO: retry request throw exception
-               std::cout << "foo" << std::endl;
                return 505;
           }
 

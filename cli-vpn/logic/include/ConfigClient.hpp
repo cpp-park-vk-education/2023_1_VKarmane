@@ -46,17 +46,18 @@ private:
 public:
      void genPair();
 
-     std::string getAddress(std::string address) { return _address; }
-     std::string getPrivateKey(std::string privateKey) { return _privateKey; }
-     std::vector<std::string> getDns(std::vector<std::string> dns) { return _dnsList; }
-     std::string getPublicKey(std::string pubKey) { return _publicKeyServer;}
-     std::vector<std::string> getAllowedIPs(std::vector<std::string> ipList) { return _allowedIPs; }
-     std::string getEndpoint(std::string endpoint) { return _endpoint; }
-     size_t getKeepAlive(size_t keepalive) { return _keepAlive; }
+     std::string getAddress() { return _address; }
+     std::string getPrivateKey() { return _privateKey; }
+     std::vector<std::string> getDns() { return _dnsList; }
+     std::string getPublicKey() { return _publicKeyServer;}
+     std::vector<std::string> getAllowedIPs() { return _allowedIPs; }
+     std::string getEndpoint() { return _endpoint; }
+     size_t getKeepAlive() { return _keepAlive; }
 
      void setUnspecified(); // Seting in config parametrs by default that i can
 
-     int ipPublicKeyrequest();
+     int ipPublicKeyRequest(const std::string& endpoint);
+
      void buildConfig();                 // Initiation config in /etc/wireguard folder
                                    // saving in /etc/wireguard/wireguard-cli/${_name}/
 
