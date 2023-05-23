@@ -1,7 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-
 #include <QMainWindow>
 #include "staticswindow.h"
 #include "authenticationwindow.h"
@@ -36,9 +35,11 @@ private slots:
     void showCountries();
 
     void setValueButtonCountryClicked(bool value);
-    void setValueDefaultConfiguration(std::string value);
+    void setValueDefaultConfiguration(const std::string& value);
     void setValueConfigAdded(bool value);
+    void setValueNameTun(const std::string& value);
 
+    void clearConfig(const QString& filePath);
 
 private:
     Ui::MainWindow *ui;
@@ -53,7 +54,10 @@ private:
     bool buttonCountryClicked;
     bool configAdded;
 
+    std::string nameTun;
     std::string defaultConfiguration;
+
+    QString filePath;
 
 };
 #endif // MAINWINDOW_H

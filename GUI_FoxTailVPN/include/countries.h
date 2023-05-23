@@ -3,12 +3,21 @@
 
 #include <QDialog>
 
+
+QT_BEGIN_NAMESPACE
 namespace Ui {
 class Countries;
 }
+QT_END_NAMESPACE
 
-class Countries : public QDialog
-{
+class ICountriesWindow {
+    virtual void btnBack() = 0;
+    virtual void readLEServerIP() = 0;
+    virtual void deleteServerIP() = 0;
+    virtual void chooseServerIP() = 0;
+};
+
+class Countries : public QDialog, public ICountriesWindow {
     Q_OBJECT
 
 public:
@@ -22,16 +31,17 @@ private:
     std::string defaultConfiguration;
 
 signals:
+    void valueChangedNameTun(const std::string& value);
     void backMainWindow();
     void valueChangedButtonCountryClicked(bool value);
-    void valueChangedDefaultConfiguration(std::string value);
+    void valueChangedDefaultConfiguration(const std::string& value);
 
 
 private slots:
-    void back();
-    void readLEServerIP();
-    void deleteServerIP();
-    void chooseServerIP();
+    void btnBack() override;
+    void readLEServerIP() override;
+    void deleteServerIP() override;
+    void chooseServerIP() override;
 };
 
 #endif // COUNTRIES_H

@@ -12,8 +12,8 @@ QT_END_NAMESPACE
 
 class IConfigurationWindow {
     virtual void btnSave() = 0;
-    virtual void btnDelete() = 0;
     virtual void btnBack() = 0;
+    virtual void saveConfig(const QString& configURLS) = 0;
 };
 
 class ConfigurationWindow : public QDialog, public IConfigurationWindow {
@@ -33,8 +33,8 @@ signals:
 
 private slots:
     void btnSave() override;
-    void btnDelete() override;
     void btnBack() override;
+    void saveConfig(const QString& configURLS) override;
 };
 
 #endif // CONFIGURATIONWINDOW_H
