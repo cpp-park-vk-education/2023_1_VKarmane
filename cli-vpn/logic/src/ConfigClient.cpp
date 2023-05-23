@@ -63,7 +63,7 @@ ConfigClient::ConfigClient(const std::string name, std::string configname): _nam
           this->genPair();
      }
 
-     this->ipPublicKeyrequest();
+     // this->ipPublicKeyrequest();
 }
 
 ConfigClient& ConfigClient::operator=(const std::vector<std::vector<std::string>> parsed_vector) {
@@ -220,8 +220,6 @@ void ConfigClient::setUnspecified() {
 
 
 void ConfigClient::buildConfig() {
-     this->setUnspecified();
-
      std::string path = defaultPath + _name + ".conf";
      std::ofstream wg_config(path);
 
@@ -248,9 +246,12 @@ void ConfigClient::buildConfig() {
                << "PersistentKeepalive = " << this->_keepAlive << '\n';
      
      wg_config.close();
+
+     
 }
 
 
 void ConfigClient::changeConfig() {
+
      return;
 }

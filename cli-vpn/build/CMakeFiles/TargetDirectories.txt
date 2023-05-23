@@ -1,2 +1,3 @@
+/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/build/CMakeFiles/client.dir
 /home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/build/CMakeFiles/edit_cache.dir
 /home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/build/CMakeFiles/rebuild_cache.dir

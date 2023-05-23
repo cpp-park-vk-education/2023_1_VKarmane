@@ -24,7 +24,7 @@ public:
           boost::asio::write(_socket, boost::asio::buffer(msg));
      }
 
-     /*std::string receive() {
+     std::string receive() {
           boost::asio::streambuf buffer;
           boost::asio::read_until(_socket, buffer, '\n');
      
@@ -33,9 +33,11 @@ public:
           std::cout << "recived smth check it out " << msg << std::endl;
 
           return msg;
-     }*/
+     }
 
-     std::string receive() {
+     // Debug function to check error in recived message
+     
+     /*std::string receive() {
           boost::asio::streambuf buffer;
           boost::system::error_code error;
 
@@ -57,7 +59,7 @@ public:
           std::cout << "Received message: " << msg << std::endl;
 
           return msg;
-     }
+     }*/
 
      bool response_checker(std::string response) {
           if (response.size() > 0) {

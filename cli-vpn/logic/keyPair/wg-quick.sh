@@ -4,6 +4,7 @@
 # Copyright (C) 2015-2020 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
 #
 
+
 set -e -o pipefail
 shopt -s extglob
 export LC_ALL=C
