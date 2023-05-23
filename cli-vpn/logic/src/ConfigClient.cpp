@@ -35,7 +35,7 @@ ConfigClient::ConfigClient(const std::string name, std::string configname): _nam
      path = path + '/' + _name;
      status = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
      if (status == -1) {
-          std::cerr << "Error: Directory named " << _name << " already exist try another confg name"
+          std::cerr << "Error: Directory named " << _name << " already exist try another confg name";
      }
 
      std::string cfgPath = configname;

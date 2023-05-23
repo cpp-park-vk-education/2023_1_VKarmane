@@ -36,7 +36,8 @@ void Countries::chooseServerIP() {
     }
     QListWidgetItem *currentItem = ui->lwServers->currentItem();
     QString selectedText = currentItem->text();
-    std::string selectedTextStd = "\nServerIP=" + selectedText.toStdString();
+    std::string selectedTextStd = "\nEndpoint =" + selectedText.toStdString();
+    emit valueChancgenameTun(selectedTextStd);
     emit valueChangedButtonCountryClicked(true);
     emit valueChangedDefaultConfiguration(selectedTextStd);
 }

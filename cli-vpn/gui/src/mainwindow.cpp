@@ -5,7 +5,7 @@
 #include <iostream>
 #include <QScreen>
 #include <QTextStream>
-
+#include "VPNClient.hpp"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     countriesWindow = new Countries();
     connect(countriesWindow, &Countries::backMainWindow, this, &MainWindow::show);
+    connect(countriesWindow, &Countries::valueChangedNameTun, this, &MainWindow::setValueNameTun);
     connect(countriesWindow, &Countries::valueChangedButtonCountryClicked, this, &MainWindow::setValueButtonCountryClicked);
     connect(countriesWindow, &Countries::valueChangedDefaultConfiguration, this, &MainWindow::setValueDefaultConfiguration);
 
@@ -64,7 +65,6 @@ MainWindow::~MainWindow() {
 void MainWindow::showCountries() {
     countriesWindow->show();
     this->close();
-
 }
 
 void MainWindow::setValueButtonCountryClicked(bool value) {
@@ -75,6 +75,11 @@ void MainWindow::setValueButtonCountryClicked(bool value) {
 void MainWindow::setValueDefaultConfiguration(std::string value) {
     defaultConfiguration = value;
 }
+
+void MainWindow::setValueNameTun(std::string value) {
+    nameTun = value;
+}
+
 
 void MainWindow::setValueConfigAdded(bool value) {
     configAdded = value;
@@ -111,8 +116,15 @@ void MainWindow::turnOnVPN() {
                 QTextStream stream(&file);
                 stream << QString::fromStdString(defaultConfiguration) << "\n";
                 file.close();
+
+                VPNClient client;
+
+                client.setVpnTunContext(nameTun, filePath);
+
+                client.runTun(nameTun);
             }
         } else {
+            client.stopTun(nameTun);
             ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/arrows-button-off_98344.png); width: 50px; height: 50px;}");
             ui->lbFoxTail->setVisible(false);
             ui->lbConfigUsageOn->setVisible(false);
@@ -149,19 +161,22 @@ void MainWindow::lightMode() {
 
     // Устанавливаем данную палитру
     qApp->setPalette(lightPalette);
-
 }
 
 void MainWindow::connectionPoland() {
     defaultConfiguration.clear();
-    defaultConfiguration = "\nServerIP=104.18.2.161/32";
+
+    defaultConfiguration = "\nEndpoint = 45.82.15.27";
+    nameTun = "PL_tun";
     ui->lbCountryMessage->setVisible(false);
     buttonCountryClicked = true;
 }
 
 void MainWindow::connectionNetherlands() {
     defaultConfiguration.clear();
-    defaultConfiguration = "\nServerIP=04.18.2.161/32";
+
+    defaultConfiguration = "\nEndpoint = 46.19.69.219";
+    nameTun = "NL_tun";
     ui->lbCountryMessage->setVisible(false);
     buttonCountryClicked = true;
 }

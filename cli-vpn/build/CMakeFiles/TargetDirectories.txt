@@ -1,8 +1,8 @@
-/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/build/CMakeFiles/GUI.dir
-/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/build/CMakeFiles/edit_cache.dir
-/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/build/CMakeFiles/rebuild_cache.dir
-/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/build/CMakeFiles/list_install_components.dir
-/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/build/CMakeFiles/install.dir
-/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/build/CMakeFiles/install/local.dir
-/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/build/CMakeFiles/install/strip.dir
-/home/hiiiiiiiiiii/git/project/2023_1_VKarmane/cli-vpn/build/CMakeFiles/GUI_autogen.dir
+/home/kosmatoff/git/2023_1_VKarmane/cli-vpn/build/CMakeFiles/GUI.dir
+/home/kosmatoff/git/2023_1_VKarmane/cli-vpn/build/CMakeFiles/edit_cache.dir
+/home/kosmatoff/git/2023_1_VKarmane/cli-vpn/build/CMakeFiles/rebuild_cache.dir
+/home/kosmatoff/git/2023_1_VKarmane/cli-vpn/build/CMakeFiles/list_install_components.dir
+/home/kosmatoff/git/2023_1_VKarmane/cli-vpn/build/CMakeFiles/install.dir
+/home/kosmatoff/git/2023_1_VKarmane/cli-vpn/build/CMakeFiles/install/local.dir
+/home/kosmatoff/git/2023_1_VKarmane/cli-vpn/build/CMakeFiles/install/strip.dir
+/home/kosmatoff/git/2023_1_VKarmane/cli-vpn/build/CMakeFiles/GUI_autogen.dir

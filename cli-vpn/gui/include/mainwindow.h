@@ -17,11 +17,11 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
-public:
+ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
+ private slots:
     void lightMode();
     void darkMode();
 
@@ -38,9 +38,9 @@ private slots:
     void setValueButtonCountryClicked(bool value);
     void setValueDefaultConfiguration(std::string value);
     void setValueConfigAdded(bool value);
+    void setValueNameTun(std::string value);
 
-
-private:
+ private:
     Ui::MainWindow *ui;
     Countries* countriesWindow;
     ConfigurationWindow* configurationWindow;
@@ -53,6 +53,7 @@ private:
     bool buttonCountryClicked;
     bool configAdded;
 
+    std::string nameTun;
     std::string defaultConfiguration;
 
 };

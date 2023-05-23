@@ -11,23 +11,24 @@ class Countries : public QDialog
 {
     Q_OBJECT
 
-public:
+ public:
     explicit Countries(QWidget *parent = nullptr);
     ~Countries();
 
-private:
+ private:
     Ui::Countries *ui;
 
     bool buttonCountryClicked;
     std::string defaultConfiguration;
 
-signals:
+ signals:
+    void valueChangedNameTun(std::string value);
     void backMainWindow();
     void valueChangedButtonCountryClicked(bool value);
     void valueChangedDefaultConfiguration(std::string value);
 
 
-private slots:
+ private slots:
     void back();
     void readLEServerIP();
     void deleteServerIP();
