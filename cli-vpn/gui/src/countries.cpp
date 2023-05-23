@@ -8,7 +8,7 @@ Countries::Countries(QWidget *parent) :
     ui->setupUi(this);
     setFixedSize(420, 476);
 
-    connect(ui->btnBack, SIGNAL(clicked(bool)), this, SLOT(back()));
+    connect(ui->btnBack, SIGNAL(clicked(bool)), this, SLOT(btnBack()));
 
     connect(ui->btnAdd, SIGNAL(clicked(bool)), this, SLOT(readLEServerIP()));
 
@@ -21,7 +21,7 @@ Countries::~Countries() {
     delete ui;
 }
 
-void Countries::back() {
+void Countries::btnBack() {
     this->close();
     emit backMainWindow();
 }
@@ -37,7 +37,7 @@ void Countries::chooseServerIP() {
     QListWidgetItem *currentItem = ui->lwServers->currentItem();
     QString selectedText = currentItem->text();
     std::string selectedTextStd = "\nEndpoint =" + selectedText.toStdString();
-    emit valueChancgenameTun(selectedTextStd);
+    emit valueChangedNameTun(selectedTextStd);
     emit valueChangedButtonCountryClicked(true);
     emit valueChangedDefaultConfiguration(selectedTextStd);
 }
