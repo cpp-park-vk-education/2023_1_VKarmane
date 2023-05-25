@@ -100,14 +100,14 @@ border-image:url(:/img/arrows-button-on_97730.png);
     </property>
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>124</x>
       <y>140</y>
-      <width>161</width>
+      <width>171</width>
       <height>51</height>
      </rect>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a name=&quot;tw-target-text&quot;/&gt;&lt;span style=&quot; font-family:'inherit'; color:#a51d2d;&quot;&gt;C&lt;/span&gt;&lt;span style=&quot; font-family:'inherit'; color:#a51d2d;&quot;&gt;hoose country or &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'inherit'; color:#a51d2d;&quot;&gt;set up your server IP&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a name=&quot;tw-target-text&quot;/&gt;&lt;span style=&quot; font-family:'inherit'; font-size:12pt; font-weight:700; color:#a51d2d;&quot;&gt;C&lt;/span&gt;&lt;span style=&quot; font-family:'inherit'; font-size:12pt; font-weight:700; color:#a51d2d;&quot;&gt;hoose country or &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'inherit'; font-size:12pt; font-weight:700; color:#a51d2d;&quot;&gt;set up your server IP&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="lbConfigUsageOff">
@@ -116,14 +116,14 @@ border-image:url(:/img/arrows-button-on_97730.png);
     </property>
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>340</x>
       <y>0</y>
-      <width>121</width>
+      <width>81</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#a51d2d;&quot;&gt;Config isn't active&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700; color:#a51d2d;&quot;&gt;Config OFF&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="lbConfigUsageOn">
@@ -132,14 +132,14 @@ border-image:url(:/img/arrows-button-on_97730.png);
     </property>
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>340</x>
       <y>0</y>
       <width>101</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#26a269;&quot;&gt;Config is active&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700; color:#26a269;&quot;&gt;Config ON&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <zorder>lbFoxTail</zorder>
