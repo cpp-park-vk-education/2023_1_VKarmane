@@ -15,7 +15,7 @@
 #include "../../handshake/headers/ClinetHandshake.hpp"
 
 class ConfigClient {
-public:
+ public:
      ConfigClient();
      
      ConfigClient(const std::string name, std::string configname);
@@ -39,11 +39,11 @@ public:
      void setEndpoint(std::string endpoint) { _endpoint = endpoint; }
      void setKeepAlive(size_t keepalive) { _keepAlive = keepalive; }
 
-private:    
+ private:    
      std::string genPrivateKey();
      std::string genPublicKey(const std::string& private_key);
 
-public:
+ public:
      void genPair();
 
      std::string getAddress() { return _address; }
@@ -61,7 +61,7 @@ public:
      void buildConfig();                 // Initiation config in /etc/wireguard folder
                                    // saving in /etc/wireguard/wireguard-cli/${_name}/
 
-     void changeConfig();
+     void changeAllowedIPs();
 
      void print() {
           std::cout << "| _name = " << this->_name << std::endl
@@ -84,12 +84,12 @@ public:
           std::cout << std::endl;
      }
 
-     bool isFileEmpty(std::string filename) {
+     bool isFileEmpty(const std::string& filename) {
           std::ifstream file(filename);
           return file.peek() == std::ifstream::traits_type::eof();
      }
 
-private:
+ private:
      // Config & tun name
      std::string _name;
      // Interface

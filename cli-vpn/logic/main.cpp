@@ -2,9 +2,7 @@
 
 int main() {
 
-     std::string name = "8.8.8.8";
-
-     std::cout << ipToCountryCode(name);
+     VPNClient cli;
 
      return 0;
 }

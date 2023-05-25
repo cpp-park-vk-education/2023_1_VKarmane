@@ -29,7 +29,12 @@ VPNClient::VPNClient() {
 void VPNClient::setVpnTunContext(const std::string& name, std::string contextFilePath) {
      for (int i = 0; i < tunnels.size(); ++i) {
           if (tunnels[i].first == name) {
-               std::cerr << "Error: Config file " << name << " already exist" << std::endl;
+               ConfigClient config(name, contextFilePath);
+
+               config.setUnspecified();
+
+               config.buildConfig();
+               
                return;
           }
      }

@@ -40,36 +40,21 @@ ConfigClient::ConfigClient(const std::string name, std::string configname): _nam
 
      std::string cfgPath = configname;
 
-     ParseFile p;
+     ParseFile parser;
 
-     if (p.isValid(cfgPath)) {
-          std::vector<std::vector<std::string>> parsed_vector = p.parseConfig(cfgPath);
+     
+     std::vector<std::vector<std::string>> parsed_vector = parser.getTokens(cfgPath);
 
-          for (auto const& row : parsed_vector) {
-               for (auto const& element : row) {
-                    std::cout << element << " ";
-               }
-               std::cout << std::endl;
+     for (auto const& row : parsed_vector) {
+          for (auto const& element : row) {
+               std::cout << element << " ";
           }
-
-          *this = parsed_vector;
-     } else {
-          std::cout << "printing676776" << std::endl;
-          std::vector<std::vector<std::string>> parsed_vector = p.parseNotStructured(cfgPath);
-          
-          for (auto const& row : parsed_vector) {
-               for (auto const& element : row) {
-                    std::cout << element << " ";
-               }
-               std::cout << std::endl;
-          }
-
-          std::cout << "printing 1" << std::endl;
-          *this = parsed_vector;
-          std::cout << "printing" << std::endl;
-          this->print();
-          this->genPair();
+          std::cout << std::endl;
      }
+
+     *this = parsed_vector;
+
+     this->print();
 
      // this->ipPublicKeyrequest();
 }
@@ -77,51 +62,53 @@ ConfigClient::ConfigClient(const std::string name, std::string configname): _nam
 ConfigClient& ConfigClient::operator=(const std::vector<std::vector<std::string>> parsed_vector) {
      std::cout << "coping" << std::endl;
      for (int i = 0; i < parsed_vector.size(); ++i) {
-          if (parsed_vector[i][0] == "PrivateKey") {
-               this->setPrivateKey(parsed_vector[i][1]);
-          }
-
-          if (parsed_vector[i][0] == "Address") {
-               this->setAddress(parsed_vector[i][1]);
-          }
-
-          if (parsed_vector[i][0] == "DNS") {
-               this->setDns(parsed_vector[i]);
-          }
-
-          if (parsed_vector[i][0] == "PublicKey") {
-               this->setPublicKey(parsed_vector[i][1]);
-          }
-
-          if (parsed_vector[i][0] == "AllowedIPs") {
-               this->setAllowedIPs(parsed_vector[i]);
-          }
-
-          if (parsed_vector[i][0] == "Endpoint") {
-               std::cout << parsed_vector[i][1] << std::endl;
-               this->setEndpoint(parsed_vector[i][1]);
-          }
-
-          if (parsed_vector[i][0] == "PersistentKeepalive") {
-               this->setKeepAlive(std::stoul(parsed_vector[i][1]));
-          }
-
-          if (parsed_vector[i][0] == "URLlist") {
-               std::cout << "lol" << std::endl;
-               for (const auto& el : parsed_vector[i]) {
-                    std::cout << el << ' ';
+          if (parsed_vector[i].size() > 0) {
+               if (parsed_vector[i][0] == "PrivateKey") {
+                    this->setPrivateKey(parsed_vector[i][1]);
                }
+
+               if (parsed_vector[i][0] == "Address") {
+                    this->setAddress(parsed_vector[i][1]);
+               }
+
+               if (parsed_vector[i][0] == "DNS") {
+                    this->setDns(parsed_vector[i]);
+               }
+
+               if (parsed_vector[i][0] == "PublicKey") {
+                    this->setPublicKey(parsed_vector[i][1]);
+               }
+
+               if (parsed_vector[i][0] == "AllowedIPs") {
+                    this->setAllowedIPs(parsed_vector[i]);
+               }
+
+               if (parsed_vector[i][0] == "Endpoint") {
+                    std::cout << parsed_vector[i][1] << std::endl;
+                    this->setEndpoint(parsed_vector[i][1]);
+               }
+
+               if (parsed_vector[i][0] == "PersistentKeepalive") {
+                    this->setKeepAlive(std::stoul(parsed_vector[i][1]));
+               }
+
+               if (parsed_vector[i][0] == "URLlist") {
+                    std::cout << "lol" << std::endl;
+                    for (const auto& el : parsed_vector[i]) {
+                         std::cout << el << ' ';
+                    }
+                    
+                    this->_allowedIPs = parsed_vector[i];
+                    _allowedIPs.erase(_allowedIPs.begin());
                
-               this->_allowedIPs = parsed_vector[i];
-               _allowedIPs.erase(_allowedIPs.begin());
-          
-               for (const auto& el : _allowedIPs) {
-                    std::cout << el << ' ';
+                    for (const auto& el : _allowedIPs) {
+                         std::cout << el << ' ';
+                    }
                }
-          }
 
-          if (parsed_vector[i][0] == "Endpoint") {
-               this->setEndpoint(parsed_vector[i][1]);
+               if (parsed_vector[i][0] == "Endpoint") {
+                    this->setEndpoint(parsed_vector[i][1]);
+               }
           }
      }
      return *this;
@@ -166,8 +153,8 @@ void ConfigClient::genPair() {
      if (privateKeyFile.is_open() && publicKeyFile.is_open()) {
           std::getline(privateKeyFile, this->_privateKey);
           std::getline(publicKeyFile, this->_publicKeyClient);
-          std::cout << "key pair -> " << _privateKey << std::endl
-                    << _publicKeyClient << std::endl;
+          std::cout << "key pair -> " << this->_privateKey << std::endl
+                    << this->_publicKeyClient << std::endl;
           privateKeyFile.close();
      }
      
@@ -252,13 +239,7 @@ void ConfigClient::buildConfig() {
                << "Endpoint = " << this->_endpoint << "\n"
                << "PersistentKeepalive = " << this->_keepAlive << '\n';
      
-     wg_config.close();
-
-     
+     wg_config.close();     
 }
 
 
-void ConfigClient::changeConfig() {
-
-     return;
-}

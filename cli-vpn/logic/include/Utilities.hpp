@@ -8,13 +8,24 @@
 
 #include <GeoIP.h>
 
-bool isValidName(const std::string& name) {
+#include "Parser.hpp"
+
+bool isIP4(const std::string& name) {
      std::regex pattern("\\d+\\.\\d+\\.\\d+\\.\\d+");
 
-     return (std::regex_match(name, pattern)) ? false : true;
+     return (std::regex_match(name, pattern)) ? true : false;
 }
 
-std::string ipToCountryCode (const std::string& name) {
+bool isChanged(const std::string& filename) {
+     std::string confPath = "/etc/wireguard/" + filename + ".conf";
+     std::ifstream configstream(confPath);
+
+     ParseFile parser;
+
+     parser.getTokens(confPath);
+}
+
+/*std::string ipToCountryCode (const std::string& name) {
      GeoIP *gi = GeoIP_open("/usr/share/GeoIP/GeoIP.dat", GEOIP_STANDARD);
      const char *ip = name.c_str();
      const char *country_code = GeoIP_country_code_by_addr(gi, ip);
@@ -25,4 +36,4 @@ std::string ipToCountryCode (const std::string& name) {
      }
      GeoIP_delete(gi);
      return ""; // or some other default value
-}
+}*/
