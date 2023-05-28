@@ -5,11 +5,13 @@ set(CMAKE_CXX_STANDARD 17)
 
 enable_testing()
 #add_subdirectory(googletest)
-add_executable(Server 
+add_executable(Server
+               src/wireguardKey.cpp
                src/config.cpp
                src/server.cpp
                src/VpnWorker.cpp
-               src/main.cpp)
+               src/main.cpp
+               )
 
 #target_link_libraries(Server gtest_main)
 
@@ -23,8 +25,9 @@ include_directories(include)
 
 # Test
 
-add_subdirectory(googletest)
+add_subdirectory(libs/googletest)
 add_executable(ServerTest 
+               src/wireguardKey.cpp
                tests/testConfig.cpp
                src/config.cpp 
                src/server.cpp

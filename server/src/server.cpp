@@ -15,6 +15,10 @@ Server::Server(boost::asio::io_context& io_context, unsigned short port, Config&
     doAccept();
 }
 
+Server::~Server() {
+    Cleanup();
+}
+
 void Server::doAccept() {
     // Create a new session object
     auto session = std::make_shared<VpnWorker>(_io_context, _config);
@@ -28,3 +32,14 @@ void Server::doAccept() {
                                 doAccept();
                             });
 }
+
+void Server::Cleanup() {
+        // Perform necessary cleanup tasks here
+        std::cout << "Performing cleanup..." << std::endl;
+        
+        // Close the acceptor
+        _acceptor.close();
+        
+        // Stop the IO context
+        _io_context.stop();
+    }

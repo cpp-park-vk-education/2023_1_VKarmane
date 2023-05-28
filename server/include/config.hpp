@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include "wireguardKey.hpp"
 
 struct WireguardPeer {
     std::string publicKey;
@@ -22,7 +23,7 @@ class Config : public ICongif {
     // В конструктор передается имя файла
     // Путь до файла рекомендуется указывать "etc/wireguard/name"
     explicit Config(const std::string& name_);
-    ~Config() = default;
+    ~Config();
 
     // запускает wg-quick up
     void run();  // try ...
@@ -32,9 +33,7 @@ class Config : public ICongif {
 
     void deleteConfig(const std::string& name) override;
 
-    std::string addPeer(std::string key);
-
-    std::string getPublicKey();
+    std::string addPeer(const std::string& key);
 
  private:
     // создает рабочий конфиг wireguard и считывает данные
@@ -47,17 +46,13 @@ class Config : public ICongif {
     // считывает из него данные
     void loadFromFile(const std::string& path);
 
-    // создает файлы в etc/wireguard publickey и privatekey
-    void createKey();
-
     // возвращает первый свободный ip по порядку и удаляет его из ipPull
     std::string getAllowedIP();
 
     std::string name;
     size_t peer = 101;
     int port;
-    std::string publicKey;
-    std::string privateKey;
+    WireguardKey key;
 
     // хранит свободные ip от 101 - 255, которые выдаются клиенту
     std::map<std::size_t, std::string> ipPull;

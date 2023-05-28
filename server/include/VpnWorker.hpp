@@ -13,7 +13,6 @@ class VpnWorker : public std::enable_shared_from_this<VpnWorker> {
     VpnWorker(boost::asio::io_context& io_context, Config& config)
         : _socket(io_context),
           _config(config) {}
-
     boost::asio::ip::tcp::socket& socket();
 
     void start();

@@ -12,7 +12,6 @@
 
 static const std::string defaultIpServer = "10.20.0.1/24";
 static const std::string defaultPort = "51285";
-static const std::string defaultPath = "/etc/wireguard/";
 static const std::string defaultPostUp = "iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o $(ip a | grep -oP '(?<=2: ).*' | grep -o '^....') -j MASQUERADE";
 static const std::string defaultPostDown = "iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o $(ip a | grep -oP '(?<=2: ).*' | grep -o '^....') -j MASQUERADE";
 
@@ -122,27 +121,6 @@ static void modifyConfigFile(const std::string& filename) {
     std::cout << "Configuration file modified successfully." << std::endl;
 }
 
-
-static bool isValidWireguardKey(std::string keyStr) {
-    // Удалить пробельные символы из строки
-    keyStr.erase(std::remove(keyStr.begin(), keyStr.end(), ' '), keyStr.end());
-    keyStr.erase(std::remove(keyStr.begin(), keyStr.end(), '\n'), keyStr.end());
-
-    // Проверяем, что ключевая строка имеет правильную длину
-    if (keyStr.length() != 44) {
-        return false;
-    }
-
-    // Проверяем, что ключевая строка содержит только допустимые символы Base64
-    std::regex base64regex("[A-Za-z0-9+/]+={0,2}");
-    if (!std::regex_match(keyStr, base64regex)) {
-        return false;
-    }
-
-    // ключ валидный
-    return true;
-}
-
 std::vector<WireguardPeer> parseWireGuardShowOutput(const std::string& output) {
     std::vector<WireguardPeer> peers;
     std::istringstream stream(output);
@@ -187,20 +165,12 @@ static std::string executeCommand(const std::string& command) {
     return result;
 }
 
-// используется для проверки уже созданного конфига на валидность
-// static bool isConfigValid(const std::string& configPath) {
-//     std::string command = "sudo wg-quick up " + configPath;
-//     std::cout << "error" << std::endl;
-//     int result = system(command.c_str());
-//     // закрываем конфиг
-//     std::string commandClose = "sudo wg-quick down" + configPath;
-//     system(commandClose.c_str());
-//     return result == 0;
-// }
-
 Config::Config(const std::string& name_) : name(name_) {
-    createKey();
     makeConfig(name_);
+}
+
+Config::~Config() {
+    stop();
 }
 
 void Config::run() {
@@ -224,19 +194,19 @@ void Config::stop() {
     }
 }
 
-std::string Config::addPeer(std::string key) {
-    if (isValidWireguardKey(key)) {
+std::string Config::addPeer(const std::string& clientkey) {
+    if (key.isValidWireguardKey(clientkey)) {
         std::string allowedIp = getAllowedIP();
         if (allowedIp == "ServerFull\n") {
             return allowedIp;
         }
         std::cout << "New peer! Ip " << allowedIp << std::endl;
-        std::string command = "sudo wg set wg0 peer " + key +
+        std::string command = "sudo wg set wg0 peer " + clientkey +
                             " allowed-ips " + allowedIp;
         size_t a = system(command.c_str());
-        std::string serverKey = getPublicKey() + " " + allowedIp + '\n';
+        std::string serverKey = key.getPulicKey() + " " + allowedIp + '\n';
         return serverKey;
-    }
+}
     std::string errorMessage = "KeyError";
     return errorMessage;
 }
@@ -284,37 +254,6 @@ std::string Config::getAllowedIP() {
     return firstValue;
 }
 
-void Config::createKey() {
-    std::string pathPublicKey = defaultPath + "publickey";
-    std::string pathPrivateKey = defaultPath + "privatekey";
-    // если ключи уже были созданы просто считаем их
-    if (std::filesystem::exists(pathPublicKey) &&
-        std::filesystem::exists(pathPrivateKey))   
-    {
-        std::ifstream publicKeyFile(pathPublicKey);
-        std::ifstream privateKeyFile(pathPrivateKey);
-        if (publicKeyFile.is_open() && privateKeyFile.is_open()) {
-            std::getline(publicKeyFile, publicKey);
-            std::getline(privateKeyFile, privateKey);
-            publicKeyFile.close();
-            privateKeyFile.close();
-        }
-
-    } else {
-        std::string command = "wg genkey | tee " + pathPrivateKey +
-                              " | wg pubkey > " + pathPublicKey;
-        std::system(command.c_str());
-        std::ifstream publicKeyFile(pathPublicKey);
-        std::ifstream privateKeyFile(pathPrivateKey);
-        if (publicKeyFile.is_open() && privateKeyFile.is_open()) {
-            std::getline(publicKeyFile, publicKey);
-            std::getline(privateKeyFile, privateKey);
-            publicKeyFile.close();
-            privateKeyFile.close();
-        }
-    }
-}
-
 void Config::makeConfig(const std::string& path) {
     // заполняем значения ip для peer's
     std::string ipTest = "10.20.0.";
@@ -340,7 +279,7 @@ void Config::makeConfig(const std::string& path) {
         outputFile << "[Interface]\n";
         outputFile << "Address = " + defaultIpServer + "\n";
         outputFile << "Listenport = " + defaultPort + "\n";
-        outputFile << "Privatekey = " + privateKey + "\n";
+        outputFile << "Privatekey = " + key.getPrivateKey() + "\n";
         outputFile << "PostUp = " + defaultPostUp + "\n";
         outputFile << "PostDown = " + defaultPostDown + "\n";
         outputFile << "\n";
@@ -410,6 +349,6 @@ void Config::loadFromFile(const std::string& path) {
     }
 }
 
-std::string Config::getPublicKey() {
-    return publicKey;
-}
+// std::string Config::getPublicKey() {
+//     return publicKey;
+// }

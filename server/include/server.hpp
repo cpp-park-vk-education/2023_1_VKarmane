@@ -13,8 +13,9 @@ using boost::asio::ip::tcp;
 class Server {
  public:
     Server(boost::asio::io_context& io_context, unsigned short port, Config& config, std::string& address);
-
+    ~Server();
  private:
+    void Cleanup();
     void doAccept();
 
     boost::asio::io_context& _io_context;
