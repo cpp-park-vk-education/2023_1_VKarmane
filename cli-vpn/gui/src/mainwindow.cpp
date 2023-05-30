@@ -2,13 +2,10 @@
 #include "ui_mainwindow.h"
 
 #include <QFile>
-#include <iostream>
 #include <QScreen>
 #include <QStyle>
 #include <QTextStream>
-#include <QDebug>
 
-#include "VPNClient.hpp"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -100,7 +97,6 @@ void MainWindow::setValueConfigAdded(bool value) {
 void MainWindow::turnOnVPN() {
     if (buttonCountryClicked) {
         ui->lbCountryMessage->setVisible(false);
-        VPNClient client;
         if (!buttonClicked) {
             ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/TurnON.png); width: 50px; height: 50px;}");
             ui->lbFoxTail->setVisible(true);
@@ -115,15 +111,9 @@ void MainWindow::turnOnVPN() {
             if (file.open(QIODevice::Append | QIODevice::Text)) {
                 QTextStream stream(&file);
                 stream << QString::fromStdString(nameTun) << QString::fromStdString(defaultConfiguration) << "\n";
-                qDebug() << QString::fromStdString(nameTun) << QString::fromStdString(defaultConfiguration) << "\n";
                 file.close();
-                client.setVpnTunContext(nameTun, filePath.toStdString());
-                client.runTun(nameTun);
-            } else {
-                std::cout << "Not opened";
             }
         } else {
-            client.stopTun(nameTun);
             ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/TurnOFF.png); width: 50px; height: 50px;}");
             ui->lbFoxTail->setVisible(false);
             ui->lbConfigUsageOn->setVisible(false);

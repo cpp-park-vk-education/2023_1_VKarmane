@@ -1,8 +1,6 @@
 #include "countries.h"
 #include "ui_countries.h"
 
-#include <QDebug>
-
 Countries::Countries(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Countries)
@@ -17,6 +15,8 @@ Countries::Countries(QWidget *parent) :
         ui->lightTheme->setVisible(false);
         ui->darkTheme->setVisible(true);
     }
+
+    ui->lwServers->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     ui->lbFieldsCheck->setVisible(false);
 
@@ -71,17 +71,13 @@ void Countries::readLEServerIP() {
     ui->lwServers->insertRow(row);
     ui->lwServers->setColumnCount(2);
 
-    QHeaderView* header = ui->lwServers->horizontalHeader(); // получаем горизонтальный заголовок таблицы
-    header->setStretchLastSection(true); // растягиваем последний столбец на всю доступную ширину
+    ui->lwServers->horizontalHeader()->setStretchLastSection(true); // отключаем растягивание последнего столбца по умолчанию
 
-    QTableWidgetItem* item1 = new QTableWidgetItem(serverIP); // создаем элемент для первого столбца
-    QTableWidgetItem* item2 = new QTableWidgetItem(serverName); // создаем элемент для второго столбца
+    QTableWidgetItem* itemIP = new QTableWidgetItem(serverIP); // создаем элемент для первого столбца
+    QTableWidgetItem* itemName = new QTableWidgetItem(serverName); // создаем элемент для второго столбца
 
     ui->lwServers->setSelectionBehavior(QAbstractItemView::SelectRows); // устанавливаем поведение выбора на выбор всей строки
 
-    ui->lwServers->setItem(row, 0, item1); // добавляем элемент в первый столбец новой строки
-    ui->lwServers->setItem(row, 1, item2); // добавляем элемент во второй столбец новой строки
-
-    delete item1;
-    delete item2;
+    ui->lwServers->setItem(row, 0, itemIP); // добавляем элемент в первый столбец новой строки
+    ui->lwServers->setItem(row, 1, itemName); // добавляем элемент во второй столбец новой строки
 }
