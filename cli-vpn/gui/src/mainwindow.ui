@@ -78,7 +78,7 @@ border-image:url(:/img/TurnON.png);
    <widget class="QLabel" name="lbFoxTail">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>145</x>
       <y>120</y>
       <width>131</width>
       <height>141</height>
@@ -100,7 +100,7 @@ border-image:url(:/img/TurnON.png);
     </property>
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>140</x>
       <y>260</y>
       <width>141</width>
       <height>31</height>
@@ -120,7 +120,7 @@ border-radius: 10px;</string>
     </property>
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>165</x>
       <y>400</y>
       <width>91</width>
       <height>21</height>
@@ -140,7 +140,7 @@ border-radius: 10px;</string>
     </property>
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>165</x>
       <y>400</y>
       <width>91</width>
       <height>21</height>

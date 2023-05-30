@@ -1,10 +1,8 @@
 #include "configurationwindow.h"
 #include "ui_configurationwindow.h"
+
 #include <QTextStream>
 #include <QFile>
-
-#include <iostream>
-
 
 ConfigurationWindow::ConfigurationWindow(QWidget *parent) :
     QDialog(parent),
