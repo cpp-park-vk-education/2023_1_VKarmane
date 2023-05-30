@@ -10,19 +10,19 @@
     <x>0</x>
     <y>0</y>
     <width>420</width>
-    <height>476</height>
+    <height>549</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>420</width>
-    <height>476</height>
+    <height>549</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>420</width>
-    <height>476</height>
+    <height>549</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>410</y>
+     <y>490</y>
      <width>89</width>
      <height>25</height>
     </rect>
@@ -45,9 +45,9 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>50</y>
+     <y>60</y>
      <width>381</width>
-     <height>351</height>
+     <height>411</height>
     </rect>
    </property>
    <property name="placeholderText">
@@ -57,21 +57,25 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>110</x>
      <y>20</y>
-     <width>201</width>
-     <height>20</height>
+     <width>211</width>
+     <height>31</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid #f47c00;
+border-radius: 10px;</string>
+   </property>
    <property name="text">
-    <string>Change yout configurations:</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700; color:#f47c00;&quot;&gt;Change Your Configurations&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btnBack">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>450</y>
+     <y>520</y>
      <width>89</width>
      <height>25</height>
     </rect>
@@ -80,7 +84,53 @@
     <string>Back</string>
    </property>
   </widget>
+  <widget class="QLabel" name="lightTheme">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>421</width>
+     <height>561</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../resource.qrc">:/img/whiteTheme.png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="darkTheme">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>421</width>
+     <height>561</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../resource.qrc">:/img/11zon_cropped.png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <zorder>lightTheme</zorder>
+  <zorder>darkTheme</zorder>
+  <zorder>btnSave</zorder>
+  <zorder>pteConfiguration</zorder>
+  <zorder>label</zorder>
+  <zorder>btnBack</zorder>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resource.qrc"/>
+ </resources>
  <connections/>
 </ui>

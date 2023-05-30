@@ -9,7 +9,6 @@
         <file>img/FlagChineseFlag_banderadechina_6561.png</file>
         <file>img/flagofpoland_6425.png</file>
         <file>img/FoxTailVPNLogo.png</file>
-        <file>img/LightTheme.jpg</file>
         <file>img/power-button_icon-icons.com_60614.png</file>
         <file>img/power-off.png</file>
         <file>img/power-on.png</file>
@@ -24,5 +23,11 @@
         <file>img/list_menu_document_burger_icon_226588.png</file>
         <file>img/add_circle_create_expand_new_plus_icon_123218.png</file>
         <file>img/add_circle_create_expand_new_plus_icon_123218 (1).png</file>
+        <file>img/photoeditorsdk-export (2).png</file>
+        <file>img/itog1.svg</file>
+        <file>img/11zon_cropped.png</file>
+        <file>img/whiteTheme.png</file>
+        <file>img/TurnOFF.png</file>
+        <file>img/TurnON.png</file>
     </qresource>
 </RCC>
