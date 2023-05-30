@@ -15,6 +15,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 include_directories(gui/include)
 include_directories(gui/src)
+include_directories(gui/conf)
 
 include_directories(handshake/headers)
 include_directories(handshake/src)
@@ -44,6 +45,8 @@ set(PROJECT_SOURCES
      gui/include/countries.h
      gui/src/countries.cpp
      gui/src/countries.ui
+
+     gui/conf/configuration.txt
 
      gui/resource.qrc
 

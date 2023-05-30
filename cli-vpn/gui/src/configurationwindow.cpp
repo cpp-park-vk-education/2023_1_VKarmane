@@ -3,12 +3,22 @@
 #include <QTextStream>
 #include <QFile>
 
+#include <iostream>
+
 
 ConfigurationWindow::ConfigurationWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ConfigurationWindow) {
     ui->setupUi(this);
-    setFixedSize(420, 476);
+    setFixedSize(420, 549);
+
+    if (qApp->palette().windowText().color() == Qt::black) {
+        ui->lightTheme->setVisible(true);
+        ui->darkTheme->setVisible(false);
+    } else {
+        ui->lightTheme->setVisible(false);
+        ui->darkTheme->setVisible(true);
+    }
 
     connect(ui->btnBack, SIGNAL(clicked(bool)), this, SLOT(btnBack()));
     connect(ui->btnSave,SIGNAL(clicked(bool)),this, SLOT(btnSave()));
@@ -29,14 +39,14 @@ void ConfigurationWindow::saveConfig(const QString& configURLS) {
     if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
         file.resize(0);
         QTextStream out(&file);
-        out << "URLList=" << configURLS;
+        out << "URLlist = " << configURLS;
         file.close();
     }
 }
 
 void ConfigurationWindow::btnSave() {
     QString configURLS = ui->pteConfiguration->toPlainText();
-    configURLS  = configURLS .replace("\n", ",");
+    configURLS = configURLS.replace("\n", ",");
     saveConfig(configURLS);
     emit valueChangedConfigAdded(true);
 }

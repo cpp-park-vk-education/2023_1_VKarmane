@@ -4,7 +4,10 @@
 #include <QFile>
 #include <iostream>
 #include <QScreen>
+#include <QStyle>
 #include <QTextStream>
+#include <QDebug>
+
 #include "VPNClient.hpp"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -13,28 +16,21 @@ MainWindow::MainWindow(QWidget *parent)
     filePath = "configuration.txt";
     clearConfig(filePath);
 
-    setFixedSize(420, 476);
+    setFixedSize(420, 549);
 
     buttonClicked = false;
     buttonCountryClicked = false;
     configAdded = false;
 
-    darkMode();
+
 
     ui->setupUi(this);
     ui->lbFoxTail->setVisible(false);
     ui->lbConfigUsageOn->setVisible(false);
     ui->lbConfigUsageOff->setVisible(true);
 
-    countriesWindow = new Countries();
-    connect(countriesWindow, &Countries::backMainWindow, this, &MainWindow::show);
-    connect(countriesWindow, &Countries::valueChangedNameTun, this, &MainWindow::setValueNameTun);
-    connect(countriesWindow, &Countries::valueChangedButtonCountryClicked, this, &MainWindow::setValueButtonCountryClicked);
-    connect(countriesWindow, &Countries::valueChangedDefaultConfiguration, this, &MainWindow::setValueDefaultConfiguration);
+    darkMode();
 
-    configurationWindow = new ConfigurationWindow();
-    connect(configurationWindow, &ConfigurationWindow::backMainWindow, this, &MainWindow::show);
-    connect(configurationWindow, &ConfigurationWindow::valueChangedConfigAdded, this, &MainWindow::setValueConfigAdded);
 
     connect(ui->actionNewCountry, &QAction::triggered, this, &MainWindow::showCountries);
 
@@ -58,6 +54,12 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::showCountries() {
+    countriesWindow = new Countries();
+    connect(countriesWindow, &Countries::backMainWindow, this, &MainWindow::show);
+    connect(countriesWindow, &Countries::valueChangedNameTun, this, &MainWindow::setValueNameTun);
+    connect(countriesWindow, &Countries::valueChangedButtonCountryClicked, this, &MainWindow::setValueButtonCountryClicked);
+    connect(countriesWindow, &Countries::valueChangedDefaultConfiguration, this, &MainWindow::setValueDefaultConfiguration);
+
     countriesWindow->show();
     this->close();
 }
@@ -100,7 +102,7 @@ void MainWindow::turnOnVPN() {
         ui->lbCountryMessage->setVisible(false);
         VPNClient client;
         if (!buttonClicked) {
-            ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/arrows-button-on_97730.png); width: 50px; height: 50px;}");
+            ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/TurnON.png); width: 50px; height: 50px;}");
             ui->lbFoxTail->setVisible(true);
             buttonClicked = true;
 
@@ -112,14 +114,17 @@ void MainWindow::turnOnVPN() {
             QFile file(filePath);
             if (file.open(QIODevice::Append | QIODevice::Text)) {
                 QTextStream stream(&file);
-                stream << QString::fromStdString(defaultConfiguration) << "\n";
+                stream << QString::fromStdString(nameTun) << QString::fromStdString(defaultConfiguration) << "\n";
+                qDebug() << QString::fromStdString(nameTun) << QString::fromStdString(defaultConfiguration) << "\n";
                 file.close();
-//                client.setVpnTunContext(nameTun, filePath.toStdString());
-//                client.runTun(nameTun);
+                client.setVpnTunContext(nameTun, filePath.toStdString());
+                client.runTun(nameTun);
+            } else {
+                std::cout << "Not opened";
             }
         } else {
-//            client.stopTun(nameTun);
-            ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/arrows-button-off_98344.png); width: 50px; height: 50px;}");
+            client.stopTun(nameTun);
+            ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/TurnOFF.png); width: 50px; height: 50px;}");
             ui->lbFoxTail->setVisible(false);
             ui->lbConfigUsageOn->setVisible(false);
             ui->lbConfigUsageOff->setVisible(true);
@@ -128,7 +133,7 @@ void MainWindow::turnOnVPN() {
         }
     } else {
         ui->lbCountryMessage->setVisible(true);
-        ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/arrows-button-off_98344.png); width: 50px; height: 50px;}");
+        ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/TurnOFF.png); width: 50px; height: 50px;}");
     }
 
 }
@@ -138,7 +143,7 @@ void MainWindow::turnOnVPN() {
 void MainWindow::lightMode() {
     QPalette lightPalette;
 
-    lightPalette.setColor(QPalette::Window, Qt::white);
+    lightPalette.setColor(QPalette::Window, QColor(228, 227, 217));
     lightPalette.setColor(QPalette::WindowText, Qt::black);
     lightPalette.setColor(QPalette::Base, Qt::lightGray);
     lightPalette.setColor(QPalette::AlternateBase, Qt::white);
@@ -153,12 +158,15 @@ void MainWindow::lightMode() {
     lightPalette.setColor(QPalette::HighlightedText, Qt::white);
 
     qApp->setPalette(lightPalette);
+
+    ui->lightTheme->setVisible(true);
+    ui->darkTheme->setVisible(false);
 }
 
 void MainWindow::connectionPoland() {
     defaultConfiguration.clear();
 
-    defaultConfiguration = "Endpoint = 45.82.15.27";
+    defaultConfiguration = "\nEndpoint = 45.82.15.27";
     nameTun = "PL_tun";
     ui->lbCountryMessage->setVisible(false);
     buttonCountryClicked = true;
@@ -177,7 +185,7 @@ void MainWindow::connectionNetherlands() {
 void MainWindow::darkMode() {
     QPalette darkPalette;
 
-    darkPalette.setColor(QPalette::Window, QColor(53, 53, 53));
+    darkPalette.setColor(QPalette::Window, QColor(65, 71, 84));
     darkPalette.setColor(QPalette::WindowText, Qt::white);
     darkPalette.setColor(QPalette::Base, QColor(25, 25, 25));
     darkPalette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
@@ -193,6 +201,10 @@ void MainWindow::darkMode() {
 
     qApp->setPalette(darkPalette);
 
+
+    ui->darkTheme->setVisible(true);
+    ui->lightTheme->setVisible(false);
+
 }
 
 
@@ -207,6 +219,10 @@ void MainWindow::showAuthorization() {
 
 
 void MainWindow::showConfiguration() {
+    configurationWindow = new ConfigurationWindow();
+    connect(configurationWindow, &ConfigurationWindow::backMainWindow, this, &MainWindow::show);
+    connect(configurationWindow, &ConfigurationWindow::valueChangedConfigAdded, this, &MainWindow::setValueConfigAdded);
+
     configurationWindow->show();
     this->close();
 }
