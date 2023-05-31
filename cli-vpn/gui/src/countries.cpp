@@ -49,8 +49,8 @@ void Countries::chooseServerIP() {
     QString selectedServerName = ui->lwServers->item(ui->lwServers->currentRow(), 0)->text();
     QString selectedServerIP = ui->lwServers->item(ui->lwServers->currentRow(), 1)->text();
 
-    std::string ServerName = "\n" + selectedServerName.toStdString() + " = ";
-    std::string ServerIP = selectedServerIP.toStdString();
+    std::string ServerName = selectedServerName.toStdString();
+    std::string ServerIP = "\nEndpoint = " + selectedServerIP.toStdString();
 
     emit valueChangedButtonCountryClicked(true);
     emit valueChangedNameTun(ServerName);
@@ -78,6 +78,6 @@ void Countries::readLEServerIP() {
 
     ui->lwServers->setSelectionBehavior(QAbstractItemView::SelectRows); // устанавливаем поведение выбора на выбор всей строки
 
-    ui->lwServers->setItem(row, 0, itemIP); // добавляем элемент в первый столбец новой строки
-    ui->lwServers->setItem(row, 1, itemName); // добавляем элемент во второй столбец новой строки
+    ui->lwServers->setItem(row, 0, itemName); // добавляем элемент в первый столбец новой строки
+    ui->lwServers->setItem(row, 1, itemIP); // добавляем элемент во второй столбец новой строки
 }
