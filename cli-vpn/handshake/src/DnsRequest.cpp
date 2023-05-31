@@ -39,7 +39,7 @@ std::string DnsRequest::getPoint() {
           endPoints.clear();
           return returnString.substr(0, returnString.length() - 2);
      } else {
-          returnString = "Error Invalid Arguments";
+          returnString = "";
           return returnString;
      }
 }
