@@ -42,6 +42,8 @@ class Countries : public QDialog, public ICountriesWindow {
     void readLEServerIP() override;
     void deleteServerIP() override;
     void chooseServerIP() override;
+    void saveTableData();
+    void loadTableData();
 };
 
 #endif // COUNTRIES_H

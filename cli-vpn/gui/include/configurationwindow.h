@@ -3,7 +3,6 @@
 
 #include <QDialog>
 
-
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class ConfigurationWindow;
@@ -35,6 +34,8 @@ private slots:
     void btnSave() override;
     void btnBack() override;
     void saveConfig(const QString& configURLS) override;
+    void saveData();
+    void loadData();
 };
 
 #endif // CONFIGURATIONWINDOW_H

@@ -1,6 +1,8 @@
 #include "countries.h"
 #include "ui_countries.h"
 
+#include <QSettings>
+
 Countries::Countries(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Countries)
@@ -18,6 +20,8 @@ Countries::Countries(QWidget *parent) :
 
     ui->lwServers->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
+    loadTableData();
+
     ui->lbFieldsCheck->setVisible(false);
 
     connect(ui->btnBack, SIGNAL(clicked(bool)), this, SLOT(btnBack()));
@@ -34,6 +38,7 @@ Countries::~Countries() {
 }
 
 void Countries::btnBack() {
+    saveTableData();
     this->close();
     emit backMainWindow();
 }
@@ -69,7 +74,6 @@ void Countries::readLEServerIP() {
 
     int row = ui->lwServers->rowCount();
     ui->lwServers->insertRow(row);
-    ui->lwServers->setColumnCount(2);
 
     ui->lwServers->horizontalHeader()->setStretchLastSection(true); // отключаем растягивание последнего столбца по умолчанию
 
@@ -81,3 +85,39 @@ void Countries::readLEServerIP() {
     ui->lwServers->setItem(row, 0, itemName); // добавляем элемент в первый столбец новой строки
     ui->lwServers->setItem(row, 1, itemIP); // добавляем элемент во второй столбец новой строки
 }
+
+
+void Countries::saveTableData() {
+    QSettings settings("MyCompany", "MyApp");
+    settings.beginWriteArray("servers");
+    for (int i = 0; i < ui->lwServers->rowCount(); ++i) {
+        settings.setArrayIndex(i);
+        settings.setValue("name", ui->lwServers->item(i, 0)->text());
+        settings.setValue("ip", ui->lwServers->item(i, 1)->text());
+    }
+    settings.endArray();
+}
+
+void Countries::loadTableData() {
+    QSettings settings("MyCompany", "MyApp");
+    int size = settings.beginReadArray("servers");
+    ui->lwServers->setColumnCount(2);
+    ui->lwServers->horizontalHeader()->setStretchLastSection(true);
+    ui->lwServers->setSelectionBehavior(QAbstractItemView::SelectRows);
+    QStringList headers;
+    headers << "Название" << "IP-адрес";
+    ui->lwServers->setHorizontalHeaderLabels(headers);
+    for (int i = 0; i < size; ++i) {
+        settings.setArrayIndex(i);
+        QString name = settings.value("name").toString();
+        QString ip = settings.value("ip").toString();
+        int row = ui->lwServers->rowCount();
+        ui->lwServers->insertRow(row);
+        QTableWidgetItem* itemName = new QTableWidgetItem(name);
+        QTableWidgetItem* itemIP = new QTableWidgetItem(ip);
+        ui->lwServers->setItem(row, 0, itemName);
+        ui->lwServers->setItem(row, 1, itemIP);
+    }
+    settings.endArray();
+}
+
