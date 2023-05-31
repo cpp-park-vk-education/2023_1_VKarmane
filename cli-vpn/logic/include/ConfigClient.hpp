@@ -86,7 +86,14 @@ class ConfigClient {
      }
 
      bool isFileEmpty(const std::string& filename) {
+          std::string path = defaultPath + _name + ".conf";
           std::ifstream file(filename);
+          return file.peek() == std::ifstream::traits_type::eof();
+     }
+
+     bool isConfigEmpty() {
+          std::string path = defaultPath + _name + ".conf";
+          std::ifstream file(path);
           return file.peek() == std::ifstream::traits_type::eof();
      }
 

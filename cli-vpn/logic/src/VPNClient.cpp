@@ -31,7 +31,21 @@ void VPNClient::setVpnTunContext(const std::string& name, std::string contextFil
           if (tunnels[i].first == name) {
                ConfigClient config(name, contextFilePath);
 
+               if (config.isConfigEmpty()) {
+                    config.ipPublicKeyRequest(config.getEndpoint());
+
+                    config.setUnspecified();
+     
+                    config.buildConfig();
+
+                    config.print();
+
+                    return;
+               }
+
                config.changeAllowedIPs();
+
+               config.print();
                
                return;
           }
@@ -44,6 +58,8 @@ void VPNClient::setVpnTunContext(const std::string& name, std::string contextFil
      config.setUnspecified();
      
      config.buildConfig();
+
+     config.print();
 
      vpnTun tun(name);
 
