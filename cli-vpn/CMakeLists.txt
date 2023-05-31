@@ -56,13 +56,14 @@ set(PROJECT_SOURCES
      logic/include/VPNClient.hpp
      logic/include/vpnTunnel.hpp
      handshake/headers/ClinetHandshake.hpp
-
+     handshake/headers/DnsRequest.hpp
      #Client Back Source
      logic/src/ConfigClient.cpp
      logic/src/VPNClient.cpp
      logic/src/Parser.cpp
      handshake/src/ClientHandshake.cpp
-)
+     handshake/src/DnsRequest.cpp
+     )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(GUI

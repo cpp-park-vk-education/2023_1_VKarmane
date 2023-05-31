@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <boost/asio.hpp>
 #include <boost/asio/ip/tcp.hpp>
@@ -5,15 +7,14 @@
 
 using boost::asio::ip::tcp;
 
+bool isIP4(const std::string& ipAddress);
+
 class DnsRequest {
  public:
    void Request(const std::string& url);
 
    std::string getPoint();
 
- private:
- 
-   bool isIP4(const std::string& ipAddress);
-
+ private: 
    std::vector<std::string> endPoints;
 };

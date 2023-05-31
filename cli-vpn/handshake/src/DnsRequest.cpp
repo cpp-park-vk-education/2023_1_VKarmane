@@ -1,5 +1,11 @@
 #include "DnsRequest.hpp"
 
+bool isIP4(const std::string& ipAddress) {
+     boost::system::error_code ec;
+     boost::asio::ip::address_v4::from_string(ipAddress, ec);
+     return !ec;
+}
+
 void DnsRequest::Request(const std::string& url) {
      boost::asio::io_context io_context;
      tcp::resolver resolver(io_context);
@@ -37,9 +43,3 @@ std::string DnsRequest::getPoint() {
           return returnString;
      }
 }
-
-/*bool DnsRequest::isIP4(const std::string& ipAddress) {
-     boost::system::error_code ec;
-     boost::asio::ip::address_v4::from_string(ipAddress, ec);
-     return !ec;
-}*/

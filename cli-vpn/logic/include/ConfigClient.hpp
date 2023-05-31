@@ -13,7 +13,6 @@
 // Custom
 #include "Parser.hpp"
 #include "ClinetHandshake.hpp"
-#include "Utilities.hpp"
 #include "DnsRequest.hpp"
 
 class ConfigClient {
@@ -40,8 +39,8 @@ class ConfigClient {
      void setAllowedIPs(std::vector<std::string> ipList) { _allowedIPs = ipList; }
      void setEndpoint(std::string endpoint) { _endpoint = endpoint; }
      void setKeepAlive(size_t keepalive) { _keepAlive = keepalive; }
-
- private:    
+     friend bool isIP4(const std::string& ipAddress);
+ private:
      std::string genPrivateKey();
      std::string genPublicKey(const std::string& private_key);
 
