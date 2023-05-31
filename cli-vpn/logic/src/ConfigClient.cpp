@@ -1,5 +1,7 @@
 #include "ConfigClient.hpp"
-//#include "../include/ConfigClient.hpp"
+#include "Utilities.hpp"
+#include "DnsRequest.hpp"
+
 
 ConfigClient::ConfigClient():
      _address(nullptr), _privateKey(nullptr),
@@ -195,6 +197,25 @@ void ConfigClient::setUnspecified() {
           std::vector<std::string> allowedips;
           allowedips.push_back("0.0.0.0/0");
           this->setAllowedIPs(allowedips);
+     } else {
+          if (!isIP4(_allowedIPs[0])) {
+               std::vector<std::string> ipList;
+               
+               DnsRequest request;
+               std::string ans;
+
+               for (int i =0; i < _allowedIPs.size(); ++i) {
+                    request.Request(_allowedIPs[i]);
+                    ans = request.getPoint();
+
+                    std::streamstring ss(ans);
+                    std::string token;
+
+                    while(std::getline(ss, token, ',')) {
+                        ipList.push_back(token);
+                    }
+               }
+          }
      }
 
      if (_dnsList.size() == 0) {
@@ -244,5 +265,16 @@ void ConfigClient::buildConfig() {
 
 void ConfigClient::changeAllowedIPs() {
      std::string path = defaultPath + _name + ".conf";
-     std::ofstream wg_config(path);
+     std::fstream wg_config(path);
+
+     std::line;
+
+     while (std::getline(wg_config, line)) {
+          if (line.find("AllowedIPs") == std::string::npos) {
+               file.seekp(file.tellg() - line.length());
+               break;
+          }
+     }
+
+     wg_config << "AllowedIPs = " << _allowedIPs << '\n';
 }

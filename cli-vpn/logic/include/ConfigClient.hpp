@@ -58,9 +58,9 @@ class ConfigClient {
 
      int ipPublicKeyRequest(const std::string& endpoint);
 
-     void buildConfig();                 // Initiation config in /etc/wireguard folder
-                                   // saving in /etc/wireguard/wireguard-cli/${_name}/
-
+     void buildConfig();                // Initiation config in /etc/wireguard folder
+                                        // saving in /etc/wireguard/wireguard-cli/${_name}/
+     
      void changeAllowedIPs();
 
      void print() {

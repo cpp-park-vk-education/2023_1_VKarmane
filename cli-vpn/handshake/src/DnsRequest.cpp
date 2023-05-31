@@ -10,14 +10,14 @@ void DnsRequest::Request(const std::string& url) {
      resolver.async_resolve(query,
      [&](const boost::system::error_code& error, const tcp::resolver::results_type& endpoints) {
           if (!error) {
-          for (const auto& endpoint : endpoints) {
-               if (isIP4(endpoint.endpoint().address().to_string())) {
-                    endPoints.push_back(endpoint.endpoint().address().to_string());
+               for (const auto& endpoint : endpoints) {
+                    if (isIP4(endpoint.endpoint().address().to_string())) {
+                         endPoints.push_back(endpoint.endpoint().address().to_string());
+                    }
                }
-          }
           } else {
-          std::cerr << "dnsError" << std::endl;
-          std::cerr << "Ошибка при разрешении DNS: " << error.message() << std::endl;
+               std::cerr << "dnsError" << std::endl;
+               std::cerr << "Ошибка при разрешении DNS: " << error.message() << std::endl;
           }
      });
 
@@ -25,17 +25,17 @@ void DnsRequest::Request(const std::string& url) {
 }     
 
 std::string DnsRequest::getPoint() {
-std::string returnString;
-if (!endPoints.empty()) {
-     for (const auto it : endPoints) {
-          returnString += it + "/32, ";
+     std::string returnString;
+     if (!endPoints.empty()) {
+          for (const auto it : endPoints) {
+               returnString += it + "/32, ";
+          }
+          endPoints.clear();
+          return returnString.substr(0, returnString.length() - 2);
+     } else {
+          returnString = "Error Invalid Arguments";
+          return returnString;
      }
-     endPoints.clear();
-     return returnString.substr(0, returnString.length() - 2);
-} else {
-     returnString = "Error Invalid Arguments";
-     return returnString;
-}
 }
 
 bool DnsRequest::isIP4(const std::string& ipAddress) {
