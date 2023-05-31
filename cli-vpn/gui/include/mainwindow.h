@@ -41,7 +41,9 @@ class MainWindow : public QMainWindow {
 
     void clearConfig(const QString& filePath);
 
- private:
+    void connectLogo();
+
+private:
     Ui::MainWindow *ui;
     Countries* countriesWindow;
     ConfigurationWindow* configurationWindow;

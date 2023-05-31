@@ -5,6 +5,7 @@
 #include <QScreen>
 #include <QStyle>
 #include <QTextStream>
+#include <QMessageBox>
 
 #include "VPNClient.hpp"
 
@@ -44,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->connectPoland, &QAction::triggered, this, &MainWindow::connectionPoland);
     connect(ui->connectNetherlands, &QAction::triggered, this, &MainWindow::connectionNetherlands);
+    connect(ui->connectLogo, &QAction::triggered, this, &MainWindow::connectLogo);
 }
 
 MainWindow::~MainWindow() {
@@ -221,5 +223,13 @@ void MainWindow::showConfiguration() {
 
     configurationWindow->show();
     this->close();
+}
+
+
+void MainWindow::connectLogo() {
+    QMessageBox::about(this, "О Разработчиках",
+                       "Дмитрий Белозеров tg <a href='https://t.me/belozerovmsk'>@belozerovmsk</a><br>"
+                       "Григорий Коваленко tg <a href='https://t.me/Trapshitalligator'>@Trapshitalligator</a><br>"
+                       "Дмитрий Комаров tg <a href='https://t.me/Kosmatoff'>@Kosmatoff</a>");
 }
 

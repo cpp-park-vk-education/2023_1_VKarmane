@@ -251,8 +251,7 @@ border-radius: 10px;</string>
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="connectInstagramm"/>
-   <addaction name="connectTwitter"/>
+   <addaction name="connectLogo"/>
   </widget>
   <widget class="QToolBar" name="tbCountries">
    <property name="minimumSize">
@@ -308,10 +307,10 @@ border-radius: 10px;</string>
     <string>Authorization</string>
    </property>
   </action>
-  <action name="connectInstagramm">
+  <action name="connectLogo">
    <property name="icon">
     <iconset resource="../resource.qrc">
-     <normaloff>:/img/1491579602-yumminkysocialmedia36_83067.png</normaloff>:/img/1491579602-yumminkysocialmedia36_83067.png</iconset>
+     <normaloff>:/img/FoxTailVPNLogo.png</normaloff>:/img/FoxTailVPNLogo.png</iconset>
    </property>
    <property name="text">
     <string>Insta</string>
