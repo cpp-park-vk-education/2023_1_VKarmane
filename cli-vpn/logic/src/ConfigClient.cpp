@@ -202,7 +202,7 @@ void ConfigClient::setUnspecified() {
                DnsRequest request;
                std::string ans;
 
-               for (int i =0; i < _allowedIPs.size(); ++i) {
+               for (int i = 0; i < _allowedIPs.size(); ++i) {
                     request.Request(_allowedIPs[i]);
                     ans = request.getPoint();
 
@@ -213,6 +213,8 @@ void ConfigClient::setUnspecified() {
                         ipList.push_back(token);
                     }
                }
+               this->_allowedIPs.clear();
+               this->setAllowedIPs(ipList);
           }
      }
 
