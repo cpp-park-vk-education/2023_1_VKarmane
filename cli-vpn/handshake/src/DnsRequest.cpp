@@ -38,8 +38,8 @@ std::string DnsRequest::getPoint() {
      }
 }
 
-bool DnsRequest::isIP4(const std::string& ipAddress) {
+/*bool DnsRequest::isIP4(const std::string& ipAddress) {
      boost::system::error_code ec;
      boost::asio::ip::address_v4::from_string(ipAddress, ec);
      return !ec;
-}
+}*/

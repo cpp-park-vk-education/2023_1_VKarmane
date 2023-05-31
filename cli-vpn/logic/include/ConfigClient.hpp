@@ -12,7 +12,9 @@
 #include <filesystem>
 // Custom
 #include "Parser.hpp"
-#include "../../handshake/headers/ClinetHandshake.hpp"
+#include "ClinetHandshake.hpp"
+#include "Utilities.hpp"
+#include "DnsRequest.hpp"
 
 class ConfigClient {
  public:

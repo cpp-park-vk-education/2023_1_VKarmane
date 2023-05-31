@@ -1,6 +1,4 @@
 #include "ConfigClient.hpp"
-#include "Utilities.hpp"
-#include "DnsRequest.hpp"
 
 
 ConfigClient::ConfigClient():
@@ -200,7 +198,7 @@ void ConfigClient::setUnspecified() {
      } else {
           if (!isIP4(_allowedIPs[0])) {
                std::vector<std::string> ipList;
-               
+
                DnsRequest request;
                std::string ans;
 
@@ -208,7 +206,7 @@ void ConfigClient::setUnspecified() {
                     request.Request(_allowedIPs[i]);
                     ans = request.getPoint();
 
-                    std::streamstring ss(ans);
+                    std::stringstream ss(ans);
                     std::string token;
 
                     while(std::getline(ss, token, ',')) {
@@ -265,16 +263,39 @@ void ConfigClient::buildConfig() {
 
 void ConfigClient::changeAllowedIPs() {
      std::string path = defaultPath + _name + ".conf";
-     std::fstream wg_config(path);
+     std::ofstream wg_config(path);
+     std::ifstream infile(path);
 
-     std::line;
+     std::vector<std::string> config_buffer;
 
-     while (std::getline(wg_config, line)) {
-          if (line.find("AllowedIPs") == std::string::npos) {
-               file.seekp(file.tellg() - line.length());
-               break;
+     std::string line;
+
+     while (std::getline(infile, line)) {
+          config_buffer.push_back(line);
+     }
+
+     for (int i = 0; i < config_buffer.size(); ++i) {
+          if (config_buffer[i].find("AllowedIPs") != std::string::npos) {
+               std::string key;
+               config_buffer[i].erase(remove(config_buffer[i].begin(), config_buffer[i].end(), ' '), config_buffer[i].end());
+               key = line.substr(line.find("=") + 1);
+               std::vector<std::string> allowedips;
+               std::stringstream ss(key);
+               std::string token;
+               
+               while (std::getline(ss, token, ',')) {
+                    allowedips.push_back(token);
+               }
+
+               config_buffer[i] = "AllowedIPs = ";
+
+               for (int j = 0; j < allowedips.size(); ++j) {
+                    config_buffer[i] += allowedips[j];
+               }
           }
      }
 
-     wg_config << "AllowedIPs = " << _allowedIPs << '\n';
+     for (int i = 0; i < config_buffer.size(); i++) {
+        wg_config << config_buffer[i];
+     }
 }
