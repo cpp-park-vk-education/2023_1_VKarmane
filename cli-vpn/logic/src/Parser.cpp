@@ -54,7 +54,7 @@ bool ParseFile::isValid(std::string path) {
 }
 
 
-std::vector<std::vector<std::string>> parseConfig(std::string filePath) {
+std::vector<std::vector<std::string>> ParseFile::parseConfig(std::string filePath) {
      if (!isValid(filePath)) {
           //ToDo handle error
      }
