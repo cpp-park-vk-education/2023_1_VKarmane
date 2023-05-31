@@ -242,4 +242,7 @@ void ConfigClient::buildConfig() {
      wg_config.close();     
 }
 
-
+void ConfigClient::changeAllowedIPs() {
+     std::string path = defaultPath + _name + ".conf";
+     std::ofstream wg_config(path);
+}

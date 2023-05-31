@@ -31,9 +31,7 @@ void VPNClient::setVpnTunContext(const std::string& name, std::string contextFil
           if (tunnels[i].first == name) {
                ConfigClient config(name, contextFilePath);
 
-               config.setUnspecified();
-
-               config.buildConfig();
+               config.changeAllowedIPs();
                
                return;
           }
