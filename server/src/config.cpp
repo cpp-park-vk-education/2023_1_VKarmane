@@ -348,7 +348,3 @@ void Config::loadFromFile(const std::string& path) {
         }
     }
 }
-
-// std::string Config::getPublicKey() {
-//     return publicKey;
-// }
