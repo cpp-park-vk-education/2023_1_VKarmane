@@ -11,15 +11,19 @@ include_directories(../handshake/src)
 set (SOURCES
      main.cpp
      src/ConfigClient.cpp
-     src/VPNClient.cpp
+     ../handshake/src/DnsRequest.cpp
+     ../handshake/src/ClientHandshake.cpp
+     #src/VPNClient.cpp
+     #src/Parser.cpp
 )
 
 set (HEADERS
      include/ConfigClient.hpp
      include/Parser.hpp
-     include/VPNClient.hpp
-     include/vpnTunnel.hpp
-     include/DnsRequest.hpp
+     ../handshake/headers/ClinetHandshake.hpp
+     ../handshake/headers/DnsRequest.hpp
+     #include/VPNClient.hpp
+     #include/vpnTunnel.hpp
 )
 
 add_executable(client ${SOURCES} ${HEADERS})

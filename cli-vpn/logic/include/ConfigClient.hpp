@@ -4,60 +4,69 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+
 // structures
 #include <vector>
 #include <string>
+
 // system
 #include <sys/stat.h>
 #include <filesystem>
+
 // Custom
 #include "Parser.hpp"
 #include "ClinetHandshake.hpp"
 #include "DnsRequest.hpp"
 
+using std::string;
+using std::vector;
+
 class ConfigClient {
  public:
      ConfigClient();
      
-     ConfigClient(const std::string name, std::string configname);
+     ConfigClient(const string name, const string& configname);
 
-     ConfigClient(const std::string name, std::vector<std::vector<std::string>> parse_input);
+     ConfigClient(const string name, vector<vector<string>> parse_input);
 
      ConfigClient(const ConfigClient& config):
-          _address(config._address), _privateKey(config._privateKey),
-          _publicKeyServer(config._publicKeyServer), _allowedIPs(config._allowedIPs),
-          _endpoint(config._endpoint), _keepAlive(config._keepAlive) {}
+          _name(config._name), _publicKeyClient(config._publicKeyClient),
+          interfaceData(config.interfaceData.address, config.interfaceData.privateKey,
+                        config.interfaceData.dnsServers),
+          peerData(config.peerData.publicKey, config.peerData.allowedIPs,
+                   config.peerData.endpoint, config.peerData.persistentKeepalive) {}
      
      ConfigClient& operator=(const ConfigClient& config);
 
-     ConfigClient& operator=(const std::vector<std::vector<std::string>> parsed_vector);
+     ConfigClient& operator=(const vector<vector<string>> parsed_vector);
 
-     void setAddress(std::string address) { _address = address; }
-     void setPrivateKey(std::string privateKey) { _privateKey = privateKey; }
-     void setDns(std::vector<std::string> dns) { _dnsList = dns; }
-     void setPublicKey(std::string pubKey) { _publicKeyServer = pubKey;}
-     void setAllowedIPs(std::vector<std::string> ipList) { _allowedIPs = ipList; }
-     void setEndpoint(std::string endpoint) { _endpoint = endpoint; }
-     void setKeepAlive(size_t keepalive) { _keepAlive = keepalive; }
-     friend bool isIP4(const std::string& ipAddress);
+     void setAddress(const string& address) { interfaceData.address = address; }
+     void setPrivateKey(const string& privateKey) { interfaceData.privateKey = privateKey; }
+     void setDns(vector<string> dns) { interfaceData.dnsServers = dns; }
+     void setPublicKey(const string& pubKey) { peerData.publicKey = pubKey;}
+     void setAllowedIPs(vector<string> ipList) { peerData.allowedIPs = ipList; }
+     void setEndpoint(const string& endpoint) { peerData.endpoint = endpoint; }
+     void setKeepAlive(size_t keepalive) { peerData.persistentKeepalive = keepalive; }
+
+     friend bool isIP4(const string& ipAddress);
  private:
-     std::string genPrivateKey();
-     std::string genPublicKey(const std::string& private_key);
+     string genPrivateKey();
+     string genPublicKey(const string& private_key);
 
  public:
      void genPair();
 
-     std::string getAddress() { return _address; }
-     std::string getPrivateKey() { return _privateKey; }
-     std::vector<std::string> getDns() { return _dnsList; }
-     std::string getPublicKey() { return _publicKeyServer;}
-     std::vector<std::string> getAllowedIPs() { return _allowedIPs; }
-     std::string getEndpoint() { return _endpoint; }
-     size_t getKeepAlive() { return _keepAlive; }
+     string getAddress() { return interfaceData.address; }
+     string getPrivateKey() { return interfaceData.privateKey; }
+     vector<string> getDns() { return interfaceData.dnsServers; }
+     string getPublicKey() { return peerData.publicKey; }
+     vector<string> getAllowedIPs() { return peerData.allowedIPs; }
+     string getEndpoint() { return peerData.endpoint; }
+     size_t getKeepAlive() { return peerData.persistentKeepalive; }
 
      void setUnspecified(); // Seting in config parametrs by default that i can
 
-     int ipPublicKeyRequest(const std::string& endpoint);
+     int ipPublicKeyRequest(const string& endpoint);
 
      void buildConfig();                // Initiation config in /etc/wireguard folder
                                         // saving in /etc/wireguard/wireguard-cli/${_name}/
@@ -66,27 +75,27 @@ class ConfigClient {
 
      void print() {
           std::cout << "| _name = " << this->_name << std::endl
-                    << "| _address = " << this->_address << std::endl
-                    << "| _privateKey = " << this->_privateKey << std::endl
-                    << "| _publicKeyServer = " << this->_publicKeyServer << std::endl
-                    << "| _endpoint = " << this->_endpoint << std::endl
-                    << "| _keepAlive = " << this->_keepAlive << std::endl
+                    << "| _address = " << this->interfaceData.address << std::endl
+                    << "| _privateKey = " << this->interfaceData.privateKey << std::endl
+                    << "| _publicKeyServer = " << this->peerData.publicKey << std::endl
+                    << "| _endpoint = " << this->peerData.endpoint << std::endl
+                    << "| _keepAlive = " << this->peerData.persistentKeepalive << std::endl
                     << "| _publicKeyClient = " << this->_publicKeyClient << std::endl;
           std::cout << "| _dnsList = ";
-          for (int i = 0; i < this->_dnsList.size(); ++i) {
-               std::cout << this->_dnsList[i] << ", ";
+          for (int i = 0; i < this->interfaceData.dnsServers.size(); ++i) {
+               std::cout << this->interfaceData.dnsServers[i] << ", ";
           }
           std::cout << std::endl;
 
           std::cout << "| _allowedIPs = ";
-          for (int i = 0; i < this->_allowedIPs.size(); ++i) {
-               std::cout << this->_allowedIPs[i] << ", ";
+          for (int i = 0; i < this->peerData.allowedIPs.size(); ++i) {
+               std::cout << this->peerData.allowedIPs[i] << ", ";
           }
           std::cout << std::endl;
      }
 
-     bool isFileEmpty(const std::string& filename) {
-          std::string path = defaultPath + _name + ".conf";
+     bool isFileEmpty(const string& filename) {
+          string path = defaultPath + _name + ".conf";
           std::ifstream file(filename);
           return file.peek() == std::ifstream::traits_type::eof();
      }
@@ -99,22 +108,17 @@ class ConfigClient {
 
  private:
      // Config & tun name
-     std::string _name;
+     string _name;
      // Interface
-     std::string _address;
-     std::string _privateKey;
-     std::vector<std::string> _dnsList;
+     InterfaceData interfaceData;
 
      // Peer
-     std::string _publicKeyServer;
-     std::vector<std::string> _allowedIPs;
-     std::string _endpoint;
-     size_t _keepAlive = 25;
+     PeerData peerData;
 
      //Handshake data
-     std::string _publicKeyClient;
+     string _publicKeyClient;
 
-     std::string tunDataPath = getenv("HOME");
-     std::string defaultPath = "/etc/wireguard/";
-     std::string defaultPort = ":51285";
+     string tunDataPath = getenv("HOME");
+     string defaultPath = "/etc/wireguard/";
+     string defaultPort = ":51285";
 };

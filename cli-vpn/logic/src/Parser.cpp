@@ -1,61 +1,70 @@
-#include "Parser.hpp"
+
+/*
+using namespace std;
 
 std::vector<std::vector<std::string>> ParseFile::getTokens(const std::string filePath) {
-     if (isValid(filePath)) {
+     std::cout << "entered" << std::endl;
+     if (checkConfigFile(filePath)) {
+          std::cout << "vaild cool" <<std::endl;
           return parseConfig(filePath);
      } else {
+          std::cout << "mistakes who did this" <<std::endl;
           return parseNotStructured(filePath);
      }
+      return parseNotStructured(filePath);
 }
 
-bool ParseFile::isValid(std::string path) {
-     std::ifstream input_filestream(path);
-     std::string line;
-     if (input_filestream.is_open()) {
-          while (std::getline(input_filestream, line)) {
-               if (line.find("[Interface]") == std::string::npos) {
-                    //ToDo wrong cfg
-                    return false;
-               }
-               if (line.find("PrivateKey") == std::string::npos) {
-                    //ToDo No PrivateKey Found
-                    return false;
-               }
-               if (line.find("Address") == std::string::npos) {
-                    //ToDo No address
-                    return false;
-               }
-               if (line.find("DNS") == std::string::npos) {
-                    //Todo DNS
-                    return false;
-               }
-               if (line.find("[Peer]") == std::string::npos) {
-                    //ToDo No Peer
-                    return false;
-               }
-               if (line.find("PublicKey") == std::string::npos) {
-                    //ToDo no pubkey
-                    return false;
-               }
-               if (line.find("AllowedIPs") == std::string::npos) {
-                    //ToDo no AllowedIPs
-                    return false;
-               }
-               if (line.find("Endpoint") == std::string::npos) {
-                    // ToDo no Endpoint
-                    return false;
-               }
-               if (line.find("PersistentKeepalive") == std::string::npos) {
-                    //ToDo HandelPresistent
-               }
+bool ParseFile::checkConfigFile(const std::string& filename) {
+    std::ifstream configFile(filename);
+    if (!configFile.is_open())
+    {
+        std::cout << "Failed to open config file: " << filename << std::endl;
+        return false;
+    }
+
+    std::string line;
+    std::vector<bool> foundFields(requiredFields.size(), false);
+
+    while (std::getline(configFile, line))
+    {
+        for (size_t i = 0; i < requiredFields.size(); ++i)
+        {
+            if (line.find(requiredFields[i]) != std::string::npos)
+            {
+                foundFields[i] = true;
+                break;
+            }
+        }
+    }
+
+    configFile.close();
+
+    for (bool found : foundFields)
+    {
+        if (!found)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+
+
+void ParseFile::print() {
+     for (auto const& row : parsed_file) {
+          for (auto const& element : row) {
+               std::cout << element << " ";
           }
+          std::cout << std::endl;
      }
-     return true;
 }
 
 
 std::vector<std::vector<std::string>> ParseFile::parseConfig(std::string filePath) {
-     if (!isValid(filePath)) {
+     if (validateFile(filePath)) {
           //ToDo handle error
      }
      size_t i = 0;
@@ -131,12 +140,9 @@ std::vector<std::vector<std::string>> ParseFile::parseConfig(std::string filePat
           ++i;
      }
      filestream.close();
-     /*for (auto const& row : output) {
-          for (auto const& element : row) {
-               std::cout << element << " ";
-          }
-          std::cout << std::endl;
-     }*/
+     
+     parsed_file = output;
+
      return output;
 }
 
@@ -170,11 +176,12 @@ std::vector<std::vector<std::string>> ParseFile::parseNotStructured(std::string 
           }
           ++i;
      }
-     /*for (auto const& row : output) {
+     for (auto const& row : output) {
           for (auto const& element : row) {
                std::cout << element << " ";
           }
           std::cout << std::endl;
-     }*/
+     }
      return output;
 }
+*/

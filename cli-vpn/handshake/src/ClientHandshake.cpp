@@ -15,7 +15,7 @@ void Client::connect() {
 
 
 void Client::send(const std::string& msg) {
-    std::cout << "trying sending " << std::endl;
+    std::cout << "trying sending " << msg << std::endl;
     boost::asio::write(_socket, boost::asio::buffer(msg));
 }
 

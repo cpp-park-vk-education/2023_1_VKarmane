@@ -14,6 +14,8 @@ private:
      // VPNUser useer; //
      std::vector<std::pair <std::string, vpnTun> > tunnels;
 
+     std::string defaultPath = "/etc/wireguard";
+
 public:
      VPNClient();
 

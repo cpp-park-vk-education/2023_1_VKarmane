@@ -4,12 +4,14 @@
 
 
 VPNClient::VPNClient() {
-     std::string path = "/etc/wireguard";
      DIR* directory;
      struct dirent* file;
+
      int count = 0;
-     if ((directory = opendir(path.c_str())) != nullptr) {
+
+     if ((directory = opendir(defaultPath.c_str())) != nullptr) {
           while ((file = readdir(directory)) != nullptr) {
+
                if (file->d_type == DT_REG && file->d_name[strlen(file->d_name) - 5] == '.' 
                     && file->d_name[strlen(file->d_name) - 4] == 'c' 
                     && file->d_name[strlen(file->d_name) - 3] == 'o' 
@@ -29,34 +31,22 @@ VPNClient::VPNClient() {
 void VPNClient::setVpnTunContext(const std::string& name, std::string contextFilePath) {
      for (int i = 0; i < tunnels.size(); ++i) {
           if (tunnels[i].first == name) {
-               ConfigClient config(name, contextFilePath);
-
-               if (config.isConfigEmpty()) {
-                    config.ipPublicKeyRequest(config.getEndpoint());
-
-                    config.setUnspecified();
-     
-                    config.buildConfig();
-
-                    config.print();
-
-                    return;
-               }
-
-               config.changeAllowedIPs();
-
-               config.print();
+               std::string path = defaultPath + '/' + name + ".conf";
+               std::cout << "Config " << name << " exist" << std::endl;
                
-               return;
+               ConfigClient config(name, path);
+
           }
      }
 
      ConfigClient config(name, contextFilePath);
 
+     config.genPair();
+
      config.ipPublicKeyRequest(config.getEndpoint());
 
      config.setUnspecified();
-     
+
      config.buildConfig();
 
      config.print();
