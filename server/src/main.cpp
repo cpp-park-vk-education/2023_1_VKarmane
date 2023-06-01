@@ -20,8 +20,9 @@ int main() {
 
         boost::asio::io_context io_context;
         io_context_ptr = &io_context;
-        std::string ipServer = "127.0.0.1";
-        Server server(io_context, 2003, config, ipServer);
+        std::string ipServer = "45.82.15.27";
+        int port = 2003;
+        Server server(io_context, port, config, ipServer);
 
         std::signal(SIGINT, signalHandler);
         io_context.run();

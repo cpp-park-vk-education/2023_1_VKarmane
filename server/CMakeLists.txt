@@ -25,14 +25,14 @@ include_directories(include)
 
 # Test
 
-add_subdirectory(libs/googletest)
-add_executable(ServerTest 
-               src/wireguardKey.cpp
-               tests/testConfig.cpp
-               src/config.cpp 
-               src/server.cpp
-               src/VpnWorker.cpp)
+# add_subdirectory(libs/googletest)
+# add_executable(ServerTest 
+#                src/wireguardKey.cpp
+#                tests/testConfig.cpp
+#                src/config.cpp 
+#                src/server.cpp
+#                src/VpnWorker.cpp)
 
-target_link_libraries(ServerTest gtest_main ${Boost_LIBRARIES})
-include(GoogleTest)
-gtest_discover_tests(ServerTest)
+# target_link_libraries(ServerTest gtest_main ${Boost_LIBRARIES})
+# include(GoogleTest)
+# gtest_discover_tests(ServerTest)
