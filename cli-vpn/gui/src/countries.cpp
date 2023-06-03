@@ -10,13 +10,7 @@ Countries::Countries(QWidget *parent) :
     ui->setupUi(this);
     setFixedSize(420, 549);
 
-    if (qApp->palette().windowText().color() == Qt::black) {
-        ui->lightTheme->setVisible(true);
-        ui->darkTheme->setVisible(false);
-    } else {
-        ui->lightTheme->setVisible(false);
-        ui->darkTheme->setVisible(true);
-    }
+    showTheme();
 
     ui->lwServers->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
@@ -24,13 +18,7 @@ Countries::Countries(QWidget *parent) :
 
     ui->lbFieldsCheck->setVisible(false);
 
-    connect(ui->btnBack, SIGNAL(clicked(bool)), this, SLOT(btnBack()));
-
-    connect(ui->btnAdd, SIGNAL(clicked(bool)), this, SLOT(readLEServerIP()));
-
-    connect(ui->btnDelete, SIGNAL(clicked(bool)), this, SLOT(deleteServerIP()));
-
-    connect(ui->btnChoose, SIGNAL(clicked(bool)), this, SLOT(chooseServerIP()));
+    connectSignals();
 }
 
 Countries::~Countries() {
@@ -119,5 +107,22 @@ void Countries::loadTableData() {
         ui->lwServers->setItem(row, 1, itemIP);
     }
     settings.endArray();
+}
+
+void Countries::connectSignals() {
+    connect(ui->btnBack, SIGNAL(clicked(bool)), this, SLOT(btnBack()));
+    connect(ui->btnAdd, SIGNAL(clicked(bool)), this, SLOT(readLEServerIP()));
+    connect(ui->btnDelete, SIGNAL(clicked(bool)), this, SLOT(deleteServerIP()));
+    connect(ui->btnChoose, SIGNAL(clicked(bool)), this, SLOT(chooseServerIP()));
+}
+
+void Countries::showTheme() {
+    if (qApp->palette().windowText().color() == Qt::black) {
+        ui->lightTheme->setVisible(true);
+        ui->darkTheme->setVisible(false);
+    } else {
+        ui->lightTheme->setVisible(false);
+        ui->darkTheme->setVisible(true);
+    }
 }
 

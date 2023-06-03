@@ -42,6 +42,7 @@ class MainWindow : public QMainWindow {
     void clearConfig(const QString& filePath);
 
     void connectLogo();
+    void connectSignals();
 
 private:
     Ui::MainWindow *ui;

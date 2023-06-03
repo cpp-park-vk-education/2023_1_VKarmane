@@ -59,7 +59,7 @@ void ConfigurationWindow::btnSave() {
     emit valueChangedConfigAdded(true);
 }
 
-// Метод сохраняет данные, введенные пользователем в окно конфигурации
+// Метод сохраняет данные, введенные пользователем в окно конфигурации для дальнейшего отображения при следующем открытии
 void ConfigurationWindow::saveData() {
     // Создаем объект QSettings с указанием пути к файлу
     QSettings settings("myapp.ini", QSettings::IniFormat);

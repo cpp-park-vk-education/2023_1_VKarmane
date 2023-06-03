@@ -22,16 +22,21 @@ MainWindow::MainWindow(QWidget *parent)
     buttonCountryClicked = false;
     configAdded = false;
 
-
-
     ui->setupUi(this);
     ui->lbFoxTail->setVisible(false);
     ui->lbConfigUsageOn->setVisible(false);
     ui->lbConfigUsageOff->setVisible(true);
 
     darkMode();
+}
 
+MainWindow::~MainWindow() {
+    delete ui;
+    delete countriesWindow;
+    delete configurationWindow;
+}
 
+void MainWindow::connectSignals() {
     connect(ui->actionNewCountry, &QAction::triggered, this, &MainWindow::showCountries);
 
     connect(ui->LightMode, &QAction::triggered, this, &MainWindow::lightMode);
@@ -46,12 +51,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->connectPoland, &QAction::triggered, this, &MainWindow::connectionPoland);
     connect(ui->connectNetherlands, &QAction::triggered, this, &MainWindow::connectionNetherlands);
     connect(ui->connectLogo, &QAction::triggered, this, &MainWindow::connectLogo);
-}
-
-MainWindow::~MainWindow() {
-    delete ui;
-    delete countriesWindow;
-    delete configurationWindow;
 }
 
 void MainWindow::showCountries() {
@@ -199,10 +198,8 @@ void MainWindow::darkMode() {
 
     qApp->setPalette(darkPalette);
 
-
     ui->darkTheme->setVisible(true);
     ui->lightTheme->setVisible(false);
-
 }
 
 

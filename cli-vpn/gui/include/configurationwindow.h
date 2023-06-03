@@ -13,7 +13,9 @@ class IConfigurationWindow {
     virtual void btnSave() = 0;
     virtual void btnBack() = 0;
     virtual void saveConfig(const QString& configURLS) = 0;
+    // Метод сохраняет данные, введенные пользователем в окно конфигурации для дальнейшего отображения при следующем открытии
     virtual void saveData() = 0;
+    // Метод загружает данные, введенные пользователем в окно конфигурации при предыдущем открытии окна
     virtual void loadData() = 0;
     virtual void showTheme() = 0;
     virtual void connectSignals() = 0;
