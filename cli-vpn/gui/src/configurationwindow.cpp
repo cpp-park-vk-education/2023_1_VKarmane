@@ -9,33 +9,31 @@ ConfigurationWindow::ConfigurationWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ConfigurationWindow) {
     ui->setupUi(this);
+
+    // Задаем размер окна
     setFixedSize(420, 549);
 
     // Загружаем данные при запуске окна
     loadData();
 
-    if (qApp->palette().windowText().color() == Qt::black) {
-        ui->lightTheme->setVisible(true);
-        ui->darkTheme->setVisible(false);
-    } else {
-        ui->lightTheme->setVisible(false);
-        ui->darkTheme->setVisible(true);
-    }
+    // Отображаем тему
+    showTheme();
 
-
-    connect(ui->btnBack, SIGNAL(clicked(bool)), this, SLOT(btnBack()));
-    connect(ui->btnSave,SIGNAL(clicked(bool)),this, SLOT(btnSave()));
+    // Связываем методы и сигналы
+    connectSignals();
 }
 
 ConfigurationWindow::~ConfigurationWindow() {
     delete ui;
 }
 
+// Метод закрывает текущее окно и подает сигнал открытия главного окна
 void ConfigurationWindow::btnBack() {
     this->close();
     emit backMainWindow();
 }
 
+// Метод сохраняет в файл обработанный список URL, полученный от пользователя
 void ConfigurationWindow::saveConfig(const QString& configURLS) {
     QString filePath = "configuration.txt";
     QFile file(filePath);
@@ -47,16 +45,21 @@ void ConfigurationWindow::saveConfig(const QString& configURLS) {
     }
 }
 
+// Метод сохраняет и обрабатывает данные, введенные пользователем
 void ConfigurationWindow::btnSave() {
     QString configURLS = ui->pteConfiguration->toPlainText();
     configURLS = configURLS.replace("\n", ",");
+
+    // Сохраняем в файл обработанный список URL, полученный от пользователя
     saveConfig(configURLS);
-    // Сохраняем данные после нажатия кнопки "Сохранить"
+
+    // Сохраняем данные, введенные пользователем в окно конфигурации
     saveData();
+
     emit valueChangedConfigAdded(true);
 }
 
-
+// Метод сохраняет данные, введенные пользователем в окно конфигурации
 void ConfigurationWindow::saveData() {
     // Создаем объект QSettings с указанием пути к файлу
     QSettings settings("myapp.ini", QSettings::IniFormat);
@@ -65,10 +68,28 @@ void ConfigurationWindow::saveData() {
     settings.setValue("text", ui->pteConfiguration->toPlainText());
 }
 
+// Метод загружает данные, введенные пользователем в окно конфигурации при предыдущем открытии окна
 void ConfigurationWindow::loadData() {
     // Создаем объект QSettings с указанием пути к файлу
     QSettings settings("myapp.ini", QSettings::IniFormat);
 
     // Загружаем данные из файла
     ui->pteConfiguration->setPlainText(settings.value("text").toString());
+}
+
+// Метод отображает нужную тему
+void ConfigurationWindow::showTheme() {
+    if (qApp->palette().windowText().color() == Qt::black) {
+        ui->lightTheme->setVisible(true);
+        ui->darkTheme->setVisible(false);
+    } else {
+        ui->lightTheme->setVisible(false);
+        ui->darkTheme->setVisible(true);
+    }
+}
+
+// Метод связывает методы и сигналы
+void ConfigurationWindow::connectSignals() {
+    connect(ui->btnBack, SIGNAL(clicked(bool)), this, SLOT(btnBack()));
+    connect(ui->btnSave,SIGNAL(clicked(bool)),this, SLOT(btnSave()));
 }

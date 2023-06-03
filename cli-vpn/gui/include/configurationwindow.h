@@ -13,6 +13,10 @@ class IConfigurationWindow {
     virtual void btnSave() = 0;
     virtual void btnBack() = 0;
     virtual void saveConfig(const QString& configURLS) = 0;
+    virtual void saveData() = 0;
+    virtual void loadData() = 0;
+    virtual void showTheme() = 0;
+    virtual void connectSignals() = 0;
 };
 
 class ConfigurationWindow : public QDialog, public IConfigurationWindow {
@@ -34,8 +38,10 @@ private slots:
     void btnSave() override;
     void btnBack() override;
     void saveConfig(const QString& configURLS) override;
-    void saveData();
-    void loadData();
+    void saveData() override;
+    void loadData() override;
+    void showTheme() override;
+    void connectSignals() override;
 };
 
 #endif // CONFIGURATIONWINDOW_H

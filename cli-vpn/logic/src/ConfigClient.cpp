@@ -9,6 +9,7 @@ ConfigClient::ConfigClient() {
 
 
 ConfigClient::ConfigClient(const std::string name, const std::string& configname): _name(name) {
+     peerData.persistentKeepalive = 25;
      std::cout << "---------constr----------" << std::endl;
 
      std::ifstream configstream(configname);
@@ -188,7 +189,7 @@ void ConfigClient::setUnspecified() {
 
 void ConfigClient::buildConfig() {
      std::string path = defaultPath + _name + ".conf";
-     std::ofstream wg_config(path_test);
+     std::ofstream wg_config(path);
 
      wg_config << "[Interface]\n"
                << "Address = " << this->interfaceData.address << "\n"
@@ -210,7 +211,7 @@ void ConfigClient::buildConfig() {
      
      wg_config << peerData.allowedIPs[peerData.allowedIPs.size() - 1] << "\n"
                << "Endpoint = " << this->peerData.endpoint << "\n"
-               << "PersistentKeepalive = " << this->peerData.persistentKeepalive << '\n';
+               << "PersistentKeepalive = " << 25 << '\n';
      
      wg_config.close();     
 }
