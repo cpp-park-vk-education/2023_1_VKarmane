@@ -22,7 +22,7 @@ void VpnWorker::doRead() {
                             });
 }
 
-void ::VpnWorker::doWrite() {
+void VpnWorker::doWrite() {
     auto self(shared_from_this());
     std::string message = ipAddPeer + "\n";
     boost::asio::async_write(_socket, boost::asio::buffer(message),

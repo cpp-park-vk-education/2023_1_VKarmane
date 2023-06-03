@@ -34,12 +34,9 @@ void Server::doAccept() {
 }
 
 void Server::Cleanup() {
-        // Perform necessary cleanup tasks here
-        std::cout << "Performing cleanup..." << std::endl;
-        
-        // Close the acceptor
-        _acceptor.close();
-        
-        // Stop the IO context
-        _io_context.stop();
-    }
+    std::cout << "Performing cleanup..." << std::endl;
+
+    _acceptor.close();
+
+    _io_context.stop();
+}
