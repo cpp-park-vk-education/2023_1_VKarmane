@@ -17,27 +17,22 @@ include_directories(src)
 
 set(PROJECT_SOURCES
         src/main.cpp
-        src/mainwindow.cpp
-        include/mainwindow.h
-        src/mainwindow.ui
 
-        src/configurationwindow.cpp
-        include/configurationwindow.h
-        src/configurationwindow.ui
+	src/mainwindow.cpp
+	include/mainwindow.h
+	src/ui/mainwindow.ui
 
-        src/authenticationwindow.cpp
-        include/authenticationwindow.h
-        src/authenticationwindow.ui
+	src/configurationwindow.cpp
+	include/configurationwindow.h
+	src/ui/configurationwindow.ui
 
-        src/staticswindow.cpp
-        include/staticswindow.h
-        src/staticswindow.ui
+	include/countries.h
+	src/countries.cpp
+	src/ui/countries.ui
 
-        include/countries.h
-        src/countries.cpp
-        src/countries.ui
+	conf/configuration.txt
 
-        resource.qrc
+	resource.qrc
 )
 
 

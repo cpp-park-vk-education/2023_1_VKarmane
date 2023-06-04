@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>420</width>
-    <height>476</height>
+    <height>549</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -38,10 +38,10 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>250</y>
-      <width>121</width>
-      <height>111</height>
+      <x>140</x>
+      <y>310</y>
+      <width>141</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="cursor">
@@ -49,14 +49,14 @@
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
-border-image:url(:/img/arrows-button-off_98344.png);
+border-image:url(:/img/TurnOFF.png);
 width: 50px;
 height: 50px;
 }
 QPushButton:checked{
 width: 50px;
 height: 50px;
-border-image:url(:/img/arrows-button-on_97730.png);
+border-image:url(:/img/TurnON.png);
 }</string>
     </property>
     <property name="text">
@@ -78,10 +78,10 @@ border-image:url(:/img/arrows-button-on_97730.png);
    <widget class="QLabel" name="lbFoxTail">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>110</y>
-      <width>121</width>
-      <height>121</height>
+      <x>145</x>
+      <y>120</y>
+      <width>131</width>
+      <height>141</height>
      </rect>
     </property>
     <property name="text">
@@ -101,13 +101,17 @@ border-image:url(:/img/arrows-button-on_97730.png);
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>140</y>
-      <width>161</width>
-      <height>51</height>
+      <y>260</y>
+      <width>141</width>
+      <height>31</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid #f47c00;
+border-radius: 10px;</string>
+    </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a name=&quot;tw-target-text&quot;/&gt;&lt;span style=&quot; font-family:'inherit'; color:#a51d2d;&quot;&gt;C&lt;/span&gt;&lt;span style=&quot; font-family:'inherit'; color:#a51d2d;&quot;&gt;hoose country or &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:'inherit'; color:#a51d2d;&quot;&gt;set up your server IP&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'inherit'; font-size:12pt; font-weight:700; color:#f47c00;&quot;&gt;Choose server&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="lbConfigUsageOff">
@@ -116,14 +120,18 @@ border-image:url(:/img/arrows-button-on_97730.png);
     </property>
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>0</y>
-      <width>121</width>
+      <x>165</x>
+      <y>400</y>
+      <width>91</width>
       <height>21</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid #f47c00;
+border-radius: 10px;</string>
+    </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#a51d2d;&quot;&gt;Config isn't active&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700; color:#f47c00;&quot;&gt;Config OFF&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="lbConfigUsageOn">
@@ -132,16 +140,60 @@ border-image:url(:/img/arrows-button-on_97730.png);
     </property>
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>0</y>
-      <width>101</width>
+      <x>165</x>
+      <y>400</y>
+      <width>91</width>
       <height>21</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid #f47c00;
+border-radius: 10px;</string>
+    </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#26a269;&quot;&gt;Config is active&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700; color:#f47c00;&quot;&gt;Config ON&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
+   <widget class="QLabel" name="darkTheme">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>421</width>
+      <height>471</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="../resource.qrc">:/img/11zon_cropped.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lightTheme">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>421</width>
+      <height>471</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="../resource.qrc">:/img/whiteTheme.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <zorder>lightTheme</zorder>
+   <zorder>darkTheme</zorder>
    <zorder>lbFoxTail</zorder>
    <zorder>btnTurnVpn</zorder>
    <zorder>lbCountryMessage</zorder>
@@ -199,8 +251,7 @@ border-image:url(:/img/arrows-button-on_97730.png);
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="connectInstagramm"/>
-   <addaction name="connectTwitter"/>
+   <addaction name="connectLogo"/>
   </widget>
   <widget class="QToolBar" name="tbCountries">
    <property name="minimumSize">
@@ -256,10 +307,10 @@ border-image:url(:/img/arrows-button-on_97730.png);
     <string>Authorization</string>
    </property>
   </action>
-  <action name="connectInstagramm">
+  <action name="connectLogo">
    <property name="icon">
     <iconset resource="../resource.qrc">
-     <normaloff>:/img/1491579602-yumminkysocialmedia36_83067.png</normaloff>:/img/1491579602-yumminkysocialmedia36_83067.png</iconset>
+     <normaloff>:/img/FoxTailVPNLogo.png</normaloff>:/img/FoxTailVPNLogo.png</iconset>
    </property>
    <property name="text">
     <string>Insta</string>

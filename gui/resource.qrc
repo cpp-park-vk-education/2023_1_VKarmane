@@ -1,30 +1,20 @@
 <RCC>
     <qresource prefix="/img"/>
     <qresource prefix="/">
-        <file>img/32335.jpg</file>
         <file>img/1491579602-yumminkysocialmedia36_83067.png</file>
-        <file>img/button_log_off_14996.png</file>
-        <file>img/ChinesMaxFlag.png</file>
-        <file>img/DarkTheme.jpg</file>
         <file>img/FlagChineseFlag_banderadechina_6561.png</file>
         <file>img/flagofpoland_6425.png</file>
         <file>img/FoxTailVPNLogo.png</file>
-        <file>img/LightTheme.jpg</file>
-        <file>img/power-button_icon-icons.com_60614.png</file>
-        <file>img/power-off.png</file>
-        <file>img/power-on.png</file>
-        <file>img/star-sky.jpg</file>
         <file>img/swedenflag_6382.png</file>
-        <file>img/systemshutdown_94125.png</file>
         <file>img/Twitter_icon-icons.com_66803.png</file>
         <file>img/Statistics.png</file>
-        <file>LightBorder.css</file>
-        <file>DarkBorder.css</file>
-        <file>img/arrows-button-off_98344.png</file>
-        <file>img/arrows-button-on_97730.png</file>
         <file>img/Dutchflag_6447.png</file>
         <file>img/list_menu_document_burger_icon_226588.png</file>
         <file>img/add_circle_create_expand_new_plus_icon_123218.png</file>
         <file>img/add_circle_create_expand_new_plus_icon_123218 (1).png</file>
+        <file>img/11zon_cropped.png</file>
+        <file>img/whiteTheme.png</file>
+        <file>img/TurnOFF.png</file>
+        <file>img/TurnON.png</file>
     </qresource>
 </RCC>

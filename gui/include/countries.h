@@ -15,33 +15,41 @@ class ICountriesWindow {
     virtual void readLEServerIP() = 0;
     virtual void deleteServerIP() = 0;
     virtual void chooseServerIP() = 0;
+    virtual void saveTableData() = 0;
+    virtual void loadTableData() = 0;
+    virtual void connectSignals() = 0;
+    virtual void showTheme() = 0;
 };
 
 class Countries : public QDialog, public ICountriesWindow {
     Q_OBJECT
 
-public:
+ public:
     explicit Countries(QWidget *parent = nullptr);
     ~Countries();
 
-private:
+ private:
     Ui::Countries *ui;
 
     bool buttonCountryClicked;
     std::string defaultConfiguration;
 
-signals:
+ signals:
     void valueChangedNameTun(const std::string& value);
     void backMainWindow();
     void valueChangedButtonCountryClicked(bool value);
     void valueChangedDefaultConfiguration(const std::string& value);
 
 
-private slots:
+ private slots:
     void btnBack() override;
     void readLEServerIP() override;
     void deleteServerIP() override;
     void chooseServerIP() override;
+    void saveTableData() override;
+    void loadTableData() override;
+    void connectSignals() override;
+    void showTheme() override;
 };
 
 #endif // COUNTRIES_H

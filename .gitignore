@@ -1,2 +1,2 @@
-TDD_GUI/
-RK3/
+build*/
+CMakeLists.txt.user
