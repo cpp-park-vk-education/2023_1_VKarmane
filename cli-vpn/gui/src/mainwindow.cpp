@@ -1,15 +1,19 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "ui/ui_mainwindow.h"
 
 #include <QFile>
 #include <QScreen>
 #include <QStyle>
 #include <QTextStream>
+#include <QMessageBox>
+
+#include "VPNClient.hpp"
 
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow) {
+    , ui(new Ui::MainWindow)
+{
     filePath = "configuration.txt";
     clearConfig(filePath);
 
@@ -19,35 +23,35 @@ MainWindow::MainWindow(QWidget *parent)
     buttonCountryClicked = false;
     configAdded = false;
 
-
-
     ui->setupUi(this);
     ui->lbFoxTail->setVisible(false);
     ui->lbConfigUsageOn->setVisible(false);
     ui->lbConfigUsageOff->setVisible(true);
 
     darkMode();
-
-
-    connect(ui->actionNewCountry, &QAction::triggered, this, &MainWindow::showCountries);
-
-    connect(ui->LightMode, &QAction::triggered, this, &MainWindow::lightMode);
-    connect(ui->DarkMode, &QAction::triggered, this, &MainWindow::darkMode);
-
-    connect(ui->btnTurnVpn,SIGNAL(clicked(bool)),this, SLOT(turnOnVPN()));
-
-    connect(ui->showStatistics, &QAction::triggered, this, &MainWindow::showStatics);
-    connect(ui->showAuthorization, &QAction::triggered, this, &MainWindow::showAuthorization);
-    connect(ui->showConfiguration, &QAction::triggered, this, &MainWindow::showConfiguration);
-
-    connect(ui->connectPoland, &QAction::triggered, this, &MainWindow::connectionPoland);
-    connect(ui->connectNetherlands, &QAction::triggered, this, &MainWindow::connectionNetherlands);
 }
 
 MainWindow::~MainWindow() {
     delete ui;
     delete countriesWindow;
     delete configurationWindow;
+}
+
+void MainWindow::connectSignals() {
+    connect(ui->actionNewCountry, &QAction::triggered, this, &MainWindow::showCountries);
+
+    connect(ui->LightMode, &QAction::triggered, this, &MainWindow::lightMode);
+    connect(ui->DarkMode, &QAction::triggered, this, &MainWindow::darkMode);
+
+    connect(ui->btnTurnVpn, SIGNAL(clicked(bool)),this, SLOT(turnOnVPN()));
+
+//    connect(ui->showStatistics, &QAction::triggered, this, &MainWindow::showStatics);
+//    connect(ui->showAuthorization, &QAction::triggered, this, &MainWindow::showAuthorization);
+    connect(ui->showConfiguration, &QAction::triggered, this, &MainWindow::showConfiguration);
+
+    connect(ui->connectPoland, &QAction::triggered, this, &MainWindow::connectionPoland);
+    connect(ui->connectNetherlands, &QAction::triggered, this, &MainWindow::connectionNetherlands);
+    connect(ui->connectLogo, &QAction::triggered, this, &MainWindow::connectLogo);
 }
 
 void MainWindow::showCountries() {
@@ -79,6 +83,10 @@ void MainWindow::clearConfig(const QString& filePath) {
     if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
         file.resize(0);
         file.close();
+    } else {
+        QMessageBox::critical(nullptr, "Error", "Restart the program/computer, "
+                                                "if this does not help, "
+                                                "install a new version of the application or contact the developers");
     }
 }
 
@@ -94,41 +102,54 @@ void MainWindow::setValueConfigAdded(bool value) {
 }
 
 
-void MainWindow::turnOnVPN() {
+void MainWindow::turnVPN() {
     if (buttonCountryClicked) {
         ui->lbCountryMessage->setVisible(false);
+        VPNClient client;
         if (!buttonClicked) {
-            ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/TurnON.png); width: 50px; height: 50px;}");
-            ui->lbFoxTail->setVisible(true);
-            buttonClicked = true;
-
-            if (!configAdded) {
-                clearConfig(filePath);
-            } else {
-                configAdded = false;
-            }
-            QFile file(filePath);
-            if (file.open(QIODevice::Append | QIODevice::Text)) {
-                QTextStream stream(&file);
-                stream << QString::fromStdString(nameTun) << QString::fromStdString(defaultConfiguration) << "\n";
-                file.close();
-            }
+            turnOnVPN(client);
         } else {
-            ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/TurnOFF.png); width: 50px; height: 50px;}");
-            ui->lbFoxTail->setVisible(false);
-            ui->lbConfigUsageOn->setVisible(false);
-            ui->lbConfigUsageOff->setVisible(true);
-            buttonClicked = false;
-            buttonCountryClicked = false;
+            turnOffVPN(client);
         }
     } else {
         ui->lbCountryMessage->setVisible(true);
         ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/TurnOFF.png); width: 50px; height: 50px;}");
     }
-
 }
 
+void MainWindow::turnOffVPN(VPNClient& client) {
+    client.stopTun(nameTun);
+    ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/TurnOFF.png); width: 50px; height: 50px;}");
+    ui->lbFoxTail->setVisible(false);
+    ui->lbConfigUsageOn->setVisible(false);
+    ui->lbConfigUsageOff->setVisible(true);
+    buttonClicked = false;
+    buttonCountryClicked = false;
+}
 
+void MainWindow::turnOnVPN(VPNClient &client) {
+    ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/TurnON.png); width: 50px; height: 50px;}");
+    ui->lbFoxTail->setVisible(true);
+    buttonClicked = true;
+
+    if (!configAdded) {
+        clearConfig(filePath);
+    } else {
+        configAdded = false;
+    }
+    QFile file(filePath);
+    if (file.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream stream(&file);
+        stream << QString::fromStdString(defaultConfiguration) << "\n";
+        file.close();
+        client.setVpnTunContext(nameTun, filePath.toStdString());
+        client.runTun(nameTun);
+    } else {
+        QMessageBox::critical(nullptr, "Error", "Restart the program/computer, "
+                                                "if this does not help, "
+                                                "install a new version of the application or contact the developers");
+    }
+}
 
 void MainWindow::lightMode() {
     QPalette lightPalette;
@@ -191,21 +212,19 @@ void MainWindow::darkMode() {
 
     qApp->setPalette(darkPalette);
 
-
     ui->darkTheme->setVisible(true);
     ui->lightTheme->setVisible(false);
-
 }
 
 
-void MainWindow::showStatics() {
-    statics.show();
-}
+//void MainWindow::showStatics() {
+//    statics.show();
+//}
 
 
-void MainWindow::showAuthorization() {
-    authentication.show();
-}
+//void MainWindow::showAuthorization() {
+//    authentication.show();
+//}
 
 
 void MainWindow::showConfiguration() {
@@ -215,5 +234,13 @@ void MainWindow::showConfiguration() {
 
     configurationWindow->show();
     this->close();
+}
+
+
+void MainWindow::connectLogo() {
+    QMessageBox::about(this, "О Разработчиках",
+                       "Дмитрий Белозеров tg <a href='https://t.me/belozerovmsk'>@belozerovmsk</a><br>"
+                       "Григорий Коваленко tg <a href='https://t.me/Trapshitalligator'>@Trapshitalligator</a><br>"
+                       "Дмитрий Комаров tg <a href='https://t.me/Kosmatoff'>@Kosmatoff</a>");
 }
 

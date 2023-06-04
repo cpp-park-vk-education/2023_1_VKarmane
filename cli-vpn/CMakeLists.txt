@@ -26,25 +26,18 @@ include_directories(logic/src)
 set(PROJECT_SOURCES
      #GUI
      gui/src/main.cpp
+
      gui/src/mainwindow.cpp
      gui/include/mainwindow.h
-     gui/src/mainwindow.ui
+     gui/src/ui/mainwindow.ui
 
      gui/src/configurationwindow.cpp
      gui/include/configurationwindow.h
-     gui/src/configurationwindow.ui
-
-     gui/src/authenticationwindow.cpp
-     gui/include/authenticationwindow.h
-     gui/src/authenticationwindow.ui
-
-     gui/src/staticswindow.cpp
-     gui/include/staticswindow.h
-     gui/src/staticswindow.ui
+     gui/src/ui/configurationwindow.ui
 
      gui/include/countries.h
      gui/src/countries.cpp
-     gui/src/countries.ui
+     gui/src/ui/countries.ui
 
      gui/conf/configuration.txt
 
@@ -56,13 +49,14 @@ set(PROJECT_SOURCES
      logic/include/VPNClient.hpp
      logic/include/vpnTunnel.hpp
      handshake/headers/ClinetHandshake.hpp
-
+     handshake/headers/DnsRequest.hpp
      #Client Back Source
      logic/src/ConfigClient.cpp
      logic/src/VPNClient.cpp
      logic/src/Parser.cpp
      handshake/src/ClientHandshake.cpp
-)
+     handshake/src/DnsRequest.cpp
+     )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(GUI

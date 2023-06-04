@@ -2,10 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "staticswindow.h"
-#include "authenticationwindow.h"
+
+//#include "staticswindow.h"
+//#include "authenticationwindow.h"
 #include "configurationwindow.h"
 #include "countries.h"
+
+#include "VPNClient.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,12 +30,14 @@ class MainWindow : public QMainWindow {
     void connectionPoland();
     void connectionNetherlands();
 
-    void showStatics();
-    void showAuthorization();
+//    void showStatics();
+//    void showAuthorization();
     void showConfiguration();
-
-    void turnOnVPN();
     void showCountries();
+
+    void turnVPN();
+    void turnOffVPN(VPNClient& client);
+    void turnOnVPN(VPNClient& client);
 
     void setValueButtonCountryClicked(bool value);
     void setValueDefaultConfiguration(const std::string& value);
@@ -41,14 +46,16 @@ class MainWindow : public QMainWindow {
 
     void clearConfig(const QString& filePath);
 
- private:
+    void connectLogo();
+    void connectSignals();
+
+private:
     Ui::MainWindow *ui;
     Countries* countriesWindow;
     ConfigurationWindow* configurationWindow;
 
-    StaticsWindow statics;
-    AuthenticationWindow authentication;
-    ConfigurationWindow configuration;
+//    StaticsWindow statics;
+//    AuthenticationWindow authentication;
 
     bool buttonClicked;
     bool buttonCountryClicked;
