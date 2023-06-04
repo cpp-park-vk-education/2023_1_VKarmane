@@ -26,17 +26,18 @@ include_directories(logic/src)
 set(PROJECT_SOURCES
      #GUI
      gui/src/main.cpp
+
      gui/src/mainwindow.cpp
      gui/include/mainwindow.h
-     gui/src/mainwindow.ui
+     gui/src/ui/mainwindow.ui
 
      gui/src/configurationwindow.cpp
      gui/include/configurationwindow.h
-     gui/src/configurationwindow.ui
+     gui/src/ui/configurationwindow.ui
 
      gui/include/countries.h
      gui/src/countries.cpp
-     gui/src/countries.ui
+     gui/src/ui/countries.ui
 
      gui/conf/configuration.txt
 

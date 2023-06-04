@@ -1,5 +1,5 @@
 #include "configurationwindow.h"
-#include "ui_configurationwindow.h"
+#include "ui/ui_configurationwindow.h"
 
 #include <QTextStream>
 #include <QFile>
@@ -39,7 +39,8 @@ void ConfigurationWindow::btnBack() {
 void ConfigurationWindow::saveConfig(const QString& configURLS) {
     QString filePath = "configuration.txt";
     QFile file(filePath);
-    if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
+    if (file.open(QIODevice::ReadWrite |
+    QIODevice::Truncate | QIODevice::Text)) {
         file.resize(0);
         QTextStream out(&file);
         out << "URLlist = " << configURLS;
@@ -97,5 +98,5 @@ void ConfigurationWindow::showTheme() {
 // Метод связывает методы и сигналы
 void ConfigurationWindow::connectSignals() {
     connect(ui->btnBack, SIGNAL(clicked(bool)), this, SLOT(btnBack()));
-    connect(ui->btnSave,SIGNAL(clicked(bool)),this, SLOT(btnSave()));
+    connect(ui->btnSave, SIGNAL(clicked(bool)), this, SLOT(btnSave()));
 }

@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "ui/ui_mainwindow.h"
 
 #include <QFile>
 #include <QScreen>
@@ -43,7 +43,7 @@ void MainWindow::connectSignals() {
     connect(ui->LightMode, &QAction::triggered, this, &MainWindow::lightMode);
     connect(ui->DarkMode, &QAction::triggered, this, &MainWindow::darkMode);
 
-    connect(ui->btnTurnVpn,SIGNAL(clicked(bool)),this, SLOT(turnOnVPN()));
+    connect(ui->btnTurnVpn, SIGNAL(clicked(bool)),this, SLOT(turnOnVPN()));
 
 //    connect(ui->showStatistics, &QAction::triggered, this, &MainWindow::showStatics);
 //    connect(ui->showAuthorization, &QAction::triggered, this, &MainWindow::showAuthorization);

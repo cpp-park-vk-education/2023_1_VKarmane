@@ -1,5 +1,5 @@
 #include "countries.h"
-#include "ui_countries.h"
+#include "ui/ui_countries.h"
 
 #include <QSettings>
 
