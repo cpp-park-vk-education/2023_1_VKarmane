@@ -12,7 +12,8 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow) {
+    , ui(new Ui::MainWindow)
+{
     filePath = "configuration.txt";
     clearConfig(filePath);
 
@@ -44,8 +45,8 @@ void MainWindow::connectSignals() {
 
     connect(ui->btnTurnVpn,SIGNAL(clicked(bool)),this, SLOT(turnOnVPN()));
 
-    connect(ui->showStatistics, &QAction::triggered, this, &MainWindow::showStatics);
-    connect(ui->showAuthorization, &QAction::triggered, this, &MainWindow::showAuthorization);
+//    connect(ui->showStatistics, &QAction::triggered, this, &MainWindow::showStatics);
+//    connect(ui->showAuthorization, &QAction::triggered, this, &MainWindow::showAuthorization);
     connect(ui->showConfiguration, &QAction::triggered, this, &MainWindow::showConfiguration);
 
     connect(ui->connectPoland, &QAction::triggered, this, &MainWindow::connectionPoland);
@@ -82,6 +83,10 @@ void MainWindow::clearConfig(const QString& filePath) {
     if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
         file.resize(0);
         file.close();
+    } else {
+        QMessageBox::critical(nullptr, "Error", "Restart the program/computer, "
+                                                "if this does not help, "
+                                                "install a new version of the application or contact the developers");
     }
 }
 
@@ -97,45 +102,54 @@ void MainWindow::setValueConfigAdded(bool value) {
 }
 
 
-void MainWindow::turnOnVPN() {
+void MainWindow::turnVPN() {
     if (buttonCountryClicked) {
         ui->lbCountryMessage->setVisible(false);
         VPNClient client;
         if (!buttonClicked) {
-            ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/TurnON.png); width: 50px; height: 50px;}");
-            ui->lbFoxTail->setVisible(true);
-            buttonClicked = true;
-
-            if (!configAdded) {
-                clearConfig(filePath);
-            } else {
-                configAdded = false;
-            }
-            QFile file(filePath);
-            if (file.open(QIODevice::Append | QIODevice::Text)) {
-                QTextStream stream(&file);
-                stream << QString::fromStdString(defaultConfiguration) << "\n";
-                file.close();
-                client.setVpnTunContext(nameTun, filePath.toStdString());
-                client.runTun(nameTun);
-            }
+            turnOnVPN(client);
         } else {
-            client.stopTun(nameTun);
-            ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/TurnOFF.png); width: 50px; height: 50px;}");
-            ui->lbFoxTail->setVisible(false);
-            ui->lbConfigUsageOn->setVisible(false);
-            ui->lbConfigUsageOff->setVisible(true);
-            buttonClicked = false;
-            buttonCountryClicked = false;
+            turnOffVPN(client);
         }
     } else {
         ui->lbCountryMessage->setVisible(true);
         ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/TurnOFF.png); width: 50px; height: 50px;}");
     }
-
 }
 
+void MainWindow::turnOffVPN(VPNClient& client) {
+    client.stopTun(nameTun);
+    ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/TurnOFF.png); width: 50px; height: 50px;}");
+    ui->lbFoxTail->setVisible(false);
+    ui->lbConfigUsageOn->setVisible(false);
+    ui->lbConfigUsageOff->setVisible(true);
+    buttonClicked = false;
+    buttonCountryClicked = false;
+}
 
+void MainWindow::turnOnVPN(VPNClient &client) {
+    ui->btnTurnVpn->setStyleSheet("QPushButton {border-image:url(:/img/TurnON.png); width: 50px; height: 50px;}");
+    ui->lbFoxTail->setVisible(true);
+    buttonClicked = true;
+
+    if (!configAdded) {
+        clearConfig(filePath);
+    } else {
+        configAdded = false;
+    }
+    QFile file(filePath);
+    if (file.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream stream(&file);
+        stream << QString::fromStdString(defaultConfiguration) << "\n";
+        file.close();
+        client.setVpnTunContext(nameTun, filePath.toStdString());
+        client.runTun(nameTun);
+    } else {
+        QMessageBox::critical(nullptr, "Error", "Restart the program/computer, "
+                                                "if this does not help, "
+                                                "install a new version of the application or contact the developers");
+    }
+}
 
 void MainWindow::lightMode() {
     QPalette lightPalette;
@@ -203,14 +217,14 @@ void MainWindow::darkMode() {
 }
 
 
-void MainWindow::showStatics() {
-    statics.show();
-}
+//void MainWindow::showStatics() {
+//    statics.show();
+//}
 
 
-void MainWindow::showAuthorization() {
-    authentication.show();
-}
+//void MainWindow::showAuthorization() {
+//    authentication.show();
+//}
 
 
 void MainWindow::showConfiguration() {

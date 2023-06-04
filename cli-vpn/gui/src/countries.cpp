@@ -8,6 +8,7 @@ Countries::Countries(QWidget *parent) :
     ui(new Ui::Countries)
 {
     ui->setupUi(this);
+
     setFixedSize(420, 549);
 
     showTheme();
@@ -50,6 +51,7 @@ void Countries::chooseServerIP() {
     emit valueChangedDefaultConfiguration(ServerIP);
 }
 
+// Метод считывает введенные пользователем данные о сервере
 void Countries::readLEServerIP() {
     if (ui->leServers->text().isEmpty() or ui->leServersName->text().isEmpty()) {
         ui->lbFieldsCheck->setVisible(true);

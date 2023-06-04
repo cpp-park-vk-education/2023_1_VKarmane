@@ -34,14 +34,6 @@ set(PROJECT_SOURCES
      gui/include/configurationwindow.h
      gui/src/configurationwindow.ui
 
-     gui/src/authenticationwindow.cpp
-     gui/include/authenticationwindow.h
-     gui/src/authenticationwindow.ui
-
-     gui/src/staticswindow.cpp
-     gui/include/staticswindow.h
-     gui/src/staticswindow.ui
-
      gui/include/countries.h
      gui/src/countries.cpp
      gui/src/countries.ui

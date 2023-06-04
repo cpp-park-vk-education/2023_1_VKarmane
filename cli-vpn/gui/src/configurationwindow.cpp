@@ -4,10 +4,12 @@
 #include <QTextStream>
 #include <QFile>
 #include <QSettings>
+#include <QMessageBox>
 
 ConfigurationWindow::ConfigurationWindow(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ConfigurationWindow) {
+    ui(new Ui::ConfigurationWindow)
+{
     ui->setupUi(this);
 
     // Задаем размер окна
@@ -42,6 +44,10 @@ void ConfigurationWindow::saveConfig(const QString& configURLS) {
         QTextStream out(&file);
         out << "URLlist = " << configURLS;
         file.close();
+    } else {
+        QMessageBox::critical(nullptr, "Error", "Restart the program/computer, "
+                                                "if this does not help, "
+                                                "install a new version of the application or contact the developers");
     }
 }
 
