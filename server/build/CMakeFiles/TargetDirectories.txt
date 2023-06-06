@@ -1,4 +1,0 @@
-/home/kosmatoff/git/2023_1_VKarmane/server/build/CMakeFiles/Server.dir
-/home/kosmatoff/git/2023_1_VKarmane/server/build/CMakeFiles/test.dir
-/home/kosmatoff/git/2023_1_VKarmane/server/build/CMakeFiles/edit_cache.dir
-/home/kosmatoff/git/2023_1_VKarmane/server/build/CMakeFiles/rebuild_cache.dir

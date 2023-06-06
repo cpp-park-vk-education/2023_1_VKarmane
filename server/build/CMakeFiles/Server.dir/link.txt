@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/Server.dir/src/config.cpp.o CMakeFiles/Server.dir/src/server.cpp.o CMakeFiles/Server.dir/src/VpnWorker.cpp.o CMakeFiles/Server.dir/src/main.cpp.o -o Server  /usr/lib/x86_64-linux-gnu/libboost_system.so.1.74.0 /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.74.0 /usr/lib/x86_64-linux-gnu/libboost_atomic.so.1.74.0 
