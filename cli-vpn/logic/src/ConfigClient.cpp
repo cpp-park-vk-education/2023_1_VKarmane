@@ -1,29 +1,18 @@
 #include "ConfigClient.hpp"
-//#include "../include/ConfigClient.hpp"
 
-ConfigClient::ConfigClient():
-     _address(nullptr), _privateKey(nullptr),
-     _publicKeyServer(nullptr), _endpoint(nullptr),
-     _keepAlive(25) {
-          std::string path = getenv("HOME");
-          path = path + "/.wireguard-cli";
-          int status = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+
+ConfigClient::ConfigClient() {
+     std::string path = getenv("HOME");
+     path = path + "/.wireguard-cli";
+     int status = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 }
 
 
-ConfigClient::ConfigClient(const std::string name, std::string configname): _name(name) {
+ConfigClient::ConfigClient(const std::string name, const std::string& configname): _name(name) {
+     peerData.persistentKeepalive = 25;
      std::cout << "---------constr----------" << std::endl;
 
      std::ifstream configstream(configname);
-
-     if (!configstream.is_open()) {
-          std::cerr << "Error: Can't open file " << configname << " provided!" << std::endl;
-          return;
-     }
-
-     if (isFileEmpty(configname)) {
-          std::cerr << "Error: Provided file empty " << configname << " at least provide endpoint" << std::endl;
-     }
 
      std::string path;
      path = defaultPath + "/wireguard-cli";
@@ -35,105 +24,25 @@ ConfigClient::ConfigClient(const std::string name, std::string configname): _nam
      path = path + '/' + _name;
      status = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
      if (status == -1) {
-          std::cerr << "Error: Directory named " << _name << " already exist try another confg name"
+          std::cerr << "Error: Directory named " << _name << " already exist try another confg name";
      }
 
-     std::string cfgPath = configname;
+     ConfigParser parser;
 
-     ParseFile p;
+     
+     parser.parseFile(configname);
 
-     if (p.isValid(cfgPath)) {
-          std::vector<std::vector<std::string>> parsed_vector = p.parseConfig(cfgPath);
+     this->interfaceData = parser.getInterfaceData();
+     this->peerData = parser.getPeerData();
 
-          for (auto const& row : parsed_vector) {
-               for (auto const& element : row) {
-                    std::cout << element << " ";
-               }
-               std::cout << std::endl;
-          }
-
-          *this = parsed_vector;
-     } else {
-          std::cout << "printing676776" << std::endl;
-          std::vector<std::vector<std::string>> parsed_vector = p.parseNotStructured(cfgPath);
-          
-          for (auto const& row : parsed_vector) {
-               for (auto const& element : row) {
-                    std::cout << element << " ";
-               }
-               std::cout << std::endl;
-          }
-
-          std::cout << "printing 1" << std::endl;
-          *this = parsed_vector;
-          std::cout << "printing" << std::endl;
-          this->print();
-          this->genPair();
-     }
+     this->print();
 
      // this->ipPublicKeyrequest();
 }
 
-ConfigClient& ConfigClient::operator=(const std::vector<std::vector<std::string>> parsed_vector) {
-     std::cout << "coping" << std::endl;
-     for (int i = 0; i < parsed_vector.size(); ++i) {
-          if (parsed_vector[i][0] == "PrivateKey") {
-               this->setPrivateKey(parsed_vector[i][1]);
-          }
-
-          if (parsed_vector[i][0] == "Address") {
-               this->setAddress(parsed_vector[i][1]);
-          }
-
-          if (parsed_vector[i][0] == "DNS") {
-               this->setDns(parsed_vector[i]);
-          }
-
-          if (parsed_vector[i][0] == "PublicKey") {
-               this->setPublicKey(parsed_vector[i][1]);
-          }
-
-          if (parsed_vector[i][0] == "AllowedIPs") {
-               this->setAllowedIPs(parsed_vector[i]);
-          }
-
-          if (parsed_vector[i][0] == "Endpoint") {
-               this->setEndpoint(parsed_vector[i][1]);
-          }
-
-          if (parsed_vector[i][0] == "PersistentKeepalive") {
-               this->setKeepAlive(std::stoul(parsed_vector[i][1]));
-          }
-
-          if (parsed_vector[i][0] == "URLlist") {
-               std::cout << "lol" << std::endl;
-               for (const auto& el : parsed_vector[i]) {
-                    std::cout << el << ' ';
-               }
-               
-               this->_allowedIPs = parsed_vector[i];
-               _allowedIPs.erase(_allowedIPs.begin());
-          
-               for (const auto& el : _allowedIPs) {
-                    std::cout << el << ' ';
-               }
-          }
-
-          if (parsed_vector[i][0] == "Endpoint") {
-               std::cout << "kek" << std::endl;
-               this->setEndpoint(parsed_vector[i][1]);
-          }
-     }
-     return *this;
-}
-
 ConfigClient& ConfigClient::operator=(const ConfigClient& config) {
-     _address = config._address;
-     _privateKey = config._privateKey;
-     _publicKeyServer = config._publicKeyServer;
-     _endpoint = config._endpoint;
-     _keepAlive = config._keepAlive;
-
+     this->interfaceData = config.interfaceData;
+     this->peerData = config.peerData;
      return *this;
 }
      
@@ -148,7 +57,7 @@ std::string ConfigClient::genPublicKey(const std::string& private_key) {
 }
 
 void ConfigClient::genPair() {
-     if (!_publicKeyServer.empty() || !_privateKey.empty()) {
+     if (!_publicKeyClient.empty() || !interfaceData.privateKey.empty()) {
           return;
      }
 
@@ -164,27 +73,28 @@ void ConfigClient::genPair() {
      std::cout << privateKeyFile.is_open() << ' ' << publicKeyFile.is_open() << std::endl;
 
      if (privateKeyFile.is_open() && publicKeyFile.is_open()) {
-          std::getline(privateKeyFile, this->_privateKey);
+          std::getline(privateKeyFile, this->interfaceData.privateKey);
           std::getline(publicKeyFile, this->_publicKeyClient);
-          std::cout << "key pair -> " << _privateKey << std::endl
-                    << _publicKeyClient << std::endl;
+          std::cout << "key pair -> " << this->interfaceData.privateKey << std::endl
+                                      << this->_publicKeyClient << std::endl;
           privateKeyFile.close();
      }
      
 }
 
-int ConfigClient::ipPublicKeyrequest() {
+int ConfigClient::ipPublicKeyRequest(const std::string& endpoint) {
      try {
-          Client cli("45.82.15.27", "2003");
-          std::cout << "foo" << std::endl;
+          std::cout << "endpoint" << endpoint << " " << std::endl;
+
+          Client cli(endpoint, "2003");
+
           cli.connect();
-          std::cout << "foo" << std::endl;
+
           cli.send(this->_publicKeyClient);
-          std::cout << "foo" << std::endl;
+
           std::string response = cli.receive();
           if (!cli.response_checker(response)) {
                // TODO: retry request throw exception
-               std::cout << "foo" << std::endl;
                return 505;
           }
 
@@ -192,8 +102,8 @@ int ConfigClient::ipPublicKeyrequest() {
           std::string pb, address;
 
           while (response_parse >> pb >> address) {
-               this->_publicKeyServer = pb;
-               this->_address = address;
+               this->peerData.publicKey = pb;
+               this->interfaceData.address = address;
           }
 
      } catch (std::exception& error) {
@@ -205,24 +115,74 @@ int ConfigClient::ipPublicKeyrequest() {
 }
 
 void ConfigClient::setUnspecified() {
-     if (_allowedIPs.size() == 0) {
+     std::cout << "setting unsecifyed" << std::endl;
+     if (peerData.allowedIPs.size() == 0) {
+          std::cout << "Null Why" << std::endl; 
           std::vector<std::string> allowedips;
           allowedips.push_back("0.0.0.0/0");
           this->setAllowedIPs(allowedips);
+
+     } else {
+          std::cout << "Have some sites!!!!!!!!!!!" << std::endl;
+          if (!isIP4(peerData.allowedIPs[0])) {
+               std::cout << "Here" << std::endl;
+               for (const auto& el: peerData.allowedIPs) {
+                    std::cout << el << std::endl;
+               }
+
+               std::vector<std::string> ipList;
+
+               DnsRequest request;
+               std::string ans;
+
+               for (int i = 0; i < peerData.allowedIPs.size(); ++i) {
+                    request.Request(peerData.allowedIPs[i]);
+                    ans = request.getPoint();
+
+                    std::stringstream ss(ans);
+                    std::string token;
+
+                    while(std::getline(ss, token, ',')) {
+                        ipList.push_back(token);
+                    }
+               }
+               
+               for (const auto& el: ipList) {
+                    std::cout << el << std::endl;
+               }
+
+               this->peerData.allowedIPs.clear();
+               this->setAllowedIPs(ipList);
+          }
      }
 
-     if (_dnsList.size() == 0) {
+     if (interfaceData.dnsServers.size() == 0) {
           std::vector<std::string> dnslist;
+
           dnslist.push_back("8.8.8.8");
           dnslist.push_back("8.8.4.4");
+
           this->setDns(dnslist);
      }
 
-     if (this->_keepAlive == 0) {
-          this->_keepAlive = 25;
+     if (this->peerData.persistentKeepalive == 0) {
+          this->peerData.persistentKeepalive = 25;
      }
 
-     _endpoint = _endpoint + ":51285";
+     if (this->interfaceData.privateKey.empty()) {
+          std::string pathPrivateKey = defaultPath + "/wireguard-cli/" + _name + "/privatekey";
+          std::ifstream privateKeyFile(pathPrivateKey);
+
+          if (privateKeyFile.is_open()) {
+               std::string line;
+
+               std::getline(privateKeyFile, line);
+
+               this->setPrivateKey(line);
+          }
+     }
+
+     peerData.endpoint = peerData.endpoint + ":51285";
 }
 
 
@@ -232,34 +192,59 @@ void ConfigClient::buildConfig() {
      std::ofstream wg_config(path);
 
      wg_config << "[Interface]\n"
-               << "Address = " << this->_address << "\n"
-               << "PrivateKey = " << this->_privateKey << "\n"
+               << "Address = " << this->interfaceData.address << "\n"
+               << "PrivateKey = " << this->interfaceData.privateKey << "\n"
                << "DNS = ";
      
-     for (size_t i = 0; i < _dnsList.size() - 1; ++i) {
-          wg_config << _dnsList[i] << ", ";
+     for (size_t i = 0; i < interfaceData.dnsServers.size() - 1; ++i) {
+          wg_config << interfaceData.dnsServers[i] << ", ";
      }
 
-     wg_config << _dnsList[_dnsList.size() - 1] << "\n"
+     wg_config << interfaceData.dnsServers[interfaceData.dnsServers.size() - 1] << "\n"
                << "[Peer]\n"
-               << "PublicKey = " << this->_publicKeyServer << "\n"
+               << "PublicKey = " << this->peerData.publicKey << "\n"
                << "AllowedIPs = ";
 
-     for (size_t i = 0; i < _allowedIPs.size() - 1; ++i) {
-          wg_config << _allowedIPs[i] << ", ";
+     for (size_t i = 0; i < peerData.allowedIPs.size() - 1; ++i) {
+          wg_config << peerData.allowedIPs[i] << ", ";
      }
      
-     wg_config << _allowedIPs[_allowedIPs.size() - 1] << "\n"
-               << "Endpoint = " << this->_endpoint << "\n"
-               << "PersistentKeepalive = " << this->_keepAlive << '\n';
+     wg_config << peerData.allowedIPs[peerData.allowedIPs.size() - 1] << "\n"
+               << "Endpoint = " << this->peerData.endpoint << "\n"
+               << "PersistentKeepalive = " << 25 << '\n';
      
-     wg_config.close();
-
-     
+     wg_config.close();     
 }
 
+void ConfigClient::changeAllowedIPs() {
+     const std::string path = defaultPath + _name + ".conf";
+     std::fstream filestream(path, std::ios::in | std::ios::out);
 
-void ConfigClient::changeConfig() {
+     if (!filestream.is_open()) {
+          std::cout << "Error opening file!" << std::endl;
+     }
 
-     return;
-}
+     std::vector<std::string> lines;
+     std::string line;
+
+     bool isAllowdSection = false;
+
+     while (std::getline(filestream, line)) {
+          if (line == "[Peer]") {
+               isAllowdSection = true;
+          }
+
+          if (isAllowdSection && line.find("AllowedIPs = ") != std::string::npos) {
+               line = "AllowedIPs = ";
+               for (int i = 0; i < peerData.allowedIPs.size(); ++i) {
+                    line += peerData.allowedIPs[i];
+               }
+
+               lines.push_back(line);
+          }
+     }
+
+     for (const auto& line: lines) {
+          filestream << line << std::endl;
+     }
+}     

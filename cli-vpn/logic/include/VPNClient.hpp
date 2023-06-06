@@ -1,8 +1,10 @@
 #pragma once
 
+
 #include <utility>
 #include <dirent.h>
 #include <string.h>
+
 
 #include "ConfigClient.hpp"
 #include "vpnTunnel.hpp"
@@ -11,6 +13,8 @@ class VPNClient {
 private:
      // VPNUser useer; //
      std::vector<std::pair <std::string, vpnTun> > tunnels;
+
+     std::string defaultPath = "/etc/wireguard";
 
 public:
      VPNClient();

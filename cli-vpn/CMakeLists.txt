@@ -9,12 +9,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 include_directories(gui/include)
 include_directories(gui/src)
+include_directories(gui/conf)
 
 include_directories(handshake/headers)
 include_directories(handshake/src)
@@ -25,25 +26,20 @@ include_directories(logic/src)
 set(PROJECT_SOURCES
      #GUI
      gui/src/main.cpp
+
      gui/src/mainwindow.cpp
      gui/include/mainwindow.h
-     gui/src/mainwindow.ui
+     gui/src/ui/mainwindow.ui
 
      gui/src/configurationwindow.cpp
      gui/include/configurationwindow.h
-     gui/src/configurationwindow.ui
-
-     gui/src/authenticationwindow.cpp
-     gui/include/authenticationwindow.h
-     gui/src/authenticationwindow.ui
-
-     gui/src/staticswindow.cpp
-     gui/include/staticswindow.h
-     gui/src/staticswindow.ui
+     gui/src/ui/configurationwindow.ui
 
      gui/include/countries.h
      gui/src/countries.cpp
-     gui/src/countries.ui
+     gui/src/ui/countries.ui
+
+     gui/conf/configuration.txt
 
      gui/resource.qrc
 
@@ -53,13 +49,14 @@ set(PROJECT_SOURCES
      logic/include/VPNClient.hpp
      logic/include/vpnTunnel.hpp
      handshake/headers/ClinetHandshake.hpp
-
+     handshake/headers/DnsRequest.hpp
      #Client Back Source
      logic/src/ConfigClient.cpp
      logic/src/VPNClient.cpp
      logic/src/Parser.cpp
      handshake/src/ClientHandshake.cpp
-)
+     handshake/src/DnsRequest.cpp
+     )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(GUI
@@ -90,7 +87,6 @@ set_target_properties(GUI PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    missing
 )
 
 install(TARGETS GUI

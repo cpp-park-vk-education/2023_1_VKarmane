@@ -1,247 +1,241 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
+/*#include <iostream>
 #include <fstream>
-#include <string>
 #include <sstream>
-#include <algorithm>
 
+#include <vector>
+#include <map>
+#include <string>
+
+#include <regex>
+
+using std::string;
+using std::vector;
 
 
 class ParseFile {
-public:
-     ParseFile() = default;
+ public:
+    ParseFile() = default;
 
-     std::vector<std::vector<std::string>> parseConfig(std::string filePath) {
-          if (!isValid(filePath)) {
-               //ToDo handle error
-          }
+    vector<vector<string>> getTokens(const string filePath);
+
+    bool checkConfigFile(const std::string& filename);
+
+    vector<vector<string>> getParsedFile() { return parsed_file; }
+
+    void print();
+     
+ private:
+   vector<vector<string>> parseConfig(string filePath);
+
+   vector<vector<string>> parseNotStructured(string filename);
+
+   vector<vector<string>> parsed_file;
+
+   vector<string> requiredFields = {
+       "[Interface]", "Address", "PrivateKey", "DNS", "[Peer]", "PublicKey", "AllowedIPs", "Endpoint"
+   };
+};*/
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
+#include <vector>
+#include <string>
+#include <unordered_map>
+
+#include <regex>
+
+using std::string;
+using std::vector;
+using std::stringstream;
+
+struct InterfaceData {
+   std::string address;
+   std::string privateKey;
+   std::vector<std::string> dnsServers;
+
+   InterfaceData() = default;
+
+   InterfaceData(std::string _address, std::string _privateKey,
+                 std::vector<std::string> _dnsServers):
+                 address(_address), privateKey(_privateKey), dnsServers(_dnsServers) {}
+
+   InterfaceData(const InterfaceData& interface): address(interface.address),
+      privateKey(interface.privateKey), dnsServers(interface.dnsServers) {}
+};
+
+struct PeerData {
+   std::string publicKey;
+   std::vector<std::string> allowedIPs;
+   std::string endpoint;
+   int persistentKeepalive;
+
+   PeerData() = default;
+
+   PeerData(std::string _publicKey, std::vector<std::string> _allowedIPs,
+            std::string _endpoint, int _persistentKeepalive):
+            publicKey(_publicKey), allowedIPs(_allowedIPs),
+            endpoint(_endpoint), persistentKeepalive(_persistentKeepalive) {}
+   
+   PeerData(const PeerData& peer): publicKey(peer.publicKey),
+      allowedIPs(peer.allowedIPs), endpoint(peer.endpoint), 
+      persistentKeepalive(peer.persistentKeepalive) {}
+};
 
 
-          size_t i = 0;
-          std::vector<std::vector<std::string>> output(20);
+class ConfigParser {
+ public:
+   bool checkConfigFile(const std::string& filename) {
+      std::ifstream configFile(filename);
+      if (!configFile.is_open()) {
+         std::cout << "Failed to open config file: " << filename << std::endl;
+         return false;
+      }
 
-          std::ifstream filestream(filePath);
-          std::string line;
-          std::string key;
+      std::string line;
+      std::vector<std::string> requiredFields = {"[Interface]", "Address", "PrivateKey", "DNS", "[Peer]", "PublicKey", "AllowedIPs", "Endpoint", "PersistentKeepalive"};
+      std::vector<bool> foundFields(requiredFields.size(), false);
 
-          while (std::getline(filestream, line)) {
-               if (line.find("PrivateKey") != std::string::npos) {
-                    line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    key = line.substr(line.find("=") + 1);
-                    
-                    output[i].push_back("PrivateKey");
+      while (std::getline(configFile, line)) {
+         for (size_t i = 0; i < requiredFields.size(); ++i) {
+            if (line.find(requiredFields[i]) != std::string::npos) {
+               foundFields[i] = true;
+               break;
+            }
+         }
+      }
 
-                    output[i].push_back(key);
-               }
+      configFile.close();
 
-               if (line.find("Address") != std::string::npos) {
-                    line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    key = line.substr(line.find("=") + 1);
-                    
-                    output[i].push_back("Address");
+      for (bool found : foundFields) {
+         if (!found) {
+            return false;
+         }
+      }
 
-                    output[i].push_back(key);
-               }
+      return true;
+   }
 
-               if (line.find("DNS") != std::string::npos) {
-                    line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    key = line.substr(line.find("=") + 1);
-                    
-                    std::vector<std::string> dnslist;
+   void parseFile(const std::string& filename) {
+      std::ifstream file(filename);
+      if (!file) {
+         std::cerr << "Failed to open file: " << filename << std::endl;
+         return;
+      }
 
-                    std::stringstream ss(key);
-                    std::string token;
+      if (!checkConfigFile(filename)) {
+         parseCustom(filename);
+         return;
+      }
 
-                    while (std::getline(ss, token, ',')) {
-                         dnslist.push_back(token);
-                    }
+      std::string line;
+      std::string currentSection;
 
-                    output[i].push_back("DNS");
+      while (std::getline(file, line)) {
+         if (!line.empty() && line[0] == '#') {
+            continue;
+         } else if (!line.empty() && line[0] == '[' && line[line.length() - 1] == ']') {
+            currentSection = line.substr(1, line.length() - 2);
+         } else {
+            parseLine(line, currentSection);
+         }
+      }
 
-                    for (int j = 0; j < dnslist.size(); ++j) {
-                         output[i].push_back(dnslist[j]);
-                    }
-               }
+      file.close();
+   }
 
-               if (line.find("PublicKey") != std::string::npos) {
-                    line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    key = line.substr(line.find("=") + 1);
-                    
-                    output[i].push_back("PublicKey");
+   InterfaceData getInterfaceData() const {
+       return interfaceData;
+   }
 
-                    output[i].push_back(key);
-               }
+   PeerData getPeerData() const {
+      return peerData;
+   }
 
-               if (line.find("AllowedIPs") != std::string::npos) {
-                    line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    key = line.substr(line.find("=") + 1);
+ private:
+   void parseLine(const std::string& line, const std::string& currentSection) {
+      size_t delimiterPos = line.find('=');
+      if (delimiterPos != std::string::npos) {
+        std::string key = line.substr(0, delimiterPos);
+        std::string value = line.substr(delimiterPos + 1);
+        trim(key);
+        trim(value);
+        if (currentSection == "Interface") {
+            parseInterfaceLine(key, value);
+        } else if (currentSection == "Peer") {
+            parsePeerLine(key, value);
+        }
+      }
+   }
 
-                    std::vector<std::string> allowedips;
+   void parseInterfaceLine(const std::string& key, const std::string& value) {
+      if (key == "Address") {
+         interfaceData.address = value;
+      } else if (key == "PrivateKey") {
+         interfaceData.privateKey = value;
+      } else if (key == "DNS") {
+         std::istringstream iss(value);
+         std::string dns;
+         while (std::getline(iss, dns, ',')) {
+            trim(dns);
+            interfaceData.dnsServers.push_back(dns);
+         }
+      }
+   }
 
-                    std::stringstream ss(key);
-                    std::string token;
+   void parsePeerLine(const std::string& key, const std::string& value) {
+      if (key == "PublicKey") {
+         peerData.publicKey = value;
+      } else if (key == "AllowedIPs") {
+         std::istringstream iss(value);
+         std::string allowedIP;
+         while (std::getline(iss, allowedIP, ',')) {
+            trim(allowedIP);
+            peerData.allowedIPs.push_back(allowedIP);
+         }
+      } else if (key == "Endpoint") {
+         peerData.endpoint = value;
+      } else if (key == "PersistentKeepalive") {
+         peerData.persistentKeepalive = std::stoi(value);
+      } else {
+         std::cerr << "Unknown key in [Peer] section: " << key << std::endl;
+      }
+   }
 
-                    while (std::getline(ss, token, ',')) {
-                         allowedips.push_back(token);
-                    }
+   void parseCustom(const string file) {
+      std::ifstream filestream(file);
+      string line;
+      while (std::getline(filestream, line)) {
+         line.erase(remove(line.begin(), line.end(), ' '), line.end());
+         string key;
 
-                    output[i].push_back("AllowedIPs");
+         if (line.find("URLlist") != string::npos) {
+            key = line.substr(line.find("=") + 1);
 
-                    for (int j = 0; j < allowedips.size(); ++j) {
-                         output[i].push_back(allowedips[j]);
-                    }
-               }
+            std::istringstream iss(key);
+            std::string allowedIP;
 
-               if (line.find("Endpoint") != std::string::npos) {
-                    line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    key = line.substr(line.find("=") + 1);
+            while (std::getline(iss, allowedIP, ',')) {
+               trim(allowedIP);
+               peerData.allowedIPs.push_back(allowedIP);
+            }
+         } else if (line.find("Endpoint") != string::npos) {
+            key = line.substr(line.find("=") + 1);
+            peerData.endpoint = key;
+         }
+      }
+      filestream.close();
+   }
 
-                    output[i].push_back("Endpoint");
-                    
-                    output[i].push_back(key);
-               }
+   void trim(std::string& str) {
+      size_t first = str.find_first_not_of(' ');
+      size_t last = str.find_last_not_of(' ');
+      str = str.substr(first, last - first + 1);
+   }
 
-               if (line.find("PersistentKeepalive") != std::string::npos) {
-                    line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    key = line.substr(line.find("=") + 1);
-                    
-                    output[i].push_back("PersistentKeepalive");
-
-                    output[i].push_back(key);
-               }
-               ++i;
-          }
-
-          filestream.close();
-
-          /*for (auto const& row : output) {
-               for (auto const& element : row) {
-                    std::cout << element << " ";
-               }
-               std::cout << std::endl;
-          }*/
-
-          return output;
-     }
-
-     std::vector<std::vector<std::string>> parseNotStructured(std::string filename) {
-          std::vector<std::vector<std::string>> output(2);
-
-          std::ifstream filestream(filename);
-          std::string line;
-
-          size_t i = 0;
-
-          while (std::getline(filestream, line)) {
-               if (line.find("URLlist") != std::string::npos) {
-                    line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    std::string key(line.substr(line.find("=") + 1));
-
-                    std::vector<std::string> allowedips;
-
-                    std::stringstream ss(key);
-                    std::string token;
-                    
-
-                    while (std::getline(ss, token, ',')) {
-                         allowedips.push_back(token);
-                    }
-
-                    output[i].push_back("URLlist");
-                    for (int j = 0; j < allowedips.size(); ++j) {
-                         output[i].push_back(allowedips[j]);
-                    }
-               }
-
-               if (line.find("Endpoint") != std::string::npos) {
-                    line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    std::string key(line.substr(line.find("=") + 1));
-
-                    output[i].push_back("Endpoint");
-
-                    output[i].push_back(key);
-               }
-               ++i;
-          }
-
-          /*for (auto const& row : output) {
-               for (auto const& element : row) {
-                    std::cout << element << " ";
-               }
-               std::cout << std::endl;
-          }*/
-
-          return output;
-     }
-
-     bool isValid(std::string path) {
-          std::ifstream input_filestream(path);
-          std::string line;
-
-          if (input_filestream.is_open()) {
-               while (std::getline(input_filestream, line)) {
-                    if (line.find("[Interface]") == std::string::npos) {
-                         //ToDo wrong cfg
-                         return false;
-                    }
-
-                    if (line.find("PrivateKey") == std::string::npos) {
-                         //ToDo No PrivateKey Found
-                         return false;
-                    }
-
-                    if (line.find("Address") == std::string::npos) {
-                         //ToDo No address
-                         return false;
-                    }
-
-                    if (line.find("DNS") == std::string::npos) {
-                         //Todo DNS
-                         return false;
-                    }
-
-                    if (line.find("[Peer]") == std::string::npos) {
-                         //ToDo No Peer
-                         return false;
-                    }
-
-                    if (line.find("PublicKey") == std::string::npos) {
-                         //ToDo no pubkey
-                         return false;
-                    }
-
-                    if (line.find("AllowedIPs") == std::string::npos) {
-                         //ToDo no AllowedIPs
-                         return false;
-                    }
-
-                    if (line.find("Endpoint") == std::string::npos) {
-                         // ToDo no Endpoint
-                         return false;
-                    }
-
-                    if (line.find("PersistentKeepalive") == std::string::npos) {
-                         //ToDo HandelPresistent
-                    }
-               }
-          }
-
-          return true;
-     }
-private:
-     std::string getDNS();
-
-     std::vector<std::string> getAllowedIPs();
-
-     std::string getPrivateKey();
-
-     std::string getPublicKey();
-
-     std::string getEndpoint();
-
-     std::string getKeepAlive();
-
-     std::string getUrlsList();
+   InterfaceData interfaceData;
+   PeerData peerData;
 };
