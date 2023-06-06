@@ -4,3 +4,5 @@ cli-vpn/handshake/build/*
 cli-vpn/tests/build-tests/*
 build*/
 CMakeLists.txt.user
+build/
+.vscode/
