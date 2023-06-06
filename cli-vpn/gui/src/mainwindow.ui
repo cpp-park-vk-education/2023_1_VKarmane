@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>420</width>
+    <height>549</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="sizeIncrement">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Foxtail VPN</string>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="btnTurnVpn">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>310</y>
+      <width>141</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border-image:url(:/img/TurnOFF.png);
+width: 50px;
+height: 50px;
+}
+QPushButton:checked{
+width: 50px;
+height: 50px;
+border-image:url(:/img/TurnON.png);
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>200</width>
+      <height>100</height>
+     </size>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbFoxTail">
+    <property name="geometry">
+     <rect>
+      <x>145</x>
+      <y>120</y>
+      <width>131</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="../resource.qrc">:/img/FoxTailVPNLogo.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbCountryMessage">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>260</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid #f47c00;
+border-radius: 10px;</string>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'inherit'; font-size:12pt; font-weight:700; color:#f47c00;&quot;&gt;Choose server&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbConfigUsageOff">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>165</x>
+      <y>400</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid #f47c00;
+border-radius: 10px;</string>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700; color:#f47c00;&quot;&gt;Config OFF&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbConfigUsageOn">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>165</x>
+      <y>400</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid #f47c00;
+border-radius: 10px;</string>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700; color:#f47c00;&quot;&gt;Config ON&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="darkTheme">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>421</width>
+      <height>471</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="../resource.qrc">:/img/11zon_cropped.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lightTheme">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>421</width>
+      <height>471</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="../resource.qrc">:/img/whiteTheme.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <zorder>lightTheme</zorder>
+   <zorder>darkTheme</zorder>
+   <zorder>lbFoxTail</zorder>
+   <zorder>btnTurnVpn</zorder>
+   <zorder>lbCountryMessage</zorder>
+   <zorder>lbConfigUsageOff</zorder>
+   <zorder>lbConfigUsageOn</zorder>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>420</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuChoose_theme">
+    <property name="title">
+     <string>Choose theme</string>
+    </property>
+    <addaction name="DarkMode"/>
+    <addaction name="LightMode"/>
+   </widget>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <addaction name="showConfiguration"/>
+   </widget>
+   <addaction name="menuChoose_theme"/>
+   <addaction name="menuSettings"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="tbSites">
+   <property name="minimumSize">
+    <size>
+     <width>200</width>
+     <height>40</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>200</width>
+     <height>40</height>
+    </size>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>BottomToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="connectInstagramm"/>
+   <addaction name="connectTwitter"/>
+  </widget>
+  <widget class="QToolBar" name="tbCountries">
+   <property name="minimumSize">
+    <size>
+     <width>220</width>
+     <height>40</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>220</width>
+     <height>40</height>
+    </size>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar_2</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>BottomToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="connectNetherlands"/>
+   <addaction name="connectPoland"/>
+   <addaction name="actionNewCountry"/>
+  </widget>
+  <action name="DarkMode">
+   <property name="text">
+    <string>Dark mode</string>
+   </property>
+  </action>
+  <action name="LightMode">
+   <property name="text">
+    <string>Light mode</string>
+   </property>
+  </action>
+  <action name="showStatistics">
+   <property name="text">
+    <string>Statistics</string>
+   </property>
+  </action>
+  <action name="showConfiguration">
+   <property name="text">
+    <string>Configuration</string>
+   </property>
+  </action>
+  <action name="showAuthorization">
+   <property name="text">
+    <string>Authorization</string>
+   </property>
+  </action>
+  <action name="connectInstagramm">
+   <property name="icon">
+    <iconset resource="../resource.qrc">
+     <normaloff>:/img/1491579602-yumminkysocialmedia36_83067.png</normaloff>:/img/1491579602-yumminkysocialmedia36_83067.png</iconset>
+   </property>
+   <property name="text">
+    <string>Insta</string>
+   </property>
+  </action>
+  <action name="connectTwitter">
+   <property name="icon">
+    <iconset resource="../resource.qrc">
+     <normaloff>:/img/Twitter_icon-icons.com_66803.png</normaloff>:/img/Twitter_icon-icons.com_66803.png</iconset>
+   </property>
+   <property name="text">
+    <string>twitter</string>
+   </property>
+  </action>
+  <action name="connectPoland">
+   <property name="icon">
+    <iconset resource="../resource.qrc">
+     <normaloff>:/img/flagofpoland_6425.png</normaloff>:/img/flagofpoland_6425.png</iconset>
+   </property>
+   <property name="text">
+    <string>poland</string>
+   </property>
+  </action>
+  <action name="connectChina">
+   <property name="icon">
+    <iconset resource="../resource.qrc">
+     <normaloff>:/img/FlagChineseFlag_banderadechina_6561.png</normaloff>:/img/FlagChineseFlag_banderadechina_6561.png</iconset>
+   </property>
+   <property name="text">
+    <string>china</string>
+   </property>
+  </action>
+  <action name="connectSweden">
+   <property name="icon">
+    <iconset resource="../resource.qrc">
+     <normaloff>:/img/swedenflag_6382.png</normaloff>:/img/swedenflag_6382.png</iconset>
+   </property>
+   <property name="text">
+    <string>swedish</string>
+   </property>
+  </action>
+  <action name="connectNetherlands">
+   <property name="icon">
+    <iconset resource="../resource.qrc">
+     <normaloff>:/img/Dutchflag_6447.png</normaloff>:/img/Dutchflag_6447.png</iconset>
+   </property>
+   <property name="text">
+    <string>Netherlands</string>
+   </property>
+  </action>
+  <action name="actionNewCountry">
+   <property name="icon">
+    <iconset resource="../resource.qrc">
+     <normaloff>:/img/add_circle_create_expand_new_plus_icon_123218.png</normaloff>:/img/add_circle_create_expand_new_plus_icon_123218.png</iconset>
+   </property>
+   <property name="text">
+    <string>newCountry</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>
