@@ -15,18 +15,32 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets Test)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
+include_directories(include)
+include_directories(src)
+
 add_executable(TDD_GUI
   main.cpp
-  urlconfiguration.h
-  urlconfiguration.cpp
-  urlconfigurationtest.h
-  urlconfigurationtest.cpp
-  authorization.h
-  authorization.cpp
-  authorizationtest.h
-  authorizationtest.cpp
-  alltests.h
-  alltests.cpp
+
+  src/mainwindow.cpp
+  include/mainwindow.h
+  src/ui/mainwindow.ui
+
+  include/testmainwindow.h
+  src/testmainwindow.cpp
+
+  src/configurationwindow.cpp
+  include/configurationwindow.h
+  src/ui/configurationwindow.ui
+
+  include/testconfigurationwindow.h
+  src/testconfigurationwindow.cpp
+
+  include/countries.h
+  src/countries.cpp
+  src/ui/countries.ui
+
+  include/testcountries.h
+  src/testcountries.cpp
 )
 
 target_link_libraries(TDD_GUI Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Test)

@@ -1,4 +1,8 @@
-#include "alltests.h"
+#include "testcountries.h"
+#include "testconfigurationwindow.h"
+#include "testmainwindow.h"
 
-QTEST_MAIN(AllTests)
 
+QTEST_MAIN(TestCountries)
+//QTEST_MAIN(TestConfigurationWindow)
+//QTEST_MAIN(TestMainWindow)
