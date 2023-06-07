@@ -4,105 +4,111 @@
 
 
 VPNClient::VPNClient() {
-     DIR* directory;
-     struct dirent* file;
+    
+    std::string directoryPath = defaultPath;
 
-     int count = 0;
+    try {
+        for (const auto& entry : std::filesystem::directory_iterator(directoryPath)) {
+            std::string file = entry.path().filename().string(); 
+            
+            if (file.length() > 5 && file.substr(file.length() - 5) == ".conf") {
+                std::string name(file.substr(0, file.find('.')));
 
-     if ((directory = opendir(defaultPath.c_str())) != nullptr) {
-          while ((file = readdir(directory)) != nullptr) {
+                vpnTun tun(name);
 
-               if (file->d_type == DT_REG && file->d_name[strlen(file->d_name) - 5] == '.' 
-                    && file->d_name[strlen(file->d_name) - 4] == 'c' 
-                    && file->d_name[strlen(file->d_name) - 3] == 'o' 
-                    && file->d_name[strlen(file->d_name) - 2] == 'n' 
-                    && file->d_name[strlen(file->d_name) - 1] == 'f') {
-                         std::string name;
-                         for (int j = 0; j < strlen(file->d_name) - 5; j++)
-                              name += file->d_name[j];
-                         vpnTun tun(name);
-                         tunnels.push_back(std::make_pair(name, tun));
-               }
-          }
-          closedir(directory);
-     }
+                tunnels.push_back(std::make_pair(name, tun));
+            }
+        }
+    } catch (const std::exception& error) {
+        std::cout << "Error: " << error.what() << std::endl;
+    }
 }
 
+
 void VPNClient::setVpnTunContext(const std::string& name, std::string contextFilePath) {
-     for (int i = 0; i < tunnels.size(); ++i) {
-          if (tunnels[i].first == name) {
-               std::string path = defaultPath + '/' + name + ".conf";
-               std::cout << "Config " << name << " exist" << std::endl;
+    for (int i = 0; i < tunnels.size(); ++i) {
+        if (tunnels[i].first == name) {
+            std::string path = defaultPath + '/' + name + ".conf";
+            std::cout << "Config " << name << " exist" << std::endl;
                
-               ConfigClient config(name, path);
+            ConfigClient config(name, path);
 
-          }
-     }
+            std::cout << "parsed>>>>" << std::endl;
 
-     ConfigClient config(name, contextFilePath);
+            config.print();
 
-     config.genPair();
+            config.changeAllowedIPs(contextFilePath);
 
-     config.ipPublicKeyRequest(config.getEndpoint());
+            config.print();
 
-     config.setUnspecified();
+            return;
+        }
+    }
 
-     config.buildConfig();
+    ConfigClient config(name, contextFilePath);
 
-     config.print();
+    config.genPair();
 
-     vpnTun tun(name);
+    config.ipPublicKeyRequest(config.getEndpoint());
 
-     tunnels.push_back(std::make_pair(name, tun));
+    config.setUnspecified();
+
+    config.buildConfig();
+
+    config.print();
+
+    vpnTun tun(name);
+
+    tunnels.push_back(std::make_pair(name, tun));
 }
 
 void VPNClient::runTun(const std::string& name) {
-     size_t id = 0;
+    size_t id = 0;
 
-     for (size_t i = 0; i < tunnels.size(); ++i) {
-          if (tunnels[i].first == name) {
-               id = i;
-               break;
-          }
-     }
+    for (size_t i = 0; i < tunnels.size(); ++i) {
+        if (tunnels[i].first == name) {
+            id = i;
+            break;
+        }
+    }
 
 
-     try {
-          tunnels[id].second.up();
-     } catch (std::exception& error) {
-          std::cerr << "Error: " << error.what() << std::endl;
-     }
+    try {
+        tunnels[id].second.up();
+    } catch (std::exception& error) {
+        std::cerr << "Error: " << error.what() << std::endl;
+    }
 }
 
 
 void VPNClient::stopTun(const std::string& name) {
-     size_t id = 0;
+    size_t id = 0;
 
-     for (size_t i = 0; i < tunnels.size(); ++i) {
-          if (tunnels[i].first== name) {
-               id = i;
-               break;
-          }
-     }
+    for (size_t i = 0; i < tunnels.size(); ++i) {
+        if (tunnels[i].first== name) {
+            id = i;
+            break;
+        }
+    }
 
-     try {
-          tunnels[id].second.down();
-     } catch (std::exception& error) {
-          std::cerr << "Error: " << error.what() << std::endl;
-     }
+    try {
+        tunnels[id].second.down();
+    } catch (std::exception& error) {
+        std::cerr << "Error: " << error.what() << std::endl;
+    }
 }
 
 
 void VPNClient::rebootTun(const std::string& name) {
-     stopTun(name);
+    stopTun(name);
      
-     runTun(name);
+    runTun(name);
 }
 
 void VPNClient::printTunnels() {
-     for (int i = 0; i < tunnels.size(); ++i) {
-          std::cout << tunnels[i].first << ", ";
-     }
+    for (int i = 0; i < tunnels.size(); ++i) {
+        std::cout << tunnels[i].first << ", ";
+    }
 
-     std::cout << std::endl;
+    std::cout << std::endl;
 }

@@ -2,7 +2,7 @@
 
 
 #include <utility>
-#include <dirent.h>
+#include <filesystem>
 #include <string.h>
 
 
@@ -11,7 +11,7 @@
 
 class VPNClient {
 private:
-     // VPNUser useer; //
+     // VPNUser user; //
      std::vector<std::pair <std::string, vpnTun> > tunnels;
 
      std::string defaultPath = "/etc/wireguard";
@@ -34,5 +34,5 @@ public:
 // Нажал на страну -> Записали в Файл Endpoint = ....
 // Нажал подключиться 
 // VPNClient client;
-// client.SetUpVPNCOntext("file.txt")
+// client.SetUpVPNCOntext(name, "file.txt")
 // /etc/wireguard/_name/

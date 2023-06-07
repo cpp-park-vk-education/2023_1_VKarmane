@@ -1,0 +1,10 @@
+[Interface]
+Address = 192.168.0.1/32
+PrivateKey = AFdTcYYfVgy4F6XHApHDVp8R47gLtH7Klgl6RYu/r0I=
+DNS = 8.8.8.8, 8.8.4.4
+
+[Peer]
+PublicKey = bx1cNgOO9j3iw1cEhyYhE5qiU43fuHg0Y4uwzsglxho=
+AllowedIPs = 10.0.0.1/32, 10.0.0.2/32, 10.0.0.3/32
+Endpoint = 45.45.45.45:12345
+PersistentKeepalive = 15

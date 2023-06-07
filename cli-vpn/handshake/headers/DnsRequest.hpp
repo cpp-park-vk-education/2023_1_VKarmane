@@ -11,10 +11,10 @@ bool isIP4(const std::string& ipAddress);
 
 class DnsRequest {
  public:
-   void Request(const std::string& url);
+    void Request(const std::string& url);
 
-   std::string getPoint();
+    std::string getPoint();
 
  private: 
-   std::vector<std::string> endPoints;
+    std::vector<std::string> endPoints;
 };

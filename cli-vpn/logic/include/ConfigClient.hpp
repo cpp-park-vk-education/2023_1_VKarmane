@@ -71,28 +71,9 @@ class ConfigClient {
      void buildConfig();                // Initiation config in /etc/wireguard folder
                                         // saving in /etc/wireguard/wireguard-cli/${_name}/
      
-     void changeAllowedIPs();
+     void changeAllowedIPs(std::string);
 
-     void print() {
-          std::cout << "| _name = " << this->_name << std::endl
-                    << "| _address = " << this->interfaceData.address << std::endl
-                    << "| _privateKey = " << this->interfaceData.privateKey << std::endl
-                    << "| _publicKeyServer = " << this->peerData.publicKey << std::endl
-                    << "| _endpoint = " << this->peerData.endpoint << std::endl
-                    << "| _keepAlive = " << this->peerData.persistentKeepalive << std::endl
-                    << "| _publicKeyClient = " << this->_publicKeyClient << std::endl;
-          std::cout << "| _dnsList = ";
-          for (int i = 0; i < this->interfaceData.dnsServers.size(); ++i) {
-               std::cout << this->interfaceData.dnsServers[i] << ", ";
-          }
-          std::cout << std::endl;
-
-          std::cout << "| _allowedIPs = ";
-          for (int i = 0; i < this->peerData.allowedIPs.size(); ++i) {
-               std::cout << this->peerData.allowedIPs[i] << ", ";
-          }
-          std::cout << std::endl;
-     }
+     void print();
 
      bool isFileEmpty(const string& filename) {
           string path = defaultPath + _name + ".conf";
