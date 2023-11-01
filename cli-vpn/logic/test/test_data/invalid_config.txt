@@ -1,0 +1,2 @@
+URLlist = google.com, vk.com
+Endpoint = 23.23.23.23
